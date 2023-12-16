@@ -1,0 +1,151 @@
+[gd_scene load_steps=3 format=3 uid="uid://26oa35d8aytx"]
+
+[ext_resource type="Script" path="res://addons/NetickForGodot/NetickDock.cs" id="1_ha63q"]
+[ext_resource type="Texture2D" uid="uid://bgnl3xd70l633" path="res://addons/NetickForGodot/NetickBanner.png" id="1_id205"]
+
+[node name="Netick" type="Control" node_paths=PackedStringArray("VersionLabel", "DocumentationButton", "DiscordButton", "SiteButton", "ConfigPathTextEdit", "AssemblyPathTextEdit")]
+layout_mode = 3
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -324.0
+offset_bottom = -324.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_ha63q")
+VersionLabel = NodePath("Margin/Root/VersionLabel")
+DocumentationButton = NodePath("Margin/Root/Links/DocumentationButton")
+DiscordButton = NodePath("Margin/Root/Links/DiscordButton")
+SiteButton = NodePath("Margin/Root/Links/SiteButton")
+ConfigPathTextEdit = NodePath("Margin/Root/ConfigPathTextEdit")
+AssemblyPathTextEdit = NodePath("Margin/Root/AssemblyPathTextEdit")
+
+[node name="Margin" type="MarginContainer" parent="."]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = 593.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+
+[node name="Root" type="VBoxContainer" parent="Margin"]
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 5
+
+[node name="Netick Banner" type="Control" parent="Margin/Root"]
+custom_minimum_size = Vector2(0, 54.815)
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.0
+
+[node name="TextureRect2" type="TextureRect" parent="Margin/Root/Netick Banner"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 593.0
+offset_bottom = 68.185
+grow_vertical = 2
+scale = Vector2(0.41, 0.41)
+texture = ExtResource("1_id205")
+stretch_mode = 2
+
+[node name="AuthorLabel" type="Label" parent="Margin/Root"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"HeaderSmall"
+theme_override_constants/outline_size = 3
+text = "Netick by Karrar Rahim"
+
+[node name="VersionLabel" type="Label" parent="Margin/Root"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"HeaderMedium"
+theme_override_constants/outline_size = 3
+text = "Version: 0.8.6"
+
+[node name="Links" type="HBoxContainer" parent="Margin/Root"]
+layout_mode = 2
+alignment = 1
+
+[node name="DocumentationButton" type="Button" parent="Margin/Root/Links"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Documentation"
+
+[node name="DiscordButton" type="Button" parent="Margin/Root/Links"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Discord
+"
+
+[node name="SiteButton" type="Button" parent="Margin/Root/Links"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Site"
+
+[node name="VSeparator" type="VSeparator" parent="Margin/Root"]
+custom_minimum_size = Vector2(0, 16.89)
+layout_mode = 2
+
+[node name="RegisterPrefabsAndLevelsButton" type="Button" parent="Margin/Root"]
+visible = false
+layout_mode = 2
+text = "Register Prefabs & Levels"
+
+[node name="AutoUpdatePrefabsAndLevelsButton" type="CheckButton" parent="Margin/Root"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "Auto update levels and prefabs"
+
+[node name="Note" type="Label" parent="Margin/Root"]
+clip_contents = true
+custom_minimum_size = Vector2(0, 39.17)
+layout_mode = 2
+size_flags_vertical = 1
+theme_type_variation = &"HeaderMedium"
+theme_override_font_sizes/font_size = 9
+text = "Note: your prefabs must have a NetworkObject node at the root, while your levels must have a NetworkLevel node at the root. That's how they are differentiated."
+autowrap_mode = 2
+max_lines_visible = 5
+
+[node name="VSeparator2" type="VSeparator" parent="Margin/Root"]
+custom_minimum_size = Vector2(0, 16.89)
+layout_mode = 2
+
+[node name="Netick Config Path" type="Label" parent="Margin/Root"]
+layout_mode = 2
+text = "Netick Config Path"
+
+[node name="ConfigPathTextEdit" type="TextEdit" parent="Margin/Root"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 56.37)
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "res://netickConfig.tres"
+wrap_mode = 1
+
+[node name="Editor Assembly Path" type="Label" parent="Margin/Root"]
+layout_mode = 2
+text = "Editor Game Assembly Path "
+
+[node name="AssemblyPathTextEdit" type="TextEdit" parent="Margin/Root"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 56.37)
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "mono//temp//bin//Debug//Godot Game Project.dll"
+wrap_mode = 1

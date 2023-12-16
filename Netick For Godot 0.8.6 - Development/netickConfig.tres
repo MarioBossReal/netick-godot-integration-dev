@@ -1,0 +1,65 @@
+[gd_resource type="Resource" script_class="NetickConfig" load_steps=9 format=3 uid="uid://bygipwwx5g5xj"]
+
+[ext_resource type="Script" path="res://addons/NetickForGodot/Netick/Integration/ResourceReference.cs" id="1_01xuc"]
+[ext_resource type="Script" path="res://addons/NetickForGodot/Netick/Integration/NetickConfig.cs" id="2_f5d0d"]
+
+[sub_resource type="Resource" id="Resource_b5fr1"]
+script = ExtResource("1_01xuc")
+Name = "bomberman_main_level"
+Path = "res://bomberman/levels/bomberman_main_level.tscn"
+Id = 0
+
+[sub_resource type="Resource" id="Resource_4vryj"]
+script = ExtResource("1_01xuc")
+Name = "bomb"
+Path = "res://bomberman/network_prefabs/bomb.tscn"
+Id = 0
+
+[sub_resource type="Resource" id="Resource_34fy7"]
+script = ExtResource("1_01xuc")
+Name = "bomber"
+Path = "res://bomberman/network_prefabs/bomber.tscn"
+Id = 1
+
+[sub_resource type="Resource" id="Resource_si3kn"]
+script = ExtResource("1_01xuc")
+Name = "destroyable_block"
+Path = "res://bomberman/network_prefabs/destroyable_block.tscn"
+Id = 2
+
+[sub_resource type="Resource" id="Resource_li071"]
+script = ExtResource("1_01xuc")
+Name = "my_test_network_object"
+Path = "res://bomberman/network_prefabs/my_test_network_object.tscn"
+Id = 3
+
+[sub_resource type="Resource" id="Resource_6q1lx"]
+script = ExtResource("1_01xuc")
+Name = "static_block"
+Path = "res://bomberman/network_prefabs/static_block.tscn"
+Id = 4
+
+[resource]
+script = ExtResource("2_f5d0d")
+Levels = {
+"bomberman_main_level": SubResource("Resource_b5fr1")
+}
+Prefabs = {
+"bomb": SubResource("Resource_4vryj"),
+"bomber": SubResource("Resource_34fy7"),
+"destroyable_block": SubResource("Resource_si3kn"),
+"my_test_network_object": SubResource("Resource_li071"),
+"static_block": SubResource("Resource_6q1lx")
+}
+TickRate = 64.0
+MaxPlayers = 16
+MaxObjects = 512
+MaxSendableDataSize = 50000
+AllocatorBlockSize = 532768
+ReceiveBufferSize = 32768
+SendBufferSize = 16384
+Timeout = 10
+MaxPredicatedTicks = 64
+CallRenderInHeadless = true
+EnableLogging = true
+OtherScriptAssemblies = PackedStringArray("Netick for Godot")

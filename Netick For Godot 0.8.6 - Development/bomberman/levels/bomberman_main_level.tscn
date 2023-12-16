@@ -1,0 +1,509 @@
+[gd_scene load_steps=8 format=3 uid="uid://cjvh4orii4itf"]
+
+[ext_resource type="Script" path="res://addons/NetickForGodot/Netick/Integration/NetworkLevel.cs" id="1_4sb24"]
+[ext_resource type="Script" path="res://scripts/GameStarter.cs" id="2_dqxd1"]
+[ext_resource type="Resource" uid="uid://bygipwwx5g5xj" path="res://netickConfig.tres" id="3_bse4x"]
+[ext_resource type="Script" path="res://bomberman/scripts/BombermanEventsHandler.cs" id="4_3ayfx"]
+[ext_resource type="Texture2D" uid="uid://53w5obgmey4u" path="res://bomberman/textures/StaticBlock.png" id="5_ilxb4"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xiewx"]
+size = Vector2(1, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_4kf38"]
+
+[node name="BombermanMainLevel" type="Node"]
+script = ExtResource("1_4sb24")
+
+[node name="GameStarter" type="Control" parent="." node_paths=PackedStringArray("CurrentLevel")]
+z_index = 1
+layout_mode = 3
+anchors_preset = 0
+scale = Vector2(0.025, 0.025)
+script = ExtResource("2_dqxd1")
+CurrentLevel = NodePath("..")
+NetickConfig = ExtResource("3_bse4x")
+
+[node name="BombermanEventsHandler" type="Node" parent="."]
+script = ExtResource("4_3ayfx")
+_playerPrefab = "bomber"
+_bombPrefab = "bomb"
+_destroyableBlockPrefab = "destroyable_block"
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(6.59, 4.92)
+zoom = Vector2(45, 45)
+
+[node name="Blocks Group 1" type="Node2D" parent="."]
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="Blocks Group 1"]
+position = Vector2(1, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 1/StaticBody2D2"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 1/StaticBody2D2/CollisionShape2D"]
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Blocks Group 1"]
+position = Vector2(2, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 1/StaticBody2D"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 1/StaticBody2D/CollisionShape2D"]
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")
+
+[node name="StaticBody2D3" type="StaticBody2D" parent="Blocks Group 1"]
+position = Vector2(3, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 1/StaticBody2D3"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 1/StaticBody2D3/CollisionShape2D"]
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")
+
+[node name="StaticBody2D4" type="StaticBody2D" parent="Blocks Group 1"]
+position = Vector2(4, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 1/StaticBody2D4"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 1/StaticBody2D4/CollisionShape2D"]
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")
+
+[node name="StaticBody2D5" type="StaticBody2D" parent="Blocks Group 1"]
+position = Vector2(5, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 1/StaticBody2D5"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 1/StaticBody2D5/CollisionShape2D"]
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")
+
+[node name="StaticBody2D6" type="StaticBody2D" parent="Blocks Group 1"]
+position = Vector2(6, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 1/StaticBody2D6"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 1/StaticBody2D6/CollisionShape2D"]
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")
+
+[node name="StaticBody2D7" type="StaticBody2D" parent="Blocks Group 1"]
+position = Vector2(7, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 1/StaticBody2D7"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 1/StaticBody2D7/CollisionShape2D"]
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")
+
+[node name="StaticBody2D8" type="StaticBody2D" parent="Blocks Group 1"]
+position = Vector2(8, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 1/StaticBody2D8"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 1/StaticBody2D8/CollisionShape2D"]
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")
+
+[node name="StaticBody2D9" type="StaticBody2D" parent="Blocks Group 1"]
+position = Vector2(9, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 1/StaticBody2D9"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 1/StaticBody2D9/CollisionShape2D"]
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")
+
+[node name="StaticBody2D10" type="StaticBody2D" parent="Blocks Group 1"]
+position = Vector2(10, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 1/StaticBody2D10"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 1/StaticBody2D10/CollisionShape2D"]
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")
+
+[node name="StaticBody2D11" type="StaticBody2D" parent="Blocks Group 1"]
+position = Vector2(11, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 1/StaticBody2D11"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 1/StaticBody2D11/CollisionShape2D"]
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")
+
+[node name="StaticBody2D12" type="StaticBody2D" parent="Blocks Group 1"]
+position = Vector2(12, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 1/StaticBody2D12"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 1/StaticBody2D12/CollisionShape2D"]
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")
+
+[node name="Blocks Group 2" type="Node2D" parent="."]
+position = Vector2(0, -10)
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="Blocks Group 2"]
+position = Vector2(1, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 2/StaticBody2D2"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 2/StaticBody2D2/CollisionShape2D"]
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Blocks Group 2"]
+position = Vector2(2, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 2/StaticBody2D"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 2/StaticBody2D/CollisionShape2D"]
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")
+
+[node name="StaticBody2D3" type="StaticBody2D" parent="Blocks Group 2"]
+position = Vector2(3, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 2/StaticBody2D3"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 2/StaticBody2D3/CollisionShape2D"]
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")
+
+[node name="StaticBody2D4" type="StaticBody2D" parent="Blocks Group 2"]
+position = Vector2(4, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 2/StaticBody2D4"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 2/StaticBody2D4/CollisionShape2D"]
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")
+
+[node name="StaticBody2D5" type="StaticBody2D" parent="Blocks Group 2"]
+position = Vector2(5, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 2/StaticBody2D5"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 2/StaticBody2D5/CollisionShape2D"]
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")
+
+[node name="StaticBody2D6" type="StaticBody2D" parent="Blocks Group 2"]
+position = Vector2(6, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 2/StaticBody2D6"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 2/StaticBody2D6/CollisionShape2D"]
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")
+
+[node name="StaticBody2D7" type="StaticBody2D" parent="Blocks Group 2"]
+position = Vector2(7, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 2/StaticBody2D7"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 2/StaticBody2D7/CollisionShape2D"]
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")
+
+[node name="StaticBody2D8" type="StaticBody2D" parent="Blocks Group 2"]
+position = Vector2(8, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 2/StaticBody2D8"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 2/StaticBody2D8/CollisionShape2D"]
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")
+
+[node name="StaticBody2D9" type="StaticBody2D" parent="Blocks Group 2"]
+position = Vector2(9, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 2/StaticBody2D9"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 2/StaticBody2D9/CollisionShape2D"]
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")
+
+[node name="StaticBody2D10" type="StaticBody2D" parent="Blocks Group 2"]
+position = Vector2(10, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 2/StaticBody2D10"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 2/StaticBody2D10/CollisionShape2D"]
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")
+
+[node name="StaticBody2D11" type="StaticBody2D" parent="Blocks Group 2"]
+position = Vector2(11, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 2/StaticBody2D11"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 2/StaticBody2D11/CollisionShape2D"]
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")
+
+[node name="StaticBody2D12" type="StaticBody2D" parent="Blocks Group 2"]
+position = Vector2(12, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 2/StaticBody2D12"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 2/StaticBody2D12/CollisionShape2D"]
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")
+
+[node name="Blocks Group 3" type="Node2D" parent="."]
+position = Vector2(10, -2)
+rotation = 1.5708
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Blocks Group 3"]
+position = Vector2(2, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 3/StaticBody2D"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 3/StaticBody2D/CollisionShape2D"]
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")
+
+[node name="StaticBody2D3" type="StaticBody2D" parent="Blocks Group 3"]
+position = Vector2(3, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 3/StaticBody2D3"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 3/StaticBody2D3/CollisionShape2D"]
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")
+
+[node name="StaticBody2D4" type="StaticBody2D" parent="Blocks Group 3"]
+position = Vector2(4, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 3/StaticBody2D4"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 3/StaticBody2D4/CollisionShape2D"]
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")
+
+[node name="StaticBody2D5" type="StaticBody2D" parent="Blocks Group 3"]
+position = Vector2(5, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 3/StaticBody2D5"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 3/StaticBody2D5/CollisionShape2D"]
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")
+
+[node name="StaticBody2D6" type="StaticBody2D" parent="Blocks Group 3"]
+position = Vector2(6, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 3/StaticBody2D6"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 3/StaticBody2D6/CollisionShape2D"]
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")
+
+[node name="StaticBody2D7" type="StaticBody2D" parent="Blocks Group 3"]
+position = Vector2(7, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 3/StaticBody2D7"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 3/StaticBody2D7/CollisionShape2D"]
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")
+
+[node name="StaticBody2D8" type="StaticBody2D" parent="Blocks Group 3"]
+position = Vector2(8, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 3/StaticBody2D8"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 3/StaticBody2D8/CollisionShape2D"]
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")
+
+[node name="StaticBody2D9" type="StaticBody2D" parent="Blocks Group 3"]
+position = Vector2(9, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 3/StaticBody2D9"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 3/StaticBody2D9/CollisionShape2D"]
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")
+
+[node name="StaticBody2D10" type="StaticBody2D" parent="Blocks Group 3"]
+position = Vector2(10, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 3/StaticBody2D10"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 3/StaticBody2D10/CollisionShape2D"]
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")
+
+[node name="StaticBody2D11" type="StaticBody2D" parent="Blocks Group 3"]
+position = Vector2(11, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 3/StaticBody2D11"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 3/StaticBody2D11/CollisionShape2D"]
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")
+
+[node name="StaticBody2D12" type="StaticBody2D" parent="Blocks Group 3"]
+position = Vector2(12, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 3/StaticBody2D12"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 3/StaticBody2D12/CollisionShape2D"]
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")
+
+[node name="Blocks Group 4" type="Node2D" parent="."]
+position = Vector2(23, -2)
+rotation = 1.5708
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Blocks Group 4"]
+position = Vector2(2, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 4/StaticBody2D"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 4/StaticBody2D/CollisionShape2D"]
+position = Vector2(4.76837e-07, 0)
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")
+
+[node name="StaticBody2D3" type="StaticBody2D" parent="Blocks Group 4"]
+position = Vector2(3, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 4/StaticBody2D3"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 4/StaticBody2D3/CollisionShape2D"]
+position = Vector2(4.76837e-07, 0)
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")
+
+[node name="StaticBody2D4" type="StaticBody2D" parent="Blocks Group 4"]
+position = Vector2(4, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 4/StaticBody2D4"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 4/StaticBody2D4/CollisionShape2D"]
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")
+
+[node name="StaticBody2D5" type="StaticBody2D" parent="Blocks Group 4"]
+position = Vector2(5, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 4/StaticBody2D5"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 4/StaticBody2D5/CollisionShape2D"]
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")
+
+[node name="StaticBody2D6" type="StaticBody2D" parent="Blocks Group 4"]
+position = Vector2(6, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 4/StaticBody2D6"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 4/StaticBody2D6/CollisionShape2D"]
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")
+
+[node name="StaticBody2D7" type="StaticBody2D" parent="Blocks Group 4"]
+position = Vector2(7, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 4/StaticBody2D7"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 4/StaticBody2D7/CollisionShape2D"]
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")
+
+[node name="StaticBody2D8" type="StaticBody2D" parent="Blocks Group 4"]
+position = Vector2(8, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 4/StaticBody2D8"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 4/StaticBody2D8/CollisionShape2D"]
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")
+
+[node name="StaticBody2D9" type="StaticBody2D" parent="Blocks Group 4"]
+position = Vector2(9, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 4/StaticBody2D9"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 4/StaticBody2D9/CollisionShape2D"]
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")
+
+[node name="StaticBody2D10" type="StaticBody2D" parent="Blocks Group 4"]
+position = Vector2(10, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 4/StaticBody2D10"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 4/StaticBody2D10/CollisionShape2D"]
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")
+
+[node name="StaticBody2D11" type="StaticBody2D" parent="Blocks Group 4"]
+position = Vector2(11, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 4/StaticBody2D11"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 4/StaticBody2D11/CollisionShape2D"]
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")
+
+[node name="StaticBody2D12" type="StaticBody2D" parent="Blocks Group 4"]
+position = Vector2(12, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocks Group 4/StaticBody2D12"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Blocks Group 4/StaticBody2D12/CollisionShape2D"]
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("5_ilxb4")

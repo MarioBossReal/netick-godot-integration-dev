@@ -1,0 +1,36 @@
+[gd_scene load_steps=7 format=3 uid="uid://rprr5x41r8u3"]
+
+[ext_resource type="Script" path="res://addons/NetickForGodot/Netick/Integration/NetworkObject.cs" id="1_rsxlk"]
+[ext_resource type="Script" path="res://bomberman/scripts/Block.cs" id="2_a64ul"]
+[ext_resource type="Script" path="res://addons/NetickForGodot/Netick/Integration/Components/NetworkTransform2D.cs" id="3_tm8jf"]
+[ext_resource type="Texture2D" uid="uid://wr4ssn4wbuf5" path="res://bomberman/textures/DestroyableBlock.png" id="4_46tda"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xiewx"]
+size = Vector2(1, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_4kf38"]
+
+[node name="Destroyable Block" type="Node" node_paths=PackedStringArray("TransformSource")]
+script = ExtResource("1_rsxlk")
+"Network Id" = -1
+SceneId = 0
+PrefabId = 2
+PrefabIndex = -1
+IsSceneObject = true
+TransformSource = NodePath("Block/NetworkTransform2D/StaticBody2D")
+
+[node name="Block" type="Node" parent="."]
+script = ExtResource("2_a64ul")
+
+[node name="NetworkTransform2D" type="Node" parent="Block" node_paths=PackedStringArray("TransformSource")]
+script = ExtResource("3_tm8jf")
+TransformSource = NodePath("StaticBody2D")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Block/NetworkTransform2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Block/NetworkTransform2D/StaticBody2D"]
+shape = SubResource("RectangleShape2D_xiewx")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Block/NetworkTransform2D/StaticBody2D/CollisionShape2D"]
+mesh = SubResource("BoxMesh_4kf38")
+texture = ExtResource("4_46tda")

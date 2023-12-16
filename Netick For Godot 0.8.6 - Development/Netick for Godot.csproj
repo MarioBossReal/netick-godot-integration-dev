@@ -1,0 +1,28 @@
+<Project Sdk="Godot.NET.Sdk/4.2.0">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+    <RootNamespace>NetickforGodot</RootNamespace>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Mono.Cecil">
+      <HintPath>addons\NetickForGodot\Netick\Dependencies\Mono Cecil\Mono.Cecil.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Cecil.Mdb">
+      <HintPath>addons\NetickForGodot\Netick\Dependencies\Mono Cecil\Mono.Cecil.Mdb.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Cecil.Pdb">
+      <HintPath>addons\NetickForGodot\Netick\Dependencies\Mono Cecil\Mono.Cecil.Pdb.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Cecil.Rocks">
+      <HintPath>addons\NetickForGodot\Netick\Dependencies\Mono Cecil\Mono.Cecil.Rocks.dll</HintPath>
+    </Reference>
+    <Reference Include="Netick">
+      <HintPath>addons\NetickForGodot\Netick\Netick.dll</HintPath>
+    </Reference>
+    <Reference Include="Netick.CodeGen">
+      <HintPath>addons\NetickForGodot\Netick\Netick.CodeGen.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>
