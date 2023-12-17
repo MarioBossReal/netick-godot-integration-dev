@@ -1,6 +1,8 @@
-[gd_scene format=3 uid="uid://by4o78sb78lha"]
+[gd_scene load_steps=2 format=3 uid="uid://by4o78sb78lha"]
 
-[node name="ResourceReferenceListItem" type="MarginContainer"]
+[ext_resource type="Script" path="res://addons/NetickForGodot/Editor/scenes/ResourceReferenceListItem.cs" id="1_dfxlp"]
+
+[node name="ResourceReferenceListItem" type="MarginContainer" node_paths=PackedStringArray("NameLabel", "IdLabel", "RemoveButton")]
 anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 31.0
@@ -8,6 +10,10 @@ grow_horizontal = 2
 size_flags_horizontal = 3
 theme_override_constants/margin_left = 30
 theme_override_constants/margin_right = 30
+script = ExtResource("1_dfxlp")
+NameLabel = NodePath("Elements/Name/NameLabel")
+IdLabel = NodePath("Elements/Id/IdLabel")
+RemoveButton = NodePath("Elements/RemoveButton")
 
 [node name="Elements" type="HBoxContainer" parent="."]
 custom_minimum_size = Vector2(500, 0)

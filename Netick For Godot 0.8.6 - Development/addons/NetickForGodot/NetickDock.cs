@@ -1,3 +1,5 @@
+#if TOOLS
+
 using Godot;
 
 namespace Netick.GodotEngine;
@@ -44,11 +46,15 @@ public partial class NetickDock : Control
 
     private NetickConfig _netickConfig;
 
-
+    private bool _initialized = false;
 
     public void Initialize(NetickConfig netickConfig)
     {
+        if (_initialized)
+            return;
+
         _netickConfig = netickConfig;
+        _initialized = true;
 
         ClearReferenceLists();
 
@@ -63,55 +69,57 @@ public partial class NetickDock : Control
             var reference = pair.Value;
             AddLevelReferenceToList(reference);
         }
+
     }
 
     public void AddPrefabReferenceToList(ResourceReference reference)
     {
+        if (!_initialized)
+            return;
+
         var item = CreateReferenceListItem(reference);
 
-        item.GetNode<Button>("%RemoveButton").Pressed += () =>
-        {
-            _netickConfig.Prefabs.Remove(item.GetNode<Label>("%NameLabel").Text);
-            ResourceSaver.Save(_netickConfig, _netickConfig.ResourcePath);
-            item.QueueFree();
-        };
+        item.IsPrefabReference = true;
 
-        PrefabReferencesContainer.AddChild(item);
+        PrefabReferencesContainer?.AddChild(item);
     }
 
     public void AddLevelReferenceToList(ResourceReference reference)
     {
+        if (!_initialized)
+            return;
+
         var item = CreateReferenceListItem(reference);
 
-        item.GetNode<Button>("%RemoveButton").Pressed += () =>
-        {
-            _netickConfig.Levels.Remove(item.GetNode<Label>("%NameLabel").Text);
-            ResourceSaver.Save(_netickConfig, _netickConfig.ResourcePath);
-            item.QueueFree();
-        };
+        item.IsPrefabReference = false;
 
-        LevelReferencesContainer.AddChild(item);
+        LevelReferencesContainer?.AddChild(item);
     }
 
     private void ClearReferenceLists()
     {
-        foreach (var child in PrefabReferencesContainer.GetChildren())
+
+        foreach (var child in PrefabReferencesContainer?.GetChildren())
         {
             child?.QueueFree();
         }
 
-        foreach (var child in LevelReferencesContainer.GetChildren())
+        foreach (var child in LevelReferencesContainer?.GetChildren())
         {
             child?.QueueFree();
         }
     }
 
-    private Control CreateReferenceListItem(ResourceReference reference)
+    private ResourceReferenceListItem CreateReferenceListItem(ResourceReference reference)
     {
-        var item = ResourceReferenceItemScene.Instantiate<Control>();
+        var item = ResourceReferenceItemScene.Instantiate<ResourceReferenceListItem>();
 
-        item.GetNode<Label>("%NameLabel").Text = reference.Name;
-        item.GetNode<Label>("%IdLabel").Text = reference.Id.ToString();
+        item.NameLabel.Text = reference.Name;
+        item.IdLabel.Text = reference.Id.ToString();
+        item.Initialize(_netickConfig);
+
         return item;
     }
 }
+
+#endif

@@ -93,7 +93,7 @@ public partial class NetickGodotEditor : EditorPlugin
     {
         RemoveExportPlugin(_exportPlugin);
         RemoveControlFromDocks(_dock);
-        _dock.Free();
+        _dock?.Free();
         _dock = null;
         _exportPlugin = null;
     }
@@ -125,7 +125,7 @@ public partial class NetickGodotEditor : EditorPlugin
         _configPath.TextChanged += () => _editorConfig.NetickConfigPath = _configPath.Text;
         _assemblyPath.TextChanged += () => _editorConfig.EditorGameAssemblyDirectoryPath = _assemblyPath.Text;
 
-        _dock.Initialize(_netickConfig);
+        _dock?.Initialize(_netickConfig);
     }
 
     // Currently does not setup child prefabs like the original code does. Because this is going to be changed at some point.
