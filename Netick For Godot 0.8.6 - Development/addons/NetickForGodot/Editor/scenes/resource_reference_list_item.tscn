@@ -17,12 +17,12 @@ RemoveButton = NodePath("Elements/RemoveButton")
 
 [node name="Elements" type="HBoxContainer" parent="."]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 30
 alignment = 1
 
 [node name="Name" type="HBoxContainer" parent="Elements"]
 layout_mode = 2
-size_flags_horizontal = 0
+size_flags_horizontal = 3
 
 [node name="NameTitleLabel" type="Label" parent="Elements/Name"]
 layout_mode = 2
@@ -31,14 +31,16 @@ text = "Name:"
 
 [node name="NameLabel" type="Label" parent="Elements/Name"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(200, 0)
+custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
-size_flags_horizontal = 0
-text = "\"bomb\""
+size_flags_horizontal = 3
+text = "\"bombasdasd\""
+clip_text = true
+text_overrun_behavior = 3
 
 [node name="Id" type="HBoxContainer" parent="Elements"]
 layout_mode = 2
-size_flags_horizontal = 2
+size_flags_horizontal = 8
 
 [node name="IdTitleLabel" type="Label" parent="Elements/Id"]
 layout_mode = 2
@@ -54,7 +56,7 @@ text = "0"
 [node name="RemoveButton" type="Button" parent="Elements"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 10
+size_flags_horizontal = 8
 tooltip_text = "Remove this item from the Netick config."
 text = "Remove"
 alignment = 2
