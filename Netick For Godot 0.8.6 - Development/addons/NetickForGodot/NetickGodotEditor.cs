@@ -153,7 +153,7 @@ public partial class NetickGodotEditor : EditorPlugin
                 var reference = new ResourceReference();
                 reference.Name = name;
                 reference.Path = path;
-                reference.Id = _netickConfig.Prefabs.Count;
+                reference.Id = _netickConfig.GetValidNewPrefabId();
                 netObj.PrefabId = reference.Id;
 
                 // Need to resave because of setting PrefabId.
@@ -178,7 +178,7 @@ public partial class NetickGodotEditor : EditorPlugin
                 var reference = new ResourceReference();
                 reference.Name = name;
                 reference.Path = path;
-                reference.Id = _netickConfig.Levels.Count;
+                reference.Id = _netickConfig.GetValidNewLevelId();
 
                 _netickConfig.Levels.Add(name, reference);
 

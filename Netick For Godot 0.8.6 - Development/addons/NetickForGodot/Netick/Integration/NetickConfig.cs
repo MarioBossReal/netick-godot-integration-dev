@@ -121,4 +121,34 @@ public partial class NetickConfig : Resource
             ResourceSaver.Save(this, ResourcePath);
         }
     }
+
+    public int GetValidNewPrefabId()
+    {
+        int highest = -1;
+
+        foreach (var pair in Prefabs)
+        {
+            var reference = pair.Value;
+
+            if (reference.Id > highest)
+                highest = reference.Id;
+        }
+
+        return highest + 1;
+    }
+
+    public int GetValidNewLevelId()
+    {
+        int highest = -1;
+
+        foreach (var pair in Levels)
+        {
+            var reference = pair.Value;
+
+            if (reference.Id > highest)
+                highest = reference.Id;
+        }
+
+        return highest + 1;
+    }
 }
