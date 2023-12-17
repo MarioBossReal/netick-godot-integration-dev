@@ -124,6 +124,8 @@ public partial class NetickGodotEditor : EditorPlugin
 
         _configPath.TextChanged += () => _editorConfig.NetickConfigPath = _configPath.Text;
         _assemblyPath.TextChanged += () => _editorConfig.EditorGameAssemblyDirectoryPath = _assemblyPath.Text;
+
+        _dock.Initialize(_netickConfig);
     }
 
     // Currently does not setup child prefabs like the original code does. Because this is going to be changed at some point.
@@ -160,6 +162,9 @@ public partial class NetickGodotEditor : EditorPlugin
                 ResourceSaver.Save(newScene, path);
 
                 _netickConfig.Prefabs.Add(name, reference);
+
+                _dock.AddPrefabReferenceToList(reference);
+
                 GD.Print("Netick: Registered new prefab: " + Path.GetFileName(sceneRoot.SceneFilePath));
             }
         }
@@ -176,6 +181,9 @@ public partial class NetickGodotEditor : EditorPlugin
                 reference.Id = _netickConfig.Levels.Count;
 
                 _netickConfig.Levels.Add(name, reference);
+
+                _dock.AddLevelReferenceToList(reference);
+
                 GD.Print("Netick: Registered new level: " + Path.GetFileName(sceneRoot.SceneFilePath));
             }
         }

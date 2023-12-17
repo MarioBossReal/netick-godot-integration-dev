@@ -1,0 +1,55 @@
+[gd_scene format=3 uid="uid://by4o78sb78lha"]
+
+[node name="ResourceReferenceListItem" type="MarginContainer"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 31.0
+grow_horizontal = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_right = 30
+
+[node name="Elements" type="HBoxContainer" parent="."]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="Name" type="HBoxContainer" parent="Elements"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="NameTitleLabel" type="Label" parent="Elements/Name"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Name:"
+
+[node name="NameLabel" type="Label" parent="Elements/Name"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+text = "\"bomb\""
+
+[node name="Id" type="HBoxContainer" parent="Elements"]
+layout_mode = 2
+size_flags_horizontal = 2
+
+[node name="IdTitleLabel" type="Label" parent="Elements/Id"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "ID:"
+
+[node name="IdLabel" type="Label" parent="Elements/Id"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+text = "0"
+
+[node name="RemoveButton" type="Button" parent="Elements"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+tooltip_text = "Remove this item from the Netick config."
+text = "Remove"
+alignment = 2
