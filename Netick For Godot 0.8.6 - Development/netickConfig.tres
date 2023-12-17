@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="NetickConfig" load_steps=9 format=3 uid="uid://bygipwwx5g5xj"]
+[gd_resource type="Resource" load_steps=9 format=3 uid="uid://bygipwwx5g5xj"]
 
 [ext_resource type="Script" path="res://addons/NetickForGodot/Netick/Integration/ResourceReference.cs" id="1_01xuc"]
 [ext_resource type="Script" path="res://addons/NetickForGodot/Netick/Integration/NetickConfig.cs" id="2_f5d0d"]
