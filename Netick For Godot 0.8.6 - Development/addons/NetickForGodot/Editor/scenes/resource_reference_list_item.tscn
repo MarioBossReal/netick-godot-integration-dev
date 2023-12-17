@@ -16,13 +16,11 @@ IdLabel = NodePath("Elements/Id/IdLabel")
 RemoveButton = NodePath("Elements/RemoveButton")
 
 [node name="Elements" type="HBoxContainer" parent="."]
-custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
 theme_override_constants/separation = 10
 alignment = 1
 
 [node name="Name" type="HBoxContainer" parent="Elements"]
-custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 
@@ -33,6 +31,7 @@ text = "Name:"
 
 [node name="NameLabel" type="Label" parent="Elements/Name"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 text = "\"bomb\""
