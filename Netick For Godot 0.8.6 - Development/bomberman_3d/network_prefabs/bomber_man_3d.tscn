@@ -1,6 +1,12 @@
-[gd_scene load_steps=4 format=3 uid="uid://clylysmwkqgoa"]
+[gd_scene load_steps=10 format=3 uid="uid://clylysmwkqgoa"]
 
 [ext_resource type="Script" path="res://addons/NetickForGodot/Netick/Integration/NetworkObject.cs" id="1_x33wu"]
+[ext_resource type="Script" path="res://bomberman_3d/scripts/Bomberman3DController.cs" id="2_6mphk"]
+[ext_resource type="Material" uid="uid://bkecxmgndgwj6" path="res://bomberman_3d/materials/red.material" id="3_qwysm"]
+[ext_resource type="Material" uid="uid://bwe7xjk10hp1t" path="res://bomberman_3d/materials/green.material" id="4_my5xb"]
+[ext_resource type="Material" uid="uid://b3kpe2uagjx6p" path="res://bomberman_3d/materials/blue.material" id="5_2yb7v"]
+[ext_resource type="Material" uid="uid://dsvx7ggtm2rck" path="res://bomberman_3d/materials/yellow.material" id="6_5h00d"]
+[ext_resource type="Script" path="res://addons/NetickForGodot/Netick/Integration/Components/NetworkTransform3D.cs" id="7_56ic7"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_8fdws"]
 size = Vector3(0.5, 0.5, 0.5)
@@ -26,3 +32,16 @@ shape = SubResource("BoxShape3D_8fdws")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
 mesh = SubResource("BoxMesh_m30y5")
+
+[node name="Node" type="Node" parent="CharacterBody3D" node_paths=PackedStringArray("_meshInstance")]
+script = ExtResource("2_6mphk")
+Speed = 8.0
+Red = ExtResource("3_qwysm")
+Green = ExtResource("4_my5xb")
+Blue = ExtResource("5_2yb7v")
+Yellow = ExtResource("6_5h00d")
+_meshInstance = NodePath("../MeshInstance3D")
+
+[node name="NetworkTransform3D" type="Node" parent="CharacterBody3D" node_paths=PackedStringArray("RenderTransform")]
+script = ExtResource("7_56ic7")
+RenderTransform = NodePath("../MeshInstance3D")

@@ -45,6 +45,17 @@ public partial class Bomberman3DEventsHandler : NetworkEventsListener
 
         var pos = _spawnPositions[sandbox.ConnectedClients.Count];
         var playerObj = sandbox.NetworkInstantiate("bomber_man_3d", pos, Quaternion.Identity, client);
+
+        foreach (var child in playerObj.GetChildren())
+        {
+            foreach (var gchild in child.GetChildren())
+                if (gchild is Bomberman3DController controller)
+                {
+                    client.PlayerObject = controller;
+                    controller.MaterialIndex = sandbox.ConnectedClients.Count;
+                }
+        }
+
     }
 
     public override void OnClientDisconnected(NetworkSandbox sandbox, NetworkConnection client, TransportDisconnectReason transportDisconnectReason)
@@ -57,4 +68,5 @@ public partial class Bomberman3DEventsHandler : NetworkEventsListener
         if (sandbox.IsClient)
             return;
     }
+
 }
