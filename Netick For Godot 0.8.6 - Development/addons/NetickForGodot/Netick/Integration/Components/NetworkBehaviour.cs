@@ -2,7 +2,7 @@ using Godot;
 
 namespace Netick.GodotEngine;
 
-public unsafe abstract partial class NetworkBehaviour<T> : BaseNetworkBehaviour where T : Node
+public abstract partial class NetworkBehaviour<T> : BaseNetworkBehaviour where T : Node
 {
     public T BaseNode { get; private set; }
 

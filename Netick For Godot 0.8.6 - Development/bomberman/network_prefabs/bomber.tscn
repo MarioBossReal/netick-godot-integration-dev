@@ -30,9 +30,8 @@ scale = Vector2(0.23, 0.23)
 scale = Vector2(0.001, 0.001)
 texture = ExtResource("4_wk5rk")
 
-[node name="NetworkTransform2D" type="Node" parent="CharacterBody2D" node_paths=PackedStringArray("TransformSource", "RenderTransform")]
+[node name="NetworkTransform2D" type="Node" parent="CharacterBody2D" node_paths=PackedStringArray("RenderTransform")]
 script = ExtResource("3_cfjmj")
-TransformSource = NodePath("..")
 RenderTransform = NodePath("../Scaler")
 
 [node name="BombermanController" type="Node" parent="CharacterBody2D" node_paths=PackedStringArray("_cb", "_sprite2D", "_collisionShape2D")]

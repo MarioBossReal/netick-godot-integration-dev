@@ -33,8 +33,6 @@ public enum NetworkTransformRepConditions
 public unsafe partial class NetworkTransform3D : NetworkBehaviour<Node3D>
 {
     [Export]
-    public Node3D TransformSource;
-    [Export]
     public Node3D RenderTransform;
     [Export]
     private InterpolationMode InterpolationSource = InterpolationMode.Auto;
@@ -57,8 +55,13 @@ public unsafe partial class NetworkTransform3D : NetworkBehaviour<Node3D>
     private float _rotPrecision;
     private float _rotInversePrecision;
 
+    private Node3D _transformSource;
+
     public override void NetworkAwake()
     {
+        InitializeBaseNode();
+        _transformSource = BaseNode;
+
         _posPrecision = PositionPrecision;
         _posInversePrecision = 1f / PositionPrecision;
         _rotPrecision = RotationPrecision;
@@ -81,14 +84,14 @@ public unsafe partial class NetworkTransform3D : NetworkBehaviour<Node3D>
             _rotInversePrecision = -1;
         }
 
-        if (TransformSource == null)
+        if (_transformSource == null)
         {
             NetickLogger.LogError(Object.Entity, $"{nameof(NetworkTransform3D)}: you must assign a {nameof(Node3D)} to TransformSource on [{this.GetPath()}]\nNote: usually TransformSource should be the same as the TransformSource of NetworkObject.");
             return;
         }
 
-        NetickGodotUtils.SetVector3(S, TransformSource.GlobalPosition, _posInversePrecision);
-        NetickGodotUtils.SetQuaternion(S + 3, TransformSource.Quaternion, _rotInversePrecision);
+        NetickGodotUtils.SetVector3(S, _transformSource.GlobalPosition, _posInversePrecision);
+        NetickGodotUtils.SetQuaternion(S + 3, _transformSource.Quaternion, _rotInversePrecision);
 
         if (Engine.IsServer)
         {
@@ -101,8 +104,8 @@ public unsafe partial class NetworkTransform3D : NetworkBehaviour<Node3D>
     {
         if (RenderTransform != null && InterpolationSource == InterpolationMode.PredicatedSnapshot /*&& NetTransform.Interpolator.IsLocalInterpData*/)
         {
-            RenderTransform.GlobalPosition = TransformSource.GlobalPosition;
-            RenderTransform.Quaternion = TransformSource.Quaternion;
+            RenderTransform.GlobalPosition = _transformSource.GlobalPosition;
+            RenderTransform.Quaternion = _transformSource.Quaternion;
         }
     }
 
@@ -157,8 +160,8 @@ public unsafe partial class NetworkTransform3D : NetworkBehaviour<Node3D>
     {
         //  GD.Print("NetcodeIntoGameEngine");
 
-        TransformSource.GlobalPosition = NetickGodotUtils.GetVector3(S, _posPrecision);
-        TransformSource.Quaternion = NetickGodotUtils.GetQuaternion(S + 3, _rotPrecision);
+        _transformSource.GlobalPosition = NetickGodotUtils.GetVector3(S, _posPrecision);
+        _transformSource.Quaternion = NetickGodotUtils.GetQuaternion(S + 3, _rotPrecision);
     }
 
     public override void GameEngineIntoNetcode()
@@ -173,9 +176,9 @@ public unsafe partial class NetworkTransform3D : NetworkBehaviour<Node3D>
 
         // new poses
         if (_syncPosition)
-            NetickGodotUtils.SetVector3(S, TransformSource.GlobalPosition, _posInversePrecision);
+            NetickGodotUtils.SetVector3(S, _transformSource.GlobalPosition, _posInversePrecision);
         if (_syncRot)
-            NetickGodotUtils.SetQuaternion(S + 3, TransformSource.Quaternion, _rotInversePrecision);
+            NetickGodotUtils.SetQuaternion(S + 3, _transformSource.Quaternion, _rotInversePrecision);
 
         var newPos = NetickGodotUtils.GetVector3(S, _posPrecision);
         var newRot = NetickGodotUtils.GetQuaternion(S + 3, _rotPrecision);

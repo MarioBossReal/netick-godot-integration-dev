@@ -10,8 +10,6 @@ namespace Netick.GodotEngine;
 public unsafe partial class NetworkTransform2D : NetworkBehaviour<Node2D>
 {
     [Export]
-    public Node2D TransformSource;
-    [Export]
     public Node2D RenderTransform;
     [Export]
     private InterpolationMode InterpolationSource = InterpolationMode.Auto;
@@ -34,8 +32,13 @@ public unsafe partial class NetworkTransform2D : NetworkBehaviour<Node2D>
     private float _rotPrecision;
     private float _rotInversePrecision;
 
+    private Node2D _transformSource;
+
     public override void NetworkAwake()
     {
+        InitializeBaseNode();
+        _transformSource = BaseNode;
+
         _posPrecision = PositionPrecision;
         _posInversePrecision = 1f / PositionPrecision;
         _rotPrecision = RotationPrecision;
@@ -59,14 +62,14 @@ public unsafe partial class NetworkTransform2D : NetworkBehaviour<Node2D>
             _rotInversePrecision = -1;
         }
 
-        if (TransformSource == null)
+        if (_transformSource == null)
         {
             NetickLogger.LogError(Object.Entity, $"{nameof(NetworkTransform2D)}: you must assign a {nameof(Node2D)} to TransformSource on [{this.GetPath()}]\nNote: usually TransformSource should be the same as the TransformSource of NetworkObject.");
             return;
         }
 
-        NetickGodotUtils.SetVector2(S, TransformSource.GlobalPosition, _posInversePrecision);
-        NetickGodotUtils.SetFloat(S + 2, TransformSource.GlobalRotation, _rotInversePrecision);
+        NetickGodotUtils.SetVector2(S, _transformSource.GlobalPosition, _posInversePrecision);
+        NetickGodotUtils.SetFloat(S + 2, _transformSource.GlobalRotation, _rotInversePrecision);
 
 
         if (Engine.IsServer)
@@ -80,8 +83,8 @@ public unsafe partial class NetworkTransform2D : NetworkBehaviour<Node2D>
     {
         if (RenderTransform != null && InterpolationSource == InterpolationMode.PredicatedSnapshot /*&& NetTransform.Interpolator.IsLocalInterpData*/)
         {
-            RenderTransform.GlobalPosition = TransformSource.GlobalPosition;
-            RenderTransform.GlobalRotation = TransformSource.GlobalRotation;
+            RenderTransform.GlobalPosition = _transformSource.GlobalPosition;
+            RenderTransform.GlobalRotation = _transformSource.GlobalRotation;
         }
     }
 
@@ -135,9 +138,9 @@ public unsafe partial class NetworkTransform2D : NetworkBehaviour<Node2D>
     public override void NetcodeIntoGameEngine()
     {
         if (_syncPosition)
-            TransformSource.GlobalPosition = NetickGodotUtils.GetVector2(S, _posPrecision);
+            _transformSource.GlobalPosition = NetickGodotUtils.GetVector2(S, _posPrecision);
         if (_syncRot)
-            TransformSource.GlobalRotation = NetickGodotUtils.GetFloat(S + 2, _posPrecision);
+            _transformSource.GlobalRotation = NetickGodotUtils.GetFloat(S + 2, _posPrecision);
     }
 
     public override void GameEngineIntoNetcode()
@@ -149,9 +152,9 @@ public unsafe partial class NetworkTransform2D : NetworkBehaviour<Node2D>
 
         // new poses
         if (_syncPosition)
-            NetickGodotUtils.SetVector2(S, TransformSource.GlobalPosition, _posInversePrecision);
+            NetickGodotUtils.SetVector2(S, _transformSource.GlobalPosition, _posInversePrecision);
         if (_syncRot)
-            NetickGodotUtils.SetFloat(S + 2, TransformSource.GlobalRotation, _rotInversePrecision);
+            NetickGodotUtils.SetFloat(S + 2, _transformSource.GlobalRotation, _rotInversePrecision);
 
         var newPos = NetickGodotUtils.GetVector2(S, _posPrecision);
         var newRot = NetickGodotUtils.GetFloat(S + 2, _rotPrecision);
