@@ -4,7 +4,7 @@ using Netick.GodotEngine;
 namespace Netick.Samples.Bomberman
 {
     [GlobalClass]
-    public partial class Block : NetworkBehaviour<StaticBody2D>
+    public partial class Block : NetworkBehaviour
     {
         // Networked properties
         [Networked]
@@ -18,7 +18,6 @@ namespace Netick.Samples.Bomberman
 
         public override void _Ready()
         {
-            //InitializeBaseNode();
         }
 
         [OnChanged(nameof(Visible))]

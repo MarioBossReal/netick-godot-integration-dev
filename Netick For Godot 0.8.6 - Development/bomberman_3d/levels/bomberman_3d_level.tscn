@@ -1,0 +1,145 @@
+[gd_scene load_steps=22 format=3 uid="uid://6grvrv45n03o"]
+
+[ext_resource type="Script" path="res://addons/NetickForGodot/Netick/Integration/NetworkLevel.cs" id="1_rup07"]
+[ext_resource type="Script" path="res://scripts/GameStarter.cs" id="2_iq7ls"]
+[ext_resource type="Resource" uid="uid://bygipwwx5g5xj" path="res://netickConfig.tres" id="3_8l61q"]
+[ext_resource type="Script" path="res://bomberman_3d/scripts/Bomberman3DEventsHandler.cs" id="4_sijab"]
+[ext_resource type="Material" uid="uid://bkecxmgndgwj6" path="res://bomberman_3d/materials/red.material" id="5_wqden"]
+[ext_resource type="Material" uid="uid://bwe7xjk10hp1t" path="res://bomberman_3d/materials/green.material" id="6_aiw1w"]
+[ext_resource type="Material" uid="uid://b3kpe2uagjx6p" path="res://bomberman_3d/materials/blue.material" id="7_j6tn1"]
+[ext_resource type="Material" uid="uid://dsvx7ggtm2rck" path="res://bomberman_3d/materials/yellow.material" id="8_r5mai"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_8bag5"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_0n6rb"]
+sky_material = SubResource("ProceduralSkyMaterial_8bag5")
+
+[sub_resource type="Environment" id="Environment_6qw0s"]
+background_mode = 2
+sky = SubResource("Sky_0n6rb")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m7tg3"]
+albedo_color = Color(0.137255, 0.137255, 0.137255, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_pxopg"]
+material = SubResource("StandardMaterial3D_m7tg3")
+size = Vector2(16, 16)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_dg74o"]
+data = PackedVector3Array(8, 0, 8, -8, 0, 8, 8, 0, -8, -8, 0, 8, -8, 0, -8, 8, 0, -8)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u4lht"]
+albedo_color = Color(0.521569, 0.521569, 0.521569, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_usr7w"]
+material = SubResource("StandardMaterial3D_u4lht")
+size = Vector3(1, 1, 16)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_w2lxr"]
+data = PackedVector3Array(-0.5, 0.5, 8, 0.5, 0.5, 8, -0.5, -0.5, 8, 0.5, 0.5, 8, 0.5, -0.5, 8, -0.5, -0.5, 8, 0.5, 0.5, -8, -0.5, 0.5, -8, 0.5, -0.5, -8, -0.5, 0.5, -8, -0.5, -0.5, -8, 0.5, -0.5, -8, 0.5, 0.5, 8, 0.5, 0.5, -8, 0.5, -0.5, 8, 0.5, 0.5, -8, 0.5, -0.5, -8, 0.5, -0.5, 8, -0.5, 0.5, -8, -0.5, 0.5, 8, -0.5, -0.5, -8, -0.5, 0.5, 8, -0.5, -0.5, 8, -0.5, -0.5, -8, 0.5, 0.5, 8, -0.5, 0.5, 8, 0.5, 0.5, -8, -0.5, 0.5, 8, -0.5, 0.5, -8, 0.5, 0.5, -8, -0.5, -0.5, 8, 0.5, -0.5, 8, -0.5, -0.5, -8, 0.5, -0.5, 8, 0.5, -0.5, -8, -0.5, -0.5, -8)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_qddpb"]
+data = PackedVector3Array(-0.5, 0.5, 8, 0.5, 0.5, 8, -0.5, -0.5, 8, 0.5, 0.5, 8, 0.5, -0.5, 8, -0.5, -0.5, 8, 0.5, 0.5, -8, -0.5, 0.5, -8, 0.5, -0.5, -8, -0.5, 0.5, -8, -0.5, -0.5, -8, 0.5, -0.5, -8, 0.5, 0.5, 8, 0.5, 0.5, -8, 0.5, -0.5, 8, 0.5, 0.5, -8, 0.5, -0.5, -8, 0.5, -0.5, 8, -0.5, 0.5, -8, -0.5, 0.5, 8, -0.5, -0.5, -8, -0.5, 0.5, 8, -0.5, -0.5, 8, -0.5, -0.5, -8, 0.5, 0.5, 8, -0.5, 0.5, 8, 0.5, 0.5, -8, -0.5, 0.5, 8, -0.5, 0.5, -8, 0.5, 0.5, -8, -0.5, -0.5, 8, 0.5, -0.5, 8, -0.5, -0.5, -8, 0.5, -0.5, 8, 0.5, -0.5, -8, -0.5, -0.5, -8)
+
+[sub_resource type="BoxMesh" id="BoxMesh_erveu"]
+material = SubResource("StandardMaterial3D_u4lht")
+size = Vector3(1, 1, 18)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_x0wmg"]
+data = PackedVector3Array(-0.5, 0.5, 9, 0.5, 0.5, 9, -0.5, -0.5, 9, 0.5, 0.5, 9, 0.5, -0.5, 9, -0.5, -0.5, 9, 0.5, 0.5, -9, -0.5, 0.5, -9, 0.5, -0.5, -9, -0.5, 0.5, -9, -0.5, -0.5, -9, 0.5, -0.5, -9, 0.5, 0.5, 9, 0.5, 0.5, -9, 0.5, -0.5, 9, 0.5, 0.5, -9, 0.5, -0.5, -9, 0.5, -0.5, 9, -0.5, 0.5, -9, -0.5, 0.5, 9, -0.5, -0.5, -9, -0.5, 0.5, 9, -0.5, -0.5, 9, -0.5, -0.5, -9, 0.5, 0.5, 9, -0.5, 0.5, 9, 0.5, 0.5, -9, -0.5, 0.5, 9, -0.5, 0.5, -9, 0.5, 0.5, -9, -0.5, -0.5, 9, 0.5, -0.5, 9, -0.5, -0.5, -9, 0.5, -0.5, 9, 0.5, -0.5, -9, -0.5, -0.5, -9)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_ospor"]
+data = PackedVector3Array(-0.5, 0.5, 9, 0.5, 0.5, 9, -0.5, -0.5, 9, 0.5, 0.5, 9, 0.5, -0.5, 9, -0.5, -0.5, 9, 0.5, 0.5, -9, -0.5, 0.5, -9, 0.5, -0.5, -9, -0.5, 0.5, -9, -0.5, -0.5, -9, 0.5, -0.5, -9, 0.5, 0.5, 9, 0.5, 0.5, -9, 0.5, -0.5, 9, 0.5, 0.5, -9, 0.5, -0.5, -9, 0.5, -0.5, 9, -0.5, 0.5, -9, -0.5, 0.5, 9, -0.5, -0.5, -9, -0.5, 0.5, 9, -0.5, -0.5, 9, -0.5, -0.5, -9, 0.5, 0.5, 9, -0.5, 0.5, 9, 0.5, 0.5, -9, -0.5, 0.5, 9, -0.5, 0.5, -9, 0.5, 0.5, -9, -0.5, -0.5, 9, 0.5, -0.5, 9, -0.5, -0.5, -9, 0.5, -0.5, 9, 0.5, -0.5, -9, -0.5, -0.5, -9)
+
+[node name="Bomberman3DLevel" type="Node"]
+script = ExtResource("1_rup07")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 2, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_6qw0s")
+
+[node name="GameStarter" type="Control" parent="." node_paths=PackedStringArray("CurrentLevel")]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("2_iq7ls")
+CurrentLevel = NodePath("..")
+NetickConfig = ExtResource("3_8l61q")
+
+[node name="StaticGeometry" type="StaticBody3D" parent="."]
+
+[node name="Floor" type="MeshInstance3D" parent="StaticGeometry"]
+mesh = SubResource("PlaneMesh_pxopg")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticGeometry"]
+shape = SubResource("ConcavePolygonShape3D_dg74o")
+
+[node name="Wall" type="MeshInstance3D" parent="StaticGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, 0.5, 0)
+mesh = SubResource("BoxMesh_usr7w")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="StaticGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, 0.5, 0)
+shape = SubResource("ConcavePolygonShape3D_w2lxr")
+
+[node name="Wall2" type="MeshInstance3D" parent="StaticGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.5, 0.5, 0)
+mesh = SubResource("BoxMesh_usr7w")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="StaticGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.5, 0.5, 0)
+shape = SubResource("ConcavePolygonShape3D_qddpb")
+
+[node name="Wall3" type="MeshInstance3D" parent="StaticGeometry"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0.5, -8.5)
+mesh = SubResource("BoxMesh_erveu")
+
+[node name="CollisionShape3D4" type="CollisionShape3D" parent="StaticGeometry"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0.5, -8.5)
+shape = SubResource("ConcavePolygonShape3D_x0wmg")
+
+[node name="Wall4" type="MeshInstance3D" parent="StaticGeometry"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0.5, 8.5)
+mesh = SubResource("BoxMesh_erveu")
+
+[node name="CollisionShape3D5" type="CollisionShape3D" parent="StaticGeometry"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0.5, 8.5)
+shape = SubResource("ConcavePolygonShape3D_ospor")
+
+[node name="TopLeft" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0, -7.5)
+
+[node name="EventsHandler" type="Node" parent="." node_paths=PackedStringArray("_topLeft", "_spawns")]
+script = ExtResource("4_sijab")
+_topLeft = NodePath("../TopLeft")
+BoardSize = 16
+_spawns = NodePath("../Spawns")
+_red = ExtResource("5_wqden")
+_green = ExtResource("6_aiw1w")
+_blue = ExtResource("7_j6tn1")
+_yellow = ExtResource("8_r5mai")
+
+[node name="Spawns" type="Node3D" parent="."]
+
+[node name="Spawn1" type="Marker3D" parent="Spawns"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0, -7.5)
+
+[node name="Spawn2" type="Marker3D" parent="Spawns"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 0, 7.5)
+
+[node name="Spawn3" type="Marker3D" parent="Spawns"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 0, -7.5)
+
+[node name="Spawn4" type="Marker3D" parent="Spawns"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0, 7.5)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 15, 0)

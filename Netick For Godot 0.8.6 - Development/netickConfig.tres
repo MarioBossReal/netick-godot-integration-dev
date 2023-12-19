@@ -1,7 +1,13 @@
-[gd_resource type="Resource" script_class="NetickConfig" load_steps=9 format=3 uid="uid://bygipwwx5g5xj"]
+[gd_resource type="Resource" script_class="NetickConfig" load_steps=11 format=3 uid="uid://bygipwwx5g5xj"]
 
 [ext_resource type="Script" path="res://addons/NetickForGodot/Netick/Integration/ResourceReference.cs" id="1_01xuc"]
 [ext_resource type="Script" path="res://addons/NetickForGodot/Netick/Integration/NetickConfig.cs" id="2_f5d0d"]
+
+[sub_resource type="Resource" id="Resource_m2x78"]
+script = ExtResource("1_01xuc")
+Name = "bomberman_3d_level"
+Path = "res://bomberman_3d/levels/bomberman_3d_level.tscn"
+Id = 1
 
 [sub_resource type="Resource" id="Resource_74das"]
 script = ExtResource("1_01xuc")
@@ -20,6 +26,12 @@ script = ExtResource("1_01xuc")
 Name = "bomber"
 Path = "res://bomberman/network_prefabs/bomber.tscn"
 Id = 1
+
+[sub_resource type="Resource" id="Resource_gr2vc"]
+script = ExtResource("1_01xuc")
+Name = "bomber_man_3d"
+Path = "res://bomberman_3d/network_prefabs/bomber_man_3d.tscn"
+Id = 5
 
 [sub_resource type="Resource" id="Resource_cj40n"]
 script = ExtResource("1_01xuc")
@@ -42,11 +54,13 @@ Id = 4
 [resource]
 script = ExtResource("2_f5d0d")
 Levels = {
+"bomberman_3d_level": SubResource("Resource_m2x78"),
 "bomberman_main_level": SubResource("Resource_74das")
 }
 Prefabs = {
 "bomb": SubResource("Resource_hw7kl"),
 "bomber": SubResource("Resource_ef658"),
+"bomber_man_3d": SubResource("Resource_gr2vc"),
 "destroyable_block": SubResource("Resource_cj40n"),
 "my_test_network_object": SubResource("Resource_adiec"),
 "static_block": SubResource("Resource_y475v")

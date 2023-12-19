@@ -30,7 +30,7 @@ public enum NetworkTransformRepConditions
 [ExecutionOrder(-1000)]
 [IgnoreCodeGen]
 [GlobalClass]
-public unsafe partial class NetworkTransform3D : NetworkBehaviour<Node3D>
+public unsafe partial class NetworkTransform3D : NetworkBehaviour
 {
     [Export]
     public Node3D RenderTransform;
@@ -59,8 +59,7 @@ public unsafe partial class NetworkTransform3D : NetworkBehaviour<Node3D>
 
     public override void NetworkAwake()
     {
-        InitializeBaseNode();
-        _transformSource = BaseNode;
+        _transformSource = GetBaseNode<Node3D>();
 
         _posPrecision = PositionPrecision;
         _posInversePrecision = 1f / PositionPrecision;

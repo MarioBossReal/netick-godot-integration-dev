@@ -7,7 +7,7 @@ namespace Netick.GodotEngine;
 [ExecutionOrder(-1000)]
 [IgnoreCodeGen]
 [GlobalClass]
-public unsafe partial class NetworkTransform2D : NetworkBehaviour<Node2D>
+public unsafe partial class NetworkTransform2D : NetworkBehaviour
 {
     [Export]
     public Node2D RenderTransform;
@@ -36,8 +36,7 @@ public unsafe partial class NetworkTransform2D : NetworkBehaviour<Node2D>
 
     public override void NetworkAwake()
     {
-        InitializeBaseNode();
-        _transformSource = BaseNode;
+        _transformSource = GetBaseNode<Node2D>();
 
         _posPrecision = PositionPrecision;
         _posInversePrecision = 1f / PositionPrecision;

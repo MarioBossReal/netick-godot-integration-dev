@@ -4,15 +4,12 @@ using Netick.GodotEngine;
 namespace Netick.Samples.Bomberman;
 
 [GlobalClass]
-public partial class BombermanController : NetworkBehaviour<CharacterBody2D>
+public partial class BombermanController : NetworkBehaviour
 {
     [Export]
     private string _bombPrefab;
     [Export]
     private float _speed = 6.0f;
-
-    [Export]
-    private CharacterBody2D _cb;
 
     private BombermanEventsHandler _bombermanEventsHandler;
 
@@ -21,6 +18,8 @@ public partial class BombermanController : NetworkBehaviour<CharacterBody2D>
 
     [Export]
     private CollisionShape2D _collisionShape2D;
+
+    public CharacterBody2D BaseNode { get; private set; }
 
     // Cache input strings as StringNames to prevent allocations and avoid GC hiccups;
     private StringName _moveLeft = "move_left";
@@ -47,12 +46,12 @@ public partial class BombermanController : NetworkBehaviour<CharacterBody2D>
 
     public override void _Ready()
     {
-        InitializeBaseNode();
-
         _bombermanEventsHandler = NetickGodotUtils.FindObjectOfType<BombermanEventsHandler>(GetTree().Root);
 
+        BaseNode = GetBaseNode<CharacterBody2D>();
+
         // We store the spawn pos so that we use it later during respawn
-        SpawnPos = _cb.Position;
+        SpawnPos = BaseNode.Position;
     }
 
     public override void OnInputSourceLeft()
@@ -86,7 +85,7 @@ public partial class BombermanController : NetworkBehaviour<CharacterBody2D>
             if (IsServer && input.PlantBomb && BombCount < MaxBombs && !IsResimulating)
             {
                 // * round the bomb pos so that it snaps to the nearest square.
-                var bombNetworkObject = Sandbox.NetworkInstantiate(_bombPrefab, new Vector3(Round(_cb.Position).X, Round(_cb.Position).Y, 0), Quaternion.Identity);
+                var bombNetworkObject = Sandbox.NetworkInstantiate(_bombPrefab, new Vector3(Round(BaseNode.Position).X, Round(BaseNode.Position).Y, 0), Quaternion.Identity);
                 var bomb = NetickGodotUtils.FindObjectOfType<Bomb>(bombNetworkObject);
                 BombCount++;
                 //bomb.Bomber = this;

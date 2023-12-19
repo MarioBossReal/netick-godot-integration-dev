@@ -4,7 +4,7 @@ using Netick.GodotEngine;
 namespace Netick.Samples.Bomberman
 {
     [GlobalClass]
-    public partial class Bomb : NetworkBehaviour<Node2D>
+    public partial class Bomb : NetworkBehaviour
     {
         [Signal]
         public delegate void ExplodedEventHandler();
@@ -19,7 +19,6 @@ namespace Netick.Samples.Bomberman
 
         public override void _Ready()
         {
-            //InitializeBaseNode();
         }
 
         public override void NetworkStart()

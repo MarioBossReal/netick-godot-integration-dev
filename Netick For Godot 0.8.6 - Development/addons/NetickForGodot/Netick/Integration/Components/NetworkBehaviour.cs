@@ -2,34 +2,26 @@ using Godot;
 
 namespace Netick.GodotEngine;
 
-public abstract partial class NetworkBehaviour<T> : BaseNetworkBehaviour where T : Node
+public abstract partial class NetworkBehaviour : BaseNetworkBehaviour
 {
-    public T BaseNode { get; private set; }
-
-    private bool _initialized = false;
-
-    protected void InitializeBaseNode()
+    protected T GetBaseNode<T>() where T : Node
     {
-        if (_initialized)
-            return;
-
         var parent = GetParent();
 
         if (parent == null)
         {
             GD.Print("NetworkBehaviour cannot have no parent.");
             QueueFree();
-            return;
+            return null;
         }
 
         if (parent is not T typedParent)
         {
             GD.Print("NetworkBehaviour of type " + typeof(T).Name + " cannot be attached to parent of type " + parent.GetType().Name);
             QueueFree();
-            return;
+            return null;
         }
 
-        BaseNode = typedParent;
-        _initialized = true;
+        return typedParent;
     }
 }
