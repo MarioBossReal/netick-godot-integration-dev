@@ -16,25 +16,29 @@ SceneId = 0
 PrefabId = 1
 PrefabIndex = -1
 IsSceneObject = true
-TransformSource = NodePath("BombermanController/NetworkTransform2D/CharacterBody2D")
-
-[node name="BombermanController" type="Node" parent="."]
-script = ExtResource("2_olgif")
-_bombPrefab = "bomb"
-
-[node name="NetworkTransform2D" type="Node" parent="BombermanController" node_paths=PackedStringArray("TransformSource", "RenderTransform")]
-script = ExtResource("3_cfjmj")
 TransformSource = NodePath("CharacterBody2D")
-RenderTransform = NodePath("CharacterBody2D/CollisionShape2D/Scaler")
 
-[node name="CharacterBody2D" type="CharacterBody2D" parent="BombermanController/NetworkTransform2D"]
+[node name="CharacterBody2D" type="CharacterBody2D" parent="."]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="BombermanController/NetworkTransform2D/CharacterBody2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
 shape = SubResource("CircleShape2D_01r8t")
 
-[node name="Scaler" type="Node2D" parent="BombermanController/NetworkTransform2D/CharacterBody2D/CollisionShape2D"]
+[node name="Scaler" type="Node2D" parent="CharacterBody2D"]
 scale = Vector2(0.23, 0.23)
 
-[node name="Sprite2D" type="Sprite2D" parent="BombermanController/NetworkTransform2D/CharacterBody2D/CollisionShape2D/Scaler"]
+[node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D/Scaler"]
 scale = Vector2(0.001, 0.001)
 texture = ExtResource("4_wk5rk")
+
+[node name="NetworkTransform2D" type="Node" parent="CharacterBody2D" node_paths=PackedStringArray("TransformSource", "RenderTransform")]
+script = ExtResource("3_cfjmj")
+TransformSource = NodePath("..")
+RenderTransform = NodePath("../Scaler")
+
+[node name="BombermanController" type="Node" parent="CharacterBody2D" node_paths=PackedStringArray("_cb", "_sprite2D", "_collisionShape2D")]
+script = ExtResource("2_olgif")
+_bombPrefab = "bomb"
+_speed = 5.0
+_cb = NodePath("..")
+_sprite2D = NodePath("../Scaler/Sprite2D")
+_collisionShape2D = NodePath("../CollisionShape2D")

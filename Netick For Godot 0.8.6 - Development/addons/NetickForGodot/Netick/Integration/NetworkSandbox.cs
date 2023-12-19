@@ -11,7 +11,7 @@ namespace Netick.GodotEngine
         {
             conn.Position = NetickGodotUtils.Vector3EngineToNetick(position);
         }
-        public static T GetBehaviour<T>(this OnChangedData onChangedData) where T : NetworkBehaviour
+        public static T GetBehaviour<T>(this OnChangedData onChangedData) where T : BaseNetworkBehaviour
         {
             return (T)onChangedData.Behaviour;
         }
@@ -199,7 +199,7 @@ namespace Netick.GodotEngine
         /// <param name="id"> The id of the network object</param>
         /// <returns></returns>
 
-        public bool TryGetBehaviour<T>(int id, out T behaviour) where T : NetworkBehaviour
+        public bool TryGetBehaviour<T>(int id, out T behaviour) where T : BaseNetworkBehaviour
         {
             return TryGetBehaviour<T>(out behaviour, id);
         }
@@ -210,7 +210,7 @@ namespace Netick.GodotEngine
             return Entities.TryGetValue(id, out obj); ;
         }
 
-        private bool TryGetBehaviour<T>(out T behaviour, int id) where T : NetworkBehaviour
+        private bool TryGetBehaviour<T>(out T behaviour, int id) where T : BaseNetworkBehaviour
         {
             behaviour = null;
 

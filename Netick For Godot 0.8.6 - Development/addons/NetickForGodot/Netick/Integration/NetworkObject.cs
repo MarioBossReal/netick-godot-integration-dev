@@ -108,8 +108,8 @@ public unsafe partial class NetworkObject : Node, INetickEntity
     internal int InstanceCounter = 0;
 
     //internal List<NetworkEventsListner> EventListners           = new();
-    internal NetworkBehaviour[] NetworkedBehaviours = new NetworkBehaviour[0];
-    internal NetworkBehaviour[] NetickBehaviours = new NetworkBehaviour[0];
+    internal BaseNetworkBehaviour[] NetworkedBehaviours = new BaseNetworkBehaviour[0];
+    internal BaseNetworkBehaviour[] NetickBehaviours = new BaseNetworkBehaviour[0];
     // internal NetworkPlayer              TempInputSource;
 
     // [SerializeField]
@@ -228,15 +228,15 @@ public unsafe partial class NetworkObject : Node, INetickEntity
         }
 
         this.Sandbox = sandbox;
-        var listdd = new List<NetworkBehaviour>();
+        var listdd = new List<BaseNetworkBehaviour>();
         GetBehaviours(this, listdd); //   GetBehaviours(Actor, EventListners);
         NetickBehaviours = listdd.ToArray();//  NetickLogger.Log("INIT -- Behs" + listdd.Count);
 
-        var listo = new List<NetworkBehaviour>();
+        var listo = new List<BaseNetworkBehaviour>();
         for (int i = 0; i < NetickBehaviours.Length; i++)
         {
-            if (NetickBehaviours[i] as NetworkBehaviour != null)
-                listo.Add(NetickBehaviours[i] as NetworkBehaviour);
+            if (NetickBehaviours[i] as BaseNetworkBehaviour != null)
+                listo.Add(NetickBehaviours[i] as BaseNetworkBehaviour);
         }
 
         NetworkedBehaviours = listo.ToArray();//this.NetworkedBehaviours.Sort((x, y) => GetBehOrder(x).CompareTo(GetBehOrder(y)));
@@ -355,7 +355,7 @@ public unsafe partial class NetworkObject : Node, INetickEntity
 
     }
 
-    public T GetBehaviour<T>() where T : NetworkBehaviour
+    public T GetBehaviour<T>() where T : BaseNetworkBehaviour
     {
         for (int i = 0; i < NetworkedBehaviours.Length; i++)
         {

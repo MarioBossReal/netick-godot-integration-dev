@@ -3,37 +3,37 @@
 [ext_resource type="Script" path="res://addons/NetickForGodot/Netick/Integration/ResourceReference.cs" id="1_01xuc"]
 [ext_resource type="Script" path="res://addons/NetickForGodot/Netick/Integration/NetickConfig.cs" id="2_f5d0d"]
 
-[sub_resource type="Resource" id="Resource_j83ti"]
+[sub_resource type="Resource" id="Resource_74das"]
 script = ExtResource("1_01xuc")
 Name = "bomberman_main_level"
 Path = "res://bomberman/levels/bomberman_main_level.tscn"
 Id = 0
 
-[sub_resource type="Resource" id="Resource_khr5f"]
+[sub_resource type="Resource" id="Resource_hw7kl"]
 script = ExtResource("1_01xuc")
 Name = "bomb"
 Path = "res://bomberman/network_prefabs/bomb.tscn"
 Id = 0
 
-[sub_resource type="Resource" id="Resource_it75e"]
+[sub_resource type="Resource" id="Resource_ef658"]
 script = ExtResource("1_01xuc")
 Name = "bomber"
 Path = "res://bomberman/network_prefabs/bomber.tscn"
 Id = 1
 
-[sub_resource type="Resource" id="Resource_pkijp"]
+[sub_resource type="Resource" id="Resource_cj40n"]
 script = ExtResource("1_01xuc")
 Name = "destroyable_block"
 Path = "res://bomberman/network_prefabs/destroyable_block.tscn"
 Id = 2
 
-[sub_resource type="Resource" id="Resource_akdwb"]
+[sub_resource type="Resource" id="Resource_adiec"]
 script = ExtResource("1_01xuc")
 Name = "my_test_network_object"
 Path = "res://bomberman/network_prefabs/my_test_network_object.tscn"
 Id = 3
 
-[sub_resource type="Resource" id="Resource_r1lwx"]
+[sub_resource type="Resource" id="Resource_y475v"]
 script = ExtResource("1_01xuc")
 Name = "static_block"
 Path = "res://bomberman/network_prefabs/static_block.tscn"
@@ -42,14 +42,14 @@ Id = 4
 [resource]
 script = ExtResource("2_f5d0d")
 Levels = {
-"bomberman_main_level": SubResource("Resource_j83ti")
+"bomberman_main_level": SubResource("Resource_74das")
 }
 Prefabs = {
-"bomb": SubResource("Resource_khr5f"),
-"bomber": SubResource("Resource_it75e"),
-"destroyable_block": SubResource("Resource_pkijp"),
-"my_test_network_object": SubResource("Resource_akdwb"),
-"static_block": SubResource("Resource_r1lwx")
+"bomb": SubResource("Resource_hw7kl"),
+"bomber": SubResource("Resource_ef658"),
+"destroyable_block": SubResource("Resource_cj40n"),
+"my_test_network_object": SubResource("Resource_adiec"),
+"static_block": SubResource("Resource_y475v")
 }
 TickRate = 64.0
 MaxPlayers = 16

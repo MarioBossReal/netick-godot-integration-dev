@@ -17,20 +17,27 @@ SceneId = 0
 PrefabId = 2
 PrefabIndex = -1
 IsSceneObject = true
-TransformSource = NodePath("Block/NetworkTransform2D/StaticBody2D")
-
-[node name="Block" type="Node" parent="."]
-script = ExtResource("2_a64ul")
-
-[node name="NetworkTransform2D" type="Node" parent="Block" node_paths=PackedStringArray("TransformSource")]
-script = ExtResource("3_tm8jf")
 TransformSource = NodePath("StaticBody2D")
 
-[node name="StaticBody2D" type="StaticBody2D" parent="Block/NetworkTransform2D"]
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Block/NetworkTransform2D/StaticBody2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
 shape = SubResource("RectangleShape2D_xiewx")
 
-[node name="MeshInstance2D" type="MeshInstance2D" parent="Block/NetworkTransform2D/StaticBody2D/CollisionShape2D"]
+[node name="MeshInstance2D" type="MeshInstance2D" parent="StaticBody2D"]
 mesh = SubResource("BoxMesh_4kf38")
 texture = ExtResource("4_46tda")
+
+[node name="Block" type="Node" parent="StaticBody2D" node_paths=PackedStringArray("_meshInstance", "_collisionShape2D")]
+script = ExtResource("2_a64ul")
+_meshInstance = NodePath("../MeshInstance2D")
+_collisionShape2D = NodePath("../CollisionShape2D")
+
+[node name="NetworkTransform2D" type="Node" parent="StaticBody2D" node_paths=PackedStringArray("TransformSource", "RenderTransform")]
+script = ExtResource("3_tm8jf")
+TransformSource = NodePath("..")
+RenderTransform = NodePath("../MeshInstance2D")
+InterpolationSource = null
+TeleportDistance = null
+PositionPrecision = null
+RotationPrecision = null

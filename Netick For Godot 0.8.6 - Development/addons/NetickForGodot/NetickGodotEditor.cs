@@ -154,6 +154,9 @@ public partial class NetickGodotEditor : EditorPlugin
                 reference.Name = name;
                 reference.Path = path;
                 reference.Id = _netickConfig.GetValidNewPrefabId();
+
+                // I think that things like this should be stored in the resource
+                // reference and then set at runtime when the object is instanced.
                 netObj.PrefabId = reference.Id;
 
                 // Need to resave because of setting PrefabId.
@@ -447,7 +450,7 @@ public class GodotCodeGen : ICodeGenUser
 
     public void Init(ModuleDefinition typeDefinition)
     {
-        NetworkBehaviourType = typeof(NetworkBehaviour);
+        NetworkBehaviourType = typeof(BaseNetworkBehaviour);
     }
 
     public string GetNetworkScriptTypeFullName()

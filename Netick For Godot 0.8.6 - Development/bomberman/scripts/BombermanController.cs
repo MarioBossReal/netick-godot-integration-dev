@@ -4,16 +4,22 @@ using Netick.GodotEngine;
 namespace Netick.Samples.Bomberman;
 
 [GlobalClass]
-public partial class BombermanController : NetworkBehaviour
+public partial class BombermanController : NetworkBehaviour<CharacterBody2D>
 {
     [Export]
     private string _bombPrefab;
     [Export]
     private float _speed = 6.0f;
 
+    [Export]
     private CharacterBody2D _cb;
+
     private BombermanEventsHandler _bombermanEventsHandler;
+
+    [Export]
     private Sprite2D _sprite2D;
+
+    [Export]
     private CollisionShape2D _collisionShape2D;
 
     // Cache input strings as StringNames to prevent allocations and avoid GC hiccups;
@@ -41,10 +47,10 @@ public partial class BombermanController : NetworkBehaviour
 
     public override void _Ready()
     {
+        InitializeBaseNode();
+
         _bombermanEventsHandler = NetickGodotUtils.FindObjectOfType<BombermanEventsHandler>(GetTree().Root);
-        _sprite2D = NetickGodotUtils.FindObjectOfType<Sprite2D>(this);
-        _collisionShape2D = NetickGodotUtils.FindObjectOfType<CollisionShape2D>(this);
-        _cb = ((CharacterBody2D)GetChild(0).GetChild(0));
+
         // We store the spawn pos so that we use it later during respawn
         SpawnPos = _cb.Position;
     }
@@ -75,7 +81,7 @@ public partial class BombermanController : NetworkBehaviour
 
         if (FetchInput(out BombermanInput input))
         {
-            _cb.MoveAndCollide(input.Movement * _speed * Sandbox.FixedDeltaTime);
+            BaseNode.MoveAndCollide(input.Movement * _speed * Sandbox.FixedDeltaTime);
 
             if (IsServer && input.PlantBomb && BombCount < MaxBombs && !IsResimulating)
             {
@@ -83,7 +89,7 @@ public partial class BombermanController : NetworkBehaviour
                 var bombNetworkObject = Sandbox.NetworkInstantiate(_bombPrefab, new Vector3(Round(_cb.Position).X, Round(_cb.Position).Y, 0), Quaternion.Identity);
                 var bomb = NetickGodotUtils.FindObjectOfType<Bomb>(bombNetworkObject);
                 BombCount++;
-                bomb.Bomber = this;
+                //bomb.Bomber = this;
                 bomb.Exploded += () => BombCount--;
             }
         }
@@ -102,7 +108,7 @@ public partial class BombermanController : NetworkBehaviour
         BombCount = 0;
         wishPlaceBomb = false;
         _bombermanEventsHandler.RespawnPlayer(this);
-        _cb.Position = SpawnPos;
+        BaseNode.Position = SpawnPos;
     }
 
     [OnChanged(nameof(Alive))]

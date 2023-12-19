@@ -1,5 +1,6 @@
 using Godot;
-using Netick.GodotEngine;
+
+namespace Netick.GodotEngine;
 
 [Tool]
 public partial class ResourceReferenceListItem : MarginContainer

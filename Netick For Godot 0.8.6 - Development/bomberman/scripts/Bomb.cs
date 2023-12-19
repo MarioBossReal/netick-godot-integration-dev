@@ -4,25 +4,29 @@ using Netick.GodotEngine;
 namespace Netick.Samples.Bomberman
 {
     [GlobalClass]
-    public partial class Bomb : NetworkBehaviour
+    public partial class Bomb : NetworkBehaviour<Node2D>
     {
         [Signal]
         public delegate void ExplodedEventHandler();
 
-        public BombermanController Bomber;
+        //public BombermanController Bomber;
         public float ExplosionDelay = 3.0f;
 
+        [Export]
         private Sprite2D _sprite2D;
+
         private readonly Vector2[] _directionsAroundBomb = new Vector2[4] { Vector2.Right, Vector2.Left, Vector2.Up, Vector2.Down };
+
+        public override void _Ready()
+        {
+            //InitializeBaseNode();
+        }
 
         public override void NetworkStart()
         {
-            _sprite2D = NetickGodotUtils.FindObjectOfType<Sprite2D>(Object);
-            //Bomber?.SpawnedBombs.Add(this);
         }
         public override void NetworkDestroy()
         {
-            //Bomber?.SpawnedBombs.Remove(this);
         }
 
         public override void NetworkReset()
@@ -69,7 +73,9 @@ namespace Netick.Samples.Bomberman
 
         private void Damage(Node target)
         {
-            var bomber = target.GetNodeOrNull<BombermanController>("../../../BombermanController");
+            // fixme later
+
+            /*var bomber = target.GetNodeOrNull<BombermanController>("../../../BombermanController");
             var block = target.GetNodeOrNull<Block>("../../../Block");
 
             // check if this target is a block
@@ -77,7 +83,7 @@ namespace Netick.Samples.Bomberman
                 block.Visible = false;
             // check if this target is a player (bomber)
             if (bomber != null)
-                bomber.Die();
+                bomber.Die();*/
         }
     }
 }
