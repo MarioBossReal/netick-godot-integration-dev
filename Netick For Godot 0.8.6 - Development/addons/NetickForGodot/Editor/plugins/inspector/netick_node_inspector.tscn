@@ -1,0 +1,53 @@
+[gd_scene load_steps=5 format=3 uid="uid://cd8x0l125pjg8"]
+
+[ext_resource type="Script" path="res://addons/NetickForGodot/Editor/plugins/inspector/NetickNodeInspector.cs" id="1_dhffq"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rftrq"]
+bg_color = Color(0.266667, 0.266667, 0.266667, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+expand_margin_top = 2.0
+expand_margin_bottom = 2.0
+
+[sub_resource type="FontVariation" id="FontVariation_jfx73"]
+variation_embolden = 0.5
+
+[sub_resource type="LabelSettings" id="LabelSettings_jaujt"]
+font = SubResource("FontVariation_jfx73")
+font_size = 14
+font_color = Color(0.811765, 0.811765, 0.811765, 1)
+
+[node name="NetickNodeInspector" type="VBoxContainer" node_paths=PackedStringArray("NetworkedCheckbox")]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 51.0
+grow_horizontal = 2
+size_flags_horizontal = 3
+alignment = 1
+script = ExtResource("1_dhffq")
+NetworkedCheckbox = NodePath("MarginContainer/NetworkedProperty/CheckBox")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_rftrq")
+text = "Netick Properties"
+label_settings = SubResource("LabelSettings_jaujt")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+
+[node name="NetworkedProperty" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/NetworkedProperty"]
+layout_mode = 2
+size_flags_horizontal = 2
+text = "Networked"
+
+[node name="CheckBox" type="CheckBox" parent="MarginContainer/NetworkedProperty"]
+layout_mode = 2
+size_flags_horizontal = 2

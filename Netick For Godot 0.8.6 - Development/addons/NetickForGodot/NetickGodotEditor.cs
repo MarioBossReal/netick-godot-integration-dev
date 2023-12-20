@@ -69,6 +69,7 @@ public partial class NetickGodotEditor : EditorPlugin
 {
     private NetickDock _dock;
     private NetickExportPlugin _exportPlugin;
+    private NetickInspectorPlugin _inspectorPlugin;
 
     private TextEdit _configPath;
     private TextEdit _assemblyPath;
@@ -86,16 +87,21 @@ public partial class NetickGodotEditor : EditorPlugin
         _netickConfig = GetNetickConfigResource(_editorConfig.NetickConfigPath);
         SceneChanged += RegisterSceneAsPrefabOrLevel;
 
+        _inspectorPlugin = new();
+        AddInspectorPlugin(_inspectorPlugin);
+
         InitEditor();
     }
 
     public override void _ExitTree()
     {
         RemoveExportPlugin(_exportPlugin);
+        RemoveInspectorPlugin(_inspectorPlugin);
         RemoveControlFromDocks(_dock);
         _dock?.Free();
         _dock = null;
         _exportPlugin = null;
+        _inspectorPlugin = null;
     }
 
     public override bool _Build()
