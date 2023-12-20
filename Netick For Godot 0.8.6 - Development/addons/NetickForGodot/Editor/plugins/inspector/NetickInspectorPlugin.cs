@@ -6,7 +6,7 @@ public partial class NetickInspectorPlugin : EditorInspectorPlugin
 {
     public override bool _CanHandle(GodotObject @object)
     {
-        return @object is Node;
+        return @object is Node node && node.SceneFilePath != "" && node.GetTree().EditedSceneRoot == node;
     }
 
     public override void _ParseBegin(GodotObject @object)
