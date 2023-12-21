@@ -74,15 +74,23 @@ namespace Netick.Samples.Bomberman
         {
             // fixme later
 
-            /*var bomber = target.GetNodeOrNull<BombermanController>("../../../BombermanController");
-            var block = target.GetNodeOrNull<Block>("../../../Block");
+            BombermanController bomber = null;
+            Block block = null;
+
+            foreach (var child in target.GetChildren())
+                if (child is BombermanController c)
+                { bomber = c; break; }
+
+            foreach (var child in target.GetChildren())
+                if (child is Block b)
+                { block = b; break; }
 
             // check if this target is a block
             if (block != null)
                 block.Visible = false;
             // check if this target is a player (bomber)
             if (bomber != null)
-                bomber.Die();*/
+                bomber.Die();
         }
     }
 }
