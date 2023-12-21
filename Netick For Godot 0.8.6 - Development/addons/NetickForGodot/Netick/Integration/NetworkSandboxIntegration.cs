@@ -52,6 +52,8 @@ namespace Netick.GodotEngine
 
         private Dictionary<NetworkConnection, ConnectionMeta> PreivousConnectionMetas = new(512);
 
+        private Dictionary<Node, NetworkObject> NodeToNetworkObject = new();
+
         void IGameEngine.OnPacketReceived(NetworkConnection source)
         {
             // return;
@@ -205,10 +207,13 @@ namespace Netick.GodotEngine
 
         void IGameEngine.OnEntitySpawned(Entity ent)
         {
-
             //NetickLogger.Log($"ENTITY SPAWN: Id: {ent.NetworkId}      Behs:{ent.Scripts.Length}");
             var entity = (NetworkObject)ent.UserEntity;
             Entities.Add(ent.NetworkId, entity);
+
+            if (!NodeToNetworkObject.ContainsKey(entity.TransformSource))
+                NodeToNetworkObject.Add(entity.TransformSource, entity);
+
             Callbacks.OnObjectCreated(entity);
         }
 
@@ -345,6 +350,7 @@ namespace Netick.GodotEngine
                 foreach (var pool in NetworkObjectPools.Values)
                     pool.Reload();
                 var sceneRootObjects = Level.GetChildren();
+
                 foreach (var obj in sceneRootObjects)
                     InitializeSceneObjectChildren(obj);
 
@@ -545,13 +551,16 @@ namespace Netick.GodotEngine
 
         private void InitializeSceneObj(Node obj)
         {
-            NetworkObject entity = obj as NetworkObject;
-
-            if (entity == null)
+            if (obj == null)
                 return;
 
-            if (entity.PrefabId > -1 /*|| entity.Actor.Scene != Scene*/)
+            if (!obj.HasMeta("networked_object"))
                 return;
+
+            // CHECK
+
+            //if (entity.PrefabId > -1 /*|| entity.Actor.Scene != Scene*/)
+            //return;
 
             if (Entities.Count > (Network.Config.MaxObjects + 1) || SceneObjects.Count > (Network.Config.MaxObjects + 1))
             {
@@ -562,6 +571,9 @@ namespace Netick.GodotEngine
 
 
             //GD.Print($"@@@@@@@@@@@@@@@@@@@ OBJ:    Name:{entity.GetPath()}       SceneId:{entity.SceneId}");
+
+            var entity = new NetworkObject();
+            entity.TransformSource = obj;
 
             entity.InitInternals(this);
             Engine.CreateEntityLocal(entity);
@@ -626,17 +638,24 @@ namespace Netick.GodotEngine
         }
 
 
-        private void LinkObject(Node obj, NetworkPlayer inputSource, SpawnPredictionKey spawnKey)
+        private void LinkObject(NetworkObject networkObject, NetworkPlayer inputSource, SpawnPredictionKey spawnKey)
         {
-            var entity = obj as NetworkObject;
+            var entity = networkObject;
 
             if (entity != null)
             {
                 Engine.ServerAddEntity(inputSource, entity, spawnKey);
             }
 
-            foreach (Node child in obj.GetChildren())
-                LinkObject(child, inputSource, spawnKey);
+            // CHECK
+
+            /*            foreach (var child in entity.TransformSource.GetChildren())
+                        { 
+                            if (NodeToNetworkObject.TryGetValue(child, out var obj))
+                            {
+                                LinkObject(obj, inputSource, spawnKey);
+                            }
+                        }*/
         }
 
         internal NetworkObject InstantiatePrefabRootForClient(int instanceCounter, Tick spawnTick, Vector3 pos, Quaternion rot, int id, int prefabId, SpawnPredictionKey spawnKey, bool isThisInputSource)
@@ -722,7 +741,7 @@ namespace Netick.GodotEngine
                 return;
             }
 
-            InternalNetworkDestroy(obj);
+            InternalNetworkDestroy(obj.TransformSource);
         }
 
         private void InternalNetworkDestroy(Node obj)
@@ -730,7 +749,7 @@ namespace Netick.GodotEngine
             foreach (Node child in obj.GetChildren())
                 InternalNetworkDestroy(child);
 
-            var entity = obj as NetworkObject;
+            NodeToNetworkObject.TryGetValue(obj, out var entity);
 
             if (entity != null)
             {
@@ -753,7 +772,7 @@ namespace Netick.GodotEngine
         internal void NetworkDestroyForClient(NetworkObject entity)
         {
             GetObjectResetInfo(entity, out bool shouldReset, out bool isPrefabRoot);
-            UnlinkChildren(entity);
+            UnlinkChildren(entity.TransformSource);
 
             foreach (NetworkObject child in entity.BakedInternalPrefabChildren)
                 Engine.DestroyEntity(child, true, !isPrefabRoot);
@@ -765,7 +784,7 @@ namespace Netick.GodotEngine
         {
             foreach (Node child in obj.GetChildren())
             {
-                var childNet = child as NetworkObject;
+                NodeToNetworkObject.TryGetValue(obj, out var childNet);
 
                 if (childNet != null)
                 {
@@ -803,12 +822,15 @@ namespace Netick.GodotEngine
                 entity.Recycle();
 
             if (isPrefabRoot)
+            {
                 NetworkObjectPools[entity.PrefabId].Push(entity);
+            }
             else if (entity.BakedInternalPrefabRoot == null)
             {
-                if (entity.GetParent() != null)
-                    entity.GetParent().RemoveChild(entity);
-                entity.QueueFree();
+                if (entity.TransformSource.GetParent() != null)
+                    entity.TransformSource.GetParent().RemoveChild(entity.TransformSource);
+                entity.TransformSource.QueueFree();
+                NodeToNetworkObject.Remove(entity.TransformSource);
             }
         }
 

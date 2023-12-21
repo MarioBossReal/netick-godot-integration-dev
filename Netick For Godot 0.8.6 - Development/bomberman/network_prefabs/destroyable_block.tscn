@@ -1,6 +1,5 @@
-[gd_scene load_steps=7 format=3 uid="uid://rprr5x41r8u3"]
+[gd_scene load_steps=6 format=3 uid="uid://rprr5x41r8u3"]
 
-[ext_resource type="Script" path="res://addons/NetickForGodot/Netick/Integration/NetworkObject.cs" id="1_rsxlk"]
 [ext_resource type="Script" path="res://bomberman/scripts/Block.cs" id="2_a64ul"]
 [ext_resource type="Script" path="res://addons/NetickForGodot/Netick/Integration/Components/NetworkTransform2D.cs" id="3_tm8jf"]
 [ext_resource type="Texture2D" uid="uid://wr4ssn4wbuf5" path="res://bomberman/textures/DestroyableBlock.png" id="4_46tda"]
@@ -10,34 +9,20 @@ size = Vector2(1, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_4kf38"]
 
-[node name="Destroyable Block" type="Node" node_paths=PackedStringArray("TransformSource")]
-script = ExtResource("1_rsxlk")
-"Network Id" = -1
-SceneId = 0
-PrefabId = 2
-PrefabIndex = -1
-IsSceneObject = true
-TransformSource = NodePath("StaticBody2D")
+[node name="DestroyableBlock" type="StaticBody2D"]
 
-[node name="StaticBody2D" type="StaticBody2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_xiewx")
 
-[node name="MeshInstance2D" type="MeshInstance2D" parent="StaticBody2D"]
+[node name="MeshInstance2D" type="MeshInstance2D" parent="."]
 mesh = SubResource("BoxMesh_4kf38")
 texture = ExtResource("4_46tda")
 
-[node name="Block" type="Node" parent="StaticBody2D" node_paths=PackedStringArray("_meshInstance", "_collisionShape2D")]
+[node name="Block" type="Node" parent="." node_paths=PackedStringArray("_meshInstance", "_collisionShape2D")]
 script = ExtResource("2_a64ul")
 _meshInstance = NodePath("../MeshInstance2D")
 _collisionShape2D = NodePath("../CollisionShape2D")
 
-[node name="NetworkTransform2D" type="Node" parent="StaticBody2D" node_paths=PackedStringArray("TransformSource", "RenderTransform")]
+[node name="NetworkTransform2D" type="Node" parent="." node_paths=PackedStringArray("RenderTransform")]
 script = ExtResource("3_tm8jf")
-TransformSource = NodePath("..")
 RenderTransform = NodePath("../MeshInstance2D")
-InterpolationSource = null
-TeleportDistance = null
-PositionPrecision = null
-RotationPrecision = null

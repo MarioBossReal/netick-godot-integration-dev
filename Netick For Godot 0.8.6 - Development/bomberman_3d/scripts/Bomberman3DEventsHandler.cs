@@ -46,7 +46,7 @@ public partial class Bomberman3DEventsHandler : NetworkEventsListener
         var pos = _spawnPositions[sandbox.ConnectedClients.Count];
         var playerObj = sandbox.NetworkInstantiate("bomber_man_3d", pos, Quaternion.Identity, client);
 
-        foreach (var child in playerObj.GetChildren())
+        foreach (var child in playerObj.TransformSource.GetChildren())
         {
             foreach (var gchild in child.GetChildren())
                 if (gchild is Bomberman3DController controller)

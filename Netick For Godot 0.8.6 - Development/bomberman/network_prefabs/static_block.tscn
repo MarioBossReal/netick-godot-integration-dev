@@ -1,25 +1,14 @@
-[gd_scene load_steps=4 format=3 uid="uid://cmmv6xgpqcm05"]
-
-[ext_resource type="Script" path="res://addons/NetickForGodot/Netick/Integration/NetworkObject.cs" id="1_0t6gv"]
+[gd_scene load_steps=3 format=3 uid="uid://cmmv6xgpqcm05"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xiewx"]
 size = Vector2(1, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_4kf38"]
 
-[node name="Static Block" type="Node" node_paths=PackedStringArray("TransformSource")]
-script = ExtResource("1_0t6gv")
-"Network Id" = -1
-SceneId = 0
-PrefabId = 4
-PrefabIndex = -1
-IsSceneObject = true
-TransformSource = NodePath("StaticBody2D")
+[node name="StaticBlock" type="StaticBody2D"]
 
-[node name="StaticBody2D" type="StaticBody2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_xiewx")
 
-[node name="MeshInstance2D" type="MeshInstance2D" parent="StaticBody2D"]
+[node name="MeshInstance2D" type="MeshInstance2D" parent="."]
 mesh = SubResource("BoxMesh_4kf38")

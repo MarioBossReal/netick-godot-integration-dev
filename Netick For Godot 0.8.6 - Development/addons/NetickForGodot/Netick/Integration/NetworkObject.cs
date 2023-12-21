@@ -7,67 +7,7 @@ using System.Runtime.CompilerServices;
 
 namespace Netick.GodotEngine;
 
-[Tool]
-public unsafe partial class NetworkObject : Node, INetickEntity
-{
-    public override Variant _Get(StringName property)
-    {
-        if (property.ToString() == nameof(IsSceneObject))
-        {
-            return Variant.From(IsSceneObject);
-        }
-        else if (property.ToString() == "Network Id")
-        {
-            return Variant.From(NetworkId);
-        }
-
-        return default;
-    }
-
-    public override Godot.Collections.Array<Godot.Collections.Dictionary> _GetPropertyList()
-    {
-        return new Godot.Collections.Array<Godot.Collections.Dictionary>()
-        {
-
-            new Godot.Collections.Dictionary()
-            {
-                { "name",  "Network Id" },
-                { "type",  (int)Variant.Type.Int },
-                { "usage", (int)(PropertyUsageFlags.ReadOnly | PropertyUsageFlags.Default) }
-            },
-            new Godot.Collections.Dictionary()
-            {
-                { "name",  nameof(SceneId)},
-                { "type",  (int)Variant.Type.Int },
-                { "usage", (int)(PropertyUsageFlags.ReadOnly | PropertyUsageFlags.Default) }
-            },
-             new Godot.Collections.Dictionary()
-            {
-                { "name",  nameof(PrefabId) },
-                { "type",  (int)Variant.Type.Int },
-              //  { "usage", (int)(PropertyUsageFlags.ReadOnly | PropertyUsageFlags.Default) }
-                { "usage", (int)(PropertyUsageFlags.NoEditor) }
-
-            },
-            new Godot.Collections.Dictionary()
-            {
-                { "name",  nameof(PrefabIndex) },
-                { "type",  (int)Variant.Type.Int },
-                { "usage", (int)(PropertyUsageFlags.NoEditor) }
-            },
-               new Godot.Collections.Dictionary()
-            {
-                { "name",  nameof(IsSceneObject) },
-                { "type",  (int)Variant.Type.Bool },
-                { "usage", (int)(PropertyUsageFlags.ReadOnly | PropertyUsageFlags.Default) }
-            },
-        };
-    }
-}
-
-
-[GlobalClass]
-public unsafe partial class NetworkObject : Node, INetickEntity
+public unsafe partial class NetworkObject : INetickEntity
 {
     public NetworkSandbox Sandbox { get; private set; }
     public NetickEngine Engine { get; internal set; }
@@ -223,13 +163,12 @@ public unsafe partial class NetworkObject : Node, INetickEntity
     {
         if (TransformSource == null)
         {
-            string path = (GetPath() == null || GetPath() == "") ? "NULL" : GetPath();
-            throw new Exception($"Netick: you must assign a Node to TransfromSource on [Name: {this.Name}  Path: {path}]\nNote: TransfromSource acts as the source of position and rotation for this NetworkObject Node.");
+            throw new Exception($"Netick: Cannot initialize NetworkObject that has no transform source.");
         }
 
         this.Sandbox = sandbox;
         var listdd = new List<BaseNetworkBehaviour>();
-        GetBehaviours(this, listdd); //   GetBehaviours(Actor, EventListners);
+        GetBehaviours(TransformSource, listdd); //   GetBehaviours(Actor, EventListners);
         NetickBehaviours = listdd.ToArray();//  NetickLogger.Log("INIT -- Behs" + listdd.Count);
 
         var listo = new List<BaseNetworkBehaviour>();
@@ -260,8 +199,10 @@ public unsafe partial class NetworkObject : Node, INetickEntity
             if (child as T != null)
                 behaviourList.Add(child as T);  // (child as NetworkBehaviour).Object = obj;
 
-            if (child as NetworkObject == null)
-                GetBehaviours(child, behaviourList);
+            // CHECK
+
+            //if (child as NetworkObject == null)
+            //GetBehaviours(child, behaviourList);
         }
     }
 #pragma warning disable
@@ -270,8 +211,13 @@ public unsafe partial class NetworkObject : Node, INetickEntity
         this.SpawnTick = spawnTick;
         this.SpawnPredictionKey = spawnKey;
         //NetickLogger.Log("NetworkRegister " +  id);
-        if (GetParent() != null && (GetParent() as NetworkObject) != null)
-            Parent = GetParent() as NetworkObject;
+
+        // CHECK
+
+        //if (GetParent() != null && (GetParent() as NetworkObject) != null)
+        //    Parent = GetParent() as NetworkObject;
+
+        // ----already commented out----
 
         //foreach (var networkEventListner in EventListners)
         //{
@@ -280,20 +226,25 @@ public unsafe partial class NetworkObject : Node, INetickEntity
         //}
         spawnKey = default;
 
-        AuthParent = GetParent();
+        AuthParent = TransformSource.GetParent();
         InitParentData();
     }
 #pragma warning restore
     private void InitParentData()
     {
         // is prefab root or scene object
-        if (GetParent() != null && (GetParent() as NetworkObject) != null)
-        {
-            this.Parent = GetParent() as NetworkObject;
-            this.ParentId = Parent.Id;
-        }
-        else
-            this.ParentId = -2;
+
+        // CHECK
+
+        /*        if (GetParent() != null && (GetParent() as NetworkObject) != null)
+                {
+                    this.Parent = GetParent() as NetworkObject;
+                    this.ParentId = Parent.Id;
+                }
+                else
+                    this.ParentId = -2;*/
+
+        this.ParentId = -2;
     }
     /// <summary>
     /// <i><b>[Owner/InputSource Only]</b></i> Changes the parent of this object.
@@ -323,26 +274,26 @@ public unsafe partial class NetworkObject : Node, INetickEntity
 
         if (parent != null)
         {
-            if (GetParent() != null)
-                GetParent().RemoveChild(this);
+            if (TransformSource.GetParent() != null)
+                TransformSource.GetParent().RemoveChild(TransformSource);
 
-            parent.AddChild(this);
+            parent.TransformSource.AddChild(TransformSource);
             //transform.parent = parent.transform;
 
             ParentId = parent.Id;
         }
         else
         {
-            if (GetParent() != null)
-                GetParent().RemoveChild(this);
+            if (TransformSource.GetParent() != null)
+                TransformSource.GetParent().RemoveChild(TransformSource);
             //transform.parent = null;
             ParentId = -1;
         }
 
         if (isServerSnapshot)
-            AuthParent = GetParent();
+            AuthParent = TransformSource.GetParent();
 
-        var parentTrans = parent != null ? GetParent() : null;
+        var parentTrans = parent != null ? TransformSource.GetParent() : null;
 
         Parent = parent;
 

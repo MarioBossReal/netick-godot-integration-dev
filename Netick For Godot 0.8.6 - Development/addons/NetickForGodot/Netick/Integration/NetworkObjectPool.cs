@@ -52,7 +52,7 @@ namespace Netick.GodotEngine
 
             for (int i = 0; i < All.Count; i++)
             {
-                All[i]?.QueueFree();
+                All[i]?.TransformSource?.QueueFree();
             }
 
             Free.Clear();
@@ -70,7 +70,7 @@ namespace Netick.GodotEngine
             while (Free.Count > 0)
             {
                 var obj = Free.Pop();
-                obj?.QueueFree();
+                obj?.TransformSource?.QueueFree();
             }
         }
 
@@ -118,7 +118,7 @@ namespace Netick.GodotEngine
                 }
             }
 
-            Sandbox.Level.AddChild(newObj);
+            Sandbox.Level.AddChild(newObj.TransformSource);
             return newObj;
         }
 
@@ -126,13 +126,17 @@ namespace Netick.GodotEngine
         private NetworkObject Create(Vector3 pos, Quaternion rot)
         {
             //Debug.Log("Pool Create");
+
             var scene = GD.Load<PackedScene>(PrefabPath);
-            var prefabRoot = scene.Instantiate() as NetworkObject;
+            var prefabRoot = scene.Instantiate();
+            var networkObject = new NetworkObject();
+            networkObject.TransformSource = prefabRoot;
 
-            Init(prefabRoot);
-            All.Add(prefabRoot);
+            Init(networkObject);
 
-            return prefabRoot;
+            All.Add(networkObject);
+
+            return networkObject;
         }
 
         private void Init(NetworkObject obj)
@@ -142,6 +146,7 @@ namespace Netick.GodotEngine
                 obj.InitInternals(Sandbox);
                 Sandbox.Engine.CreateEntityLocal(obj);
                 obj.IsPrefabInstance = true;
+                obj.PrefabId = PrefabId;
             }
 
             foreach (var child in obj.BakedInternalPrefabChildren)
@@ -153,7 +158,7 @@ namespace Netick.GodotEngine
 
         public void Push(NetworkObject obj)
         {
-            obj.GetParent().RemoveChild(obj);
+            obj.TransformSource.GetParent().RemoveChild(obj.TransformSource);
             Free.Push(obj);
         }
     }

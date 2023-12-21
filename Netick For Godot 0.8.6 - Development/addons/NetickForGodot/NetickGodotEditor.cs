@@ -92,8 +92,6 @@ public partial class NetickGodotEditor : EditorPlugin
         _editorConfig = GetNetickEditorConfigResource("res://addons/NetickForGodot/editorConfig.tres");
         _netickConfig = GetNetickConfigResource(_editorConfig.NetickConfigPath);
 
-        //SceneChanged += RegisterSceneAsPrefabOrLevel;
-
         _inspectorPlugin = new();
         AddInspectorPlugin(_inspectorPlugin);
         _inspectorPlugin.InspectorCreated += HandleInspectorCreated;
@@ -185,7 +183,7 @@ public partial class NetickGodotEditor : EditorPlugin
 
         _netickConfig.Prefabs.Add(name, reference);
         _dock.AddPrefabReferenceToList(reference);
-        GD.Print("Netick: Registered new prefab: " + Path.GetFileName(sceneRoot.SceneFilePath));
+        //GD.Print("Netick: Registered new prefab: " + Path.GetFileName(sceneRoot.SceneFilePath));
 
         /*        if (sceneRoot is NetworkLevel)
                 {
@@ -211,6 +209,9 @@ public partial class NetickGodotEditor : EditorPlugin
 
     private void UnRegisterNetworkedPrefab(Node sceneRoot)
     {
+        if (sceneRoot == null)
+            return;
+
         var name = Path.GetFileNameWithoutExtension(sceneRoot.SceneFilePath);
 
         if (!_netickConfig.Prefabs.TryGetValue(name, out var reference))
@@ -221,7 +222,7 @@ public partial class NetickGodotEditor : EditorPlugin
 
         ResourceSaver.Save(_netickConfig, _netickConfig.ResourcePath);
 
-        GD.Print("Netick: Unregistered prefab: " + Path.GetFileName(sceneRoot.SceneFilePath));
+        //GD.Print("Netick: Unregistered prefab: " + Path.GetFileName(sceneRoot.SceneFilePath));
     }
 
     private static NetickGodotEditorConfig GetNetickEditorConfigResource(string path)

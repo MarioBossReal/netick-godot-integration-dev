@@ -45,7 +45,7 @@ public partial class BombermanEventsHandler : NetworkEventsListener
     {
         var pos = SpawnPositions[Sandbox.ConnectedClients.Count];
         var playerNetworkObject = sandbox.NetworkInstantiate(_playerPrefab, new Vector3(pos.X, pos.Y, 0), Quaternion.Identity, client);
-        var player = NetickGodotUtils.FindObjectOfType<BombermanController>(playerNetworkObject);
+        var player = NetickGodotUtils.FindObjectOfType<BombermanController>(playerNetworkObject.TransformSource);
         client.PlayerObject = player;
         AlivePlayers.Add(player);
     }
@@ -77,9 +77,9 @@ public partial class BombermanEventsHandler : NetworkEventsListener
         {
             var player = sandbox.NetworkInstantiate(_playerPrefab, new Vector3(SpawnPositions[i].X, SpawnPositions[i].Y, 0), Quaternion.Identity, sandbox.ConnectedPlayers[i]);
 
-            GD.Print(player.Name);
+            GD.Print(player.TransformSource.Name);
 
-            var asBombmer = NetickGodotUtils.FindObjectOfType<BombermanController>(player);
+            var asBombmer = NetickGodotUtils.FindObjectOfType<BombermanController>(player.TransformSource);
             sandbox.ConnectedPlayers[i].PlayerObject = asBombmer;
         }
 

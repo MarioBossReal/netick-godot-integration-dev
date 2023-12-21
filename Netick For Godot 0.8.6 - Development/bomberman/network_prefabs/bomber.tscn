@@ -1,6 +1,5 @@
-[gd_scene load_steps=6 format=3 uid="uid://b8mltkipc2nya"]
+[gd_scene load_steps=5 format=3 uid="uid://b8mltkipc2nya"]
 
-[ext_resource type="Script" path="res://addons/NetickForGodot/Netick/Integration/NetworkObject.cs" id="1_bwfrs"]
 [ext_resource type="Script" path="res://bomberman/scripts/BombermanController.cs" id="2_olgif"]
 [ext_resource type="Script" path="res://addons/NetickForGodot/Netick/Integration/Components/NetworkTransform2D.cs" id="3_cfjmj"]
 [ext_resource type="Texture2D" uid="uid://d0s15gbe5wc5o" path="res://bomberman/textures/Bomber.png" id="4_wk5rk"]
@@ -9,35 +8,25 @@
 custom_solver_bias = 0.85
 radius = 0.43
 
-[node name="Bomber" type="Node" node_paths=PackedStringArray("TransformSource")]
-script = ExtResource("1_bwfrs")
-"Network Id" = -1
-SceneId = 0
-PrefabId = 1
-PrefabIndex = -1
-IsSceneObject = true
-TransformSource = NodePath("CharacterBody2D")
+[node name="Bomber" type="CharacterBody2D"]
 
-[node name="CharacterBody2D" type="CharacterBody2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_01r8t")
 
-[node name="Scaler" type="Node2D" parent="CharacterBody2D"]
+[node name="Scaler" type="Node2D" parent="."]
 scale = Vector2(0.23, 0.23)
 
-[node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D/Scaler"]
+[node name="Sprite2D" type="Sprite2D" parent="Scaler"]
 scale = Vector2(0.001, 0.001)
 texture = ExtResource("4_wk5rk")
 
-[node name="NetworkTransform2D" type="Node" parent="CharacterBody2D" node_paths=PackedStringArray("RenderTransform")]
+[node name="NetworkTransform2D" type="Node" parent="." node_paths=PackedStringArray("RenderTransform")]
 script = ExtResource("3_cfjmj")
 RenderTransform = NodePath("../Scaler")
 
-[node name="BombermanController" type="Node" parent="CharacterBody2D" node_paths=PackedStringArray("_cb", "_sprite2D", "_collisionShape2D")]
+[node name="BombermanController" type="Node" parent="." node_paths=PackedStringArray("_sprite2D", "_collisionShape2D")]
 script = ExtResource("2_olgif")
 _bombPrefab = "bomb"
 _speed = 5.0
-_cb = NodePath("..")
 _sprite2D = NodePath("../Scaler/Sprite2D")
 _collisionShape2D = NodePath("../CollisionShape2D")
