@@ -185,26 +185,6 @@ public partial class NetickGodotEditor : EditorPlugin
 
         _netickConfig.Prefabs.Add(name, reference);
         _dock.AddPrefabReferenceToList(reference);
-        //GD.Print("Netick: Registered new prefab: " + Path.GetFileName(sceneRoot.SceneFilePath));
-
-        /*        if (sceneRoot is NetworkLevel)
-                {
-                    bool exists = _netickConfig.Levels.ContainsKey(name);
-
-                    if (!exists)
-                    {
-                        var reference = new ResourceReference();
-                        reference.Name = name;
-                        reference.Path = path;
-                        reference.Id = _netickConfig.GetValidNewLevelId();
-
-                        _netickConfig.Levels.Add(name, reference);
-
-                        _dock.AddLevelReferenceToList(reference);
-
-                        GD.Print("Netick: Registered new level: " + Path.GetFileName(sceneRoot.SceneFilePath));
-                    }
-                }*/
 
         ResourceSaver.Save(_netickConfig, _netickConfig.ResourcePath);
     }
