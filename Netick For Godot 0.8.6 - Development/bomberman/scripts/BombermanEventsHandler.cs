@@ -1,5 +1,6 @@
 ﻿using Godot;
 using Netick.GodotEngine;
+using Netick.GodotEngine.Extensions;
 using System.Collections.Generic;
 
 namespace Netick.Samples.Bomberman;
@@ -44,8 +45,8 @@ public partial class BombermanEventsHandler : NetworkEventsListener
     public override void OnClientConnected(NetworkSandbox sandbox, NetworkConnection client)
     {
         var pos = SpawnPositions[Sandbox.ConnectedClients.Count];
-        var playerNetworkObject = sandbox.NetworkInstantiate(_playerPrefab, new Vector3(pos.X, pos.Y, 0), Quaternion.Identity, client);
-        var player = NetickGodotUtils.FindObjectOfType<BombermanController>(playerNetworkObject.TransformSource);
+        var playerNetworkObject = Sandbox.NetworkInstantiate(_playerPrefab, new(pos.X, pos.Y, 0), null, client);
+        var player = playerNetworkObject.Node.GetChild<BombermanController>();
         client.PlayerObject = player;
         AlivePlayers.Add(player);
     }
@@ -75,11 +76,11 @@ public partial class BombermanEventsHandler : NetworkEventsListener
 
         for (int i = 0; i < sandbox.ConnectedPlayers.Count; i++)
         {
-            var player = sandbox.NetworkInstantiate(_playerPrefab, new Vector3(SpawnPositions[i].X, SpawnPositions[i].Y, 0), Quaternion.Identity, sandbox.ConnectedPlayers[i]);
+            var player = sandbox.NetworkInstantiate(_playerPrefab, new(SpawnPositions[i].X, SpawnPositions[i].Y, 0), null, sandbox.ConnectedPlayers[i]);
 
-            GD.Print(player.TransformSource.Name);
+            GD.Print(player.Node.Name);
 
-            var asBombmer = NetickGodotUtils.FindObjectOfType<BombermanController>(player.TransformSource);
+            var asBombmer = player.Node.GetChild<BombermanController>();
             sandbox.ConnectedPlayers[i].PlayerObject = asBombmer;
         }
 

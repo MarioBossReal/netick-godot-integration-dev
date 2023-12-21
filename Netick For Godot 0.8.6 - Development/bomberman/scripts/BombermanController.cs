@@ -86,7 +86,7 @@ public partial class BombermanController : NetworkBehaviour
             {
                 // * round the bomb pos so that it snaps to the nearest square.
                 var bombNetworkObject = Sandbox.NetworkInstantiate(_bombPrefab, new Vector3(Round(BaseNode.Position).X, Round(BaseNode.Position).Y, 0), Quaternion.Identity);
-                var bomb = NetickGodotUtils.FindObjectOfType<Bomb>(bombNetworkObject.TransformSource);
+                var bomb = NetickGodotUtils.FindObjectOfType<Bomb>(bombNetworkObject.Node);
                 BombCount++;
                 //bomb.Bomber = this;
                 bomb.Exploded += () => BombCount--;

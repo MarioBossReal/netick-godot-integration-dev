@@ -187,10 +187,10 @@ namespace Netick.GodotEngine
             userData->IsPrefab = entity.IsPrefabObject;
             userData->PrefabRootId = entity.PrefabIndex != -1 ? entity.BakedInternalPrefabRoot.Id : -1;
 
-            if (entity.TransformSource != null)
+            if (entity.Node != null)
             {
-                var node3D = entity.TransformSource as Node3D;
-                var node2D = entity.TransformSource as Node2D;
+                var node3D = entity.Node as Node3D;
+                var node2D = entity.Node as Node2D;
 
                 if (node3D != null)
                 {
@@ -211,8 +211,8 @@ namespace Netick.GodotEngine
             var entity = (NetworkObject)ent.UserEntity;
             Entities.Add(ent.NetworkId, entity);
 
-            if (!NodeToNetworkObject.ContainsKey(entity.TransformSource))
-                NodeToNetworkObject.Add(entity.TransformSource, entity);
+            if (!NodeToNetworkObject.ContainsKey(entity.Node))
+                NodeToNetworkObject.Add(entity.Node, entity);
 
             Callbacks.OnObjectCreated(entity);
         }
@@ -573,7 +573,7 @@ namespace Netick.GodotEngine
             //GD.Print($"@@@@@@@@@@@@@@@@@@@ OBJ:    Name:{entity.GetPath()}       SceneId:{entity.SceneId}");
 
             var entity = new NetworkObject();
-            entity.TransformSource = obj;
+            entity.Node = obj;
 
             entity.InitInternals(this);
             Engine.CreateEntityLocal(entity);
@@ -604,7 +604,7 @@ namespace Netick.GodotEngine
         /// <param name="rotation">Rotation of the instantiated object.</param>
         /// <param name="inputSource">Input source of the instantiated object.</param>
         /// <returns></returns>
-        public NetworkObject NetworkInstantiate(string prefabName, Vector3 position, Quaternion rotation, NetworkPlayer inputSource = null, SpawnPredictionKey predictedSpawnKey = default)
+        public NetworkObject NetworkInstantiate(string prefabName, Vector3? position = null, Quaternion? rotation = null, NetworkPlayer inputSource = null, SpawnPredictionKey predictedSpawnKey = default)
         {
             if (prefabName == null || prefabName == "")
                 throw new Exception("Netick: prefabName cannot be empty.");
@@ -627,7 +627,10 @@ namespace Netick.GodotEngine
             if (Engine.IsResimulating && predictedSpawnKey.IsValid && TryFindSpawnPredictedObject(predictedSpawnKey, out var _newObj))
                 return _newObj;
 
-            var newObj = pool.Get(position, rotation);
+            var pos = (Vector3)(position == null ? Vector3.Zero : position);
+            var rot = (Quaternion)(rotation == null ? Quaternion.Identity : rotation);
+
+            var newObj = pool.Get(pos, rot);
 
             if (predictedSpawnKey.IsValid && Engine.IsClient)
                 PredictedSpawns.Add(predictedSpawnKey.RawValue, newObj);
@@ -741,7 +744,7 @@ namespace Netick.GodotEngine
                 return;
             }
 
-            InternalNetworkDestroy(obj.TransformSource);
+            InternalNetworkDestroy(obj.Node);
         }
 
         private void InternalNetworkDestroy(Node obj)
@@ -772,7 +775,7 @@ namespace Netick.GodotEngine
         internal void NetworkDestroyForClient(NetworkObject entity)
         {
             GetObjectResetInfo(entity, out bool shouldReset, out bool isPrefabRoot);
-            UnlinkChildren(entity.TransformSource);
+            UnlinkChildren(entity.Node);
 
             foreach (NetworkObject child in entity.BakedInternalPrefabChildren)
                 Engine.DestroyEntity(child, true, !isPrefabRoot);
@@ -827,10 +830,10 @@ namespace Netick.GodotEngine
             }
             else if (entity.BakedInternalPrefabRoot == null)
             {
-                if (entity.TransformSource.GetParent() != null)
-                    entity.TransformSource.GetParent().RemoveChild(entity.TransformSource);
-                entity.TransformSource.QueueFree();
-                NodeToNetworkObject.Remove(entity.TransformSource);
+                if (entity.Node.GetParent() != null)
+                    entity.Node.GetParent().RemoveChild(entity.Node);
+                entity.Node.QueueFree();
+                NodeToNetworkObject.Remove(entity.Node);
             }
         }
 

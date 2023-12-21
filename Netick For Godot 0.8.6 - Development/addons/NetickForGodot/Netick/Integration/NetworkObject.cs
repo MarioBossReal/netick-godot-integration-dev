@@ -29,18 +29,20 @@ public unsafe partial class NetworkObject : INetickEntity
     public Tick SpawnTick { get; internal set; } = Tick.InvalidTick;
     public SpawnPredictionKey SpawnPredictionKey { get; private set; }
 
-    [Export]
-    public Node TransformSource;
-    [Export]
+
+    /// <summary>
+    /// The <see cref="Godot.Node"/> that this <see cref="NetworkObject"/> wraps.
+    /// </summary>
+    public Node Node { get; set; }
+
     internal NetworkObject[] BakedInternalPrefabChildren = new NetworkObject[0];
-    [Export]
+
     internal NetworkObject BakedInternalPrefabRoot;
-    // [Export]
+
     internal int SceneId = 0;
-    // [Export]
+
     internal int PrefabId = -1;
 
-    //[Export]
     internal int PrefabIndex = -1;
 
 
@@ -161,14 +163,14 @@ public unsafe partial class NetworkObject : INetickEntity
 
     internal void InitInternals(NetworkSandbox sandbox)
     {
-        if (TransformSource == null)
+        if (Node == null)
         {
             throw new Exception($"Netick: Cannot initialize NetworkObject that has no transform source.");
         }
 
         this.Sandbox = sandbox;
         var listdd = new List<BaseNetworkBehaviour>();
-        GetBehaviours(TransformSource, listdd); //   GetBehaviours(Actor, EventListners);
+        GetBehaviours(Node, listdd); //   GetBehaviours(Actor, EventListners);
         NetickBehaviours = listdd.ToArray();//  NetickLogger.Log("INIT -- Behs" + listdd.Count);
 
         var listo = new List<BaseNetworkBehaviour>();
@@ -226,7 +228,7 @@ public unsafe partial class NetworkObject : INetickEntity
         //}
         spawnKey = default;
 
-        AuthParent = TransformSource.GetParent();
+        AuthParent = Node.GetParent();
         InitParentData();
     }
 #pragma warning restore
@@ -274,26 +276,26 @@ public unsafe partial class NetworkObject : INetickEntity
 
         if (parent != null)
         {
-            if (TransformSource.GetParent() != null)
-                TransformSource.GetParent().RemoveChild(TransformSource);
+            if (Node.GetParent() != null)
+                Node.GetParent().RemoveChild(Node);
 
-            parent.TransformSource.AddChild(TransformSource);
+            parent.Node.AddChild(Node);
             //transform.parent = parent.transform;
 
             ParentId = parent.Id;
         }
         else
         {
-            if (TransformSource.GetParent() != null)
-                TransformSource.GetParent().RemoveChild(TransformSource);
+            if (Node.GetParent() != null)
+                Node.GetParent().RemoveChild(Node);
             //transform.parent = null;
             ParentId = -1;
         }
 
         if (isServerSnapshot)
-            AuthParent = TransformSource.GetParent();
+            AuthParent = Node.GetParent();
 
-        var parentTrans = parent != null ? TransformSource.GetParent() : null;
+        var parentTrans = parent != null ? Node.GetParent() : null;
 
         Parent = parent;
 

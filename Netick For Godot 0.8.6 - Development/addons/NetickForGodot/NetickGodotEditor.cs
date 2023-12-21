@@ -121,7 +121,7 @@ public partial class NetickGodotEditor : EditorPlugin
 
     private void InitEditor()
     {
-        _dock = GD.Load<PackedScene>("res://addons/NetickForGodot/NetickDock.tscn").Instantiate<NetickDock>();
+        _dock = GD.Load<PackedScene>(NetickEditorResourcePaths.DockPath).Instantiate<NetickDock>();
         AddControlToDock(DockSlot.LeftUl, _dock);
 
         _dock.VersionLabel.Text = $"Version: {Network.Version}-dev";
