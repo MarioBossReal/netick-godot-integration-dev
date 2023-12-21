@@ -25,11 +25,6 @@ texture = ExtResource("4_43fw2")
 script = ExtResource("2_di2hj")
 _sprite2D = NodePath("../Sprite2D")
 
-[node name="NetworkTransform2D" type="Node" parent="Scaler" node_paths=PackedStringArray("TransformSource", "RenderTransform")]
+[node name="NetworkTransform2D" type="Node" parent="Scaler" node_paths=PackedStringArray("RenderTransform")]
 script = ExtResource("3_ylqdy")
-TransformSource = NodePath("..")
 RenderTransform = NodePath("../Sprite2D")
-InterpolationSource = null
-TeleportDistance = null
-PositionPrecision = null
-RotationPrecision = null

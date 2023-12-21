@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="NetickConfig" load_steps=11 format=3 uid="uid://bygipwwx5g5xj"]
+[gd_resource type="Resource" script_class="NetickConfig" load_steps=10 format=3 uid="uid://bygipwwx5g5xj"]
 
 [ext_resource type="Script" path="res://addons/NetickForGodot/Netick/Integration/ResourceReference.cs" id="1_01xuc"]
 [ext_resource type="Script" path="res://addons/NetickForGodot/Netick/Integration/NetickConfig.cs" id="2_f5d0d"]
@@ -15,41 +15,35 @@ Name = "bomberman_main_level"
 Path = "res://bomberman/levels/bomberman_main_level.tscn"
 Id = 0
 
-[sub_resource type="Resource" id="Resource_hw7kl"]
-script = ExtResource("1_01xuc")
-Name = "bomb"
-Path = "res://bomberman/network_prefabs/bomb.tscn"
-Id = 0
-
-[sub_resource type="Resource" id="Resource_ef658"]
+[sub_resource type="Resource" id="Resource_iakvm"]
 script = ExtResource("1_01xuc")
 Name = "bomber"
 Path = "res://bomberman/network_prefabs/bomber.tscn"
 Id = 1
 
-[sub_resource type="Resource" id="Resource_gr2vc"]
-script = ExtResource("1_01xuc")
-Name = "bomber_man_3d"
-Path = "res://bomberman_3d/network_prefabs/bomber_man_3d.tscn"
-Id = 5
-
-[sub_resource type="Resource" id="Resource_cj40n"]
+[sub_resource type="Resource" id="Resource_y4x2x"]
 script = ExtResource("1_01xuc")
 Name = "destroyable_block"
 Path = "res://bomberman/network_prefabs/destroyable_block.tscn"
 Id = 2
 
-[sub_resource type="Resource" id="Resource_adiec"]
+[sub_resource type="Resource" id="Resource_f1xpg"]
 script = ExtResource("1_01xuc")
 Name = "my_test_network_object"
 Path = "res://bomberman/network_prefabs/my_test_network_object.tscn"
 Id = 3
 
-[sub_resource type="Resource" id="Resource_y475v"]
+[sub_resource type="Resource" id="Resource_tu1lf"]
 script = ExtResource("1_01xuc")
 Name = "static_block"
 Path = "res://bomberman/network_prefabs/static_block.tscn"
 Id = 4
+
+[sub_resource type="Resource" id="Resource_5dcdh"]
+script = ExtResource("1_01xuc")
+Name = "bomb"
+Path = "res://bomberman/network_prefabs/bomb.tscn"
+Id = 5
 
 [resource]
 script = ExtResource("2_f5d0d")
@@ -58,12 +52,11 @@ Levels = {
 "bomberman_main_level": SubResource("Resource_74das")
 }
 Prefabs = {
-"bomb": SubResource("Resource_hw7kl"),
-"bomber": SubResource("Resource_ef658"),
-"bomber_man_3d": SubResource("Resource_gr2vc"),
-"destroyable_block": SubResource("Resource_cj40n"),
-"my_test_network_object": SubResource("Resource_adiec"),
-"static_block": SubResource("Resource_y475v")
+"bomb": SubResource("Resource_5dcdh"),
+"bomber": SubResource("Resource_iakvm"),
+"destroyable_block": SubResource("Resource_y4x2x"),
+"my_test_network_object": SubResource("Resource_f1xpg"),
+"static_block": SubResource("Resource_tu1lf")
 }
 TickRate = 64.0
 MaxPlayers = 16

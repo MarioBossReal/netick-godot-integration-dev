@@ -20,7 +20,7 @@ public partial class ResourceReferenceListItem : MarginContainer
 
     public override void _Ready()
     {
-        RemoveButton.Pressed += HandleRemove;
+        RemoveButton.Pressed += HandleRemoveButton;
     }
 
     public void Initialize(NetickConfig netickConfig)
@@ -28,7 +28,7 @@ public partial class ResourceReferenceListItem : MarginContainer
         _netickConfig = netickConfig;
     }
 
-    private void HandleRemove()
+    private void HandleRemoveButton()
     {
         if (_netickConfig == null)
             return;
