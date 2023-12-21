@@ -1,5 +1,6 @@
 ﻿using Godot;
 using Netick.GodotEngine;
+using Netick.GodotEngine.Extensions;
 
 namespace Netick.Samples.Bomberman;
 
@@ -41,9 +42,6 @@ public partial class BombermanController : NetworkBehaviour
     [Networked]
     public int BombCount { get; set; } = 0;
 
-    [Networked(relevancy: Relevancy.InputSource)]
-    private bool wishPlaceBomb = false;
-
     public override void _Ready()
     {
         _bombermanEventsHandler = NetickGodotUtils.FindObjectOfType<BombermanEventsHandler>(GetTree().Root);
@@ -67,9 +65,9 @@ public partial class BombermanController : NetworkBehaviour
         input.Movement = Input.GetVector(_moveLeft, _moveRight, _moveUp, _moveDown);
 
         if (Input.IsActionJustPressed(_placeBomb))
-            wishPlaceBomb = true;
+            input.PlantBomb = true;
 
-        input.PlantBomb = wishPlaceBomb;
+        //input.PlantBomb = wishPlaceBomb;
         Sandbox.SetInput(input);
     }
 
@@ -86,13 +84,13 @@ public partial class BombermanController : NetworkBehaviour
             {
                 // * round the bomb pos so that it snaps to the nearest square.
                 var bombNetworkObject = Sandbox.NetworkInstantiate(_bombPrefab, new Vector3(Round(BaseNode.Position).X, Round(BaseNode.Position).Y, 0), Quaternion.Identity);
-                var bomb = NetickGodotUtils.FindObjectOfType<Bomb>(bombNetworkObject.Node);
+                var bomb = bombNetworkObject.Node.GetChild<Bomb>();
                 BombCount++;
                 //bomb.Bomber = this;
-                bomb.Exploded += () => BombCount--;
+                bomb.Exploded += () => { BombCount--; if (BombCount < 0) BombCount = 0; };
             }
         }
-        wishPlaceBomb = false;
+
     }
 
     public void Die()
@@ -105,7 +103,6 @@ public partial class BombermanController : NetworkBehaviour
         Alive = true;
         MaxBombs = 3;
         BombCount = 0;
-        wishPlaceBomb = false;
         _bombermanEventsHandler.RespawnPlayer(this);
         BaseNode.Position = SpawnPos;
     }
