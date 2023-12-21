@@ -48,12 +48,11 @@ public partial class Bomberman3DEventsHandler : NetworkEventsListener
 
         foreach (var child in playerObj.TransformSource.GetChildren())
         {
-            foreach (var gchild in child.GetChildren())
-                if (gchild is Bomberman3DController controller)
-                {
-                    client.PlayerObject = controller;
-                    controller.MaterialIndex = sandbox.ConnectedClients.Count;
-                }
+            if (child is Bomberman3DController controller)
+            {
+                client.PlayerObject = controller;
+                controller.MaterialIndex = sandbox.ConnectedClients.Count;
+            }
         }
 
     }
