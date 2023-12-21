@@ -3,17 +3,17 @@
 [ext_resource type="Script" path="res://addons/NetickForGodot/Netick/Integration/ResourceReference.cs" id="1_01xuc"]
 [ext_resource type="Script" path="res://addons/NetickForGodot/Netick/Integration/NetickConfig.cs" id="2_f5d0d"]
 
-[sub_resource type="Resource" id="Resource_m2x78"]
-script = ExtResource("1_01xuc")
-Name = "bomberman_3d_level"
-Path = "res://bomberman_3d/levels/bomberman_3d_level.tscn"
-Id = 1
-
 [sub_resource type="Resource" id="Resource_74das"]
 script = ExtResource("1_01xuc")
 Name = "bomberman_main_level"
 Path = "res://bomberman/levels/bomberman_main_level.tscn"
 Id = 0
+
+[sub_resource type="Resource" id="Resource_n5ib8"]
+script = ExtResource("1_01xuc")
+Name = "bomberman_3d_level"
+Path = "res://bomberman_3d/levels/bomberman_3d_level.tscn"
+Id = 1
 
 [sub_resource type="Resource" id="Resource_2ausa"]
 script = ExtResource("1_01xuc")
@@ -48,7 +48,7 @@ Id = 4
 [resource]
 script = ExtResource("2_f5d0d")
 Levels = {
-"bomberman_3d_level": SubResource("Resource_m2x78"),
+"bomberman_3d_level": SubResource("Resource_n5ib8"),
 "bomberman_main_level": SubResource("Resource_74das")
 }
 Prefabs = {

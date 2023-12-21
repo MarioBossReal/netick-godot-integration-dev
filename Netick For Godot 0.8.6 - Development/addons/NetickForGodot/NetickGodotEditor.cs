@@ -96,6 +96,8 @@ public partial class NetickGodotEditor : EditorPlugin
         AddInspectorPlugin(_inspectorPlugin);
         _inspectorPlugin.InspectorCreated += HandleInspectorCreated;
 
+        SceneChanged += RegisterNetworkedLevel;
+
         InitEditor();
     }
 
@@ -205,6 +207,40 @@ public partial class NetickGodotEditor : EditorPlugin
                 }*/
 
         ResourceSaver.Save(_netickConfig, _netickConfig.ResourcePath);
+    }
+
+    // Temporary! To allow registering levels in the same way as before.
+    private void RegisterNetworkedLevel(Node sceneRoot)
+    {
+        if (sceneRoot == null)
+            return;
+
+        if (sceneRoot.SceneFilePath == null || sceneRoot.SceneFilePath == string.Empty)
+            return;
+
+        var path = sceneRoot.SceneFilePath;
+
+        var name = Path.GetFileNameWithoutExtension(path);
+
+        // Already registered.
+        if (_netickConfig.Levels.ContainsKey(name))
+            return;
+
+        if (sceneRoot is not NetworkLevel)
+            return;
+
+        var reference = new ResourceReference();
+        reference.Name = name;
+        reference.Path = path;
+        reference.Id = _netickConfig.GetValidNewLevelId();
+
+        _netickConfig.Levels.Add(name, reference);
+
+        _dock.AddLevelReferenceToList(reference);
+
+        ResourceSaver.Save(_netickConfig, _netickConfig.ResourcePath);
+
+        GD.Print("Netick: Registered new level: " + Path.GetFileName(sceneRoot.SceneFilePath));
     }
 
     private void UnRegisterNetworkedPrefab(Node sceneRoot)
