@@ -37,7 +37,7 @@ public partial class NetickInspectorPlugin : EditorInspectorPlugin
         EmitSignal(SignalName.InspectorCreated, inspector);
     }
 
-    private InspectedNodeCategory CategorizeNode(Node node)
+    private static InspectedNodeCategory CategorizeNode(Node node)
     {
         if (node.SceneFilePath != "" && node.GetTree().EditedSceneRoot == node)
             return InspectedNodeCategory.PrefabRoot;

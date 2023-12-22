@@ -53,9 +53,9 @@ public static class NodeExtensions
     {
         var descendants = node.GetChildren<Node>();
 
-        foreach (var child in descendants)
+        foreach (var child in node.GetChildren())
         {
-            descendants.Concat(GetDescendantsInternal(child));
+            descendants = descendants.Concat(GetDescendantsInternal(child));
         }
 
         return descendants;
