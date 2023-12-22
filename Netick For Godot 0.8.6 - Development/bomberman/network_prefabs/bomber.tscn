@@ -9,6 +9,7 @@ custom_solver_bias = 0.85
 radius = 0.43
 
 [node name="Bomber" type="CharacterBody2D"]
+metadata/networked_node = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_01r8t")

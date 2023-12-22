@@ -10,6 +10,7 @@ size = Vector2(1, 1)
 [sub_resource type="BoxMesh" id="BoxMesh_4kf38"]
 
 [node name="DestroyableBlock" type="StaticBody2D"]
+metadata/networked_node = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_xiewx")

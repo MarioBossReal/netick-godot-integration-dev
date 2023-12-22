@@ -6,6 +6,7 @@
 
 [node name="Bomb" type="Node2D"]
 scale = Vector2(1.815, 1.815)
+metadata/networked_node = true
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.001, 0.001)

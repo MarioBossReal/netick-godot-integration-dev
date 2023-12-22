@@ -11,7 +11,18 @@ public partial class NetickInspectorPlugin : EditorInspectorPlugin
 
     public override bool _CanHandle(GodotObject @object)
     {
-        return @object is Node node && node.SceneFilePath != "" && node.GetTree().EditedSceneRoot == node;
+        if (@object is not Node node)
+            return false;
+
+        var category = CategorizeNode(node);
+
+        if (category == InspectedNodeCategory.PrefabRoot)
+            return true;
+
+        if (category == InspectedNodeCategory.NestedPrefab)
+            return false;
+
+        return true;
     }
 
     public override void _ParseBegin(GodotObject @object)
@@ -19,10 +30,29 @@ public partial class NetickInspectorPlugin : EditorInspectorPlugin
         var inspector = GD.Load<PackedScene>(NetickEditorResourcePaths.InspectorControlPath).Instantiate<NetickNodeInspector>();
 
         inspector.InspectedNode = @object as Node;
+        var category = CategorizeNode(inspector.InspectedNode);
+        inspector.Category = category;
 
         AddCustomControl(inspector);
-
         EmitSignal(SignalName.InspectorCreated, inspector);
+    }
+
+    private InspectedNodeCategory CategorizeNode(Node node)
+    {
+        if (node.SceneFilePath != "" && node.GetTree().EditedSceneRoot == node)
+            return InspectedNodeCategory.PrefabRoot;
+
+        if (node.SceneFilePath != "" && node.GetTree().EditedSceneRoot != node)
+            return InspectedNodeCategory.NestedPrefab;
+
+        return InspectedNodeCategory.NonPrefabChild;
+    }
+
+    public enum InspectedNodeCategory
+    {
+        PrefabRoot,
+        NestedPrefab,
+        NonPrefabChild
     }
 
 }

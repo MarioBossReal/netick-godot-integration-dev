@@ -1,4 +1,5 @@
 using Godot;
+using static Netick.GodotEngine.NetickInspectorPlugin;
 
 namespace Netick.GodotEngine;
 
@@ -8,10 +9,14 @@ public partial class NetickNodeInspector : Control
     public Node InspectedNode { get; set; }
 
     [Signal]
-    public delegate void NetworkedPropertySetEventHandler(Node rootNode, bool networked);
+    public delegate void NetworkedPropertySetEventHandler(NetickNodeInspector inspector);
 
     [Export]
     public CheckBox NetworkedCheckbox { get; set; }
+
+    public InspectedNodeCategory Category { get; set; }
+
+    public bool NetworkedPropertyValue { get; set; }
 
     public override void _Ready()
     {
@@ -21,6 +26,7 @@ public partial class NetickNodeInspector : Control
 
     private void SetNetworked(bool state)
     {
-        EmitSignal(SignalName.NetworkedPropertySet, InspectedNode, state);
+        NetworkedPropertyValue = state;
+        EmitSignal(SignalName.NetworkedPropertySet, this);
     }
 }

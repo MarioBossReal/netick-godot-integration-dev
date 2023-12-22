@@ -6,9 +6,12 @@ using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Netick.CodeGen;
 using Netick.GodotEngine;
+using Netick.GodotEngine.Extensions;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using static Netick.GodotEngine.NetickInspectorPlugin;
 
 namespace NetickEditor;
 
@@ -145,30 +148,94 @@ public partial class NetickGodotEditor : EditorPlugin
     private void HandleInspectorCreated(NetickNodeInspector inspector)
     {
         var name = Path.GetFileNameWithoutExtension(inspector.InspectedNode.SceneFilePath);
-        inspector.NetworkedCheckbox.SetPressedNoSignal(_netickConfig.Prefabs.ContainsKey(name));
+
+        bool check = false;
+
+        if (inspector.Category == InspectedNodeCategory.PrefabRoot)
+            check = _netickConfig.Prefabs.ContainsKey(name);
+
+        if (inspector.Category == InspectedNodeCategory.NonPrefabChild)
+            check = inspector.InspectedNode.HasMeta("networked_node");
+
+        inspector.NetworkedCheckbox.SetPressedNoSignal(check);
         inspector.NetworkedPropertySet += HandleNodeNetworkedPropertySet;
     }
 
-    private void HandleNodeNetworkedPropertySet(Node node, bool networked)
+    private void HandleNodeNetworkedPropertySet(NetickNodeInspector inspector)
     {
-        if (networked)
+        var category = inspector.Category;
+        var networked = inspector.NetworkedPropertyValue;
+        var node = inspector.InspectedNode;
+
+        if (category == InspectedNodeCategory.NonPrefabChild)
         {
-            RegisterNetworkedPrefab(node);
+            if (networked)
+            {
+                var owner = node.Owner;
+                var ownerName = Path.GetFileNameWithoutExtension(owner.SceneFilePath);
+                _netickConfig.Prefabs.TryGetValue(ownerName, out var ownerReference);
+
+                node.SetMeta("networked_node", true);
+
+                if (ownerReference != null)
+                    node.SetMeta("owner_prefab_id", ownerReference.Id);
+                else
+                    node.SetMeta("owner_prefab_id", -1);
+            }
+            else
+            {
+                if (node.HasMeta("networked_node"))
+                    node.RemoveMeta("networked_node");
+
+                if (node.HasMeta("owner_prefab_id"))
+                    node.RemoveMeta("owner_prefab_id");
+            }
         }
-        else
+
+        if (category == InspectedNodeCategory.PrefabRoot)
         {
-            UnRegisterNetworkedPrefab(node);
+            if (networked)
+            {
+                node.SetMeta("networked_node", true);
+
+                var reference = RegisterNetworkedPrefab(node);
+
+                var descendants = node.GetDescendants<Node>().Where(x => x.HasMeta("owner_prefab_id"));
+
+                foreach (var desc in descendants)
+                {
+                    desc.SetMeta("owner_prefab_id", reference.Id);
+                }
+
+            }
+            else
+            {
+                UnRegisterNetworkedPrefab(node);
+
+                if (node.HasMeta("networked_node"))
+                    node.RemoveMeta("networked_node");
+
+                var descendants = node.GetDescendants<Node>().Where(x => x.HasMeta("owner_prefab_id"));
+
+                foreach (var desc in descendants)
+                {
+                    desc.SetMeta("owner_prefab_id", -1);
+                }
+            }
+
+            if (node.HasMeta("owner_prefab_id"))
+                node.RemoveMeta("owner_prefab_id");
         }
     }
 
     // Currently does not setup child prefabs like the original code does. Because this is going to be changed at some point.
-    private void RegisterNetworkedPrefab(Node sceneRoot)
+    private ResourceReference RegisterNetworkedPrefab(Node sceneRoot)
     {
         if (sceneRoot == null)
-            return;
+            return null;
 
         if (sceneRoot.SceneFilePath == null || sceneRoot.SceneFilePath == string.Empty)
-            return;
+            return null;
 
         var path = sceneRoot.SceneFilePath;
 
@@ -176,7 +243,7 @@ public partial class NetickGodotEditor : EditorPlugin
 
         // Already registered.
         if (_netickConfig.Prefabs.ContainsKey(name))
-            return;
+            return null;
 
         var reference = new ResourceReference();
         reference.Name = name;
@@ -187,6 +254,8 @@ public partial class NetickGodotEditor : EditorPlugin
         _dock.AddPrefabReferenceToList(reference);
 
         ResourceSaver.Save(_netickConfig, _netickConfig.ResourcePath);
+
+        return reference;
     }
 
     // Temporary! To allow registering levels in the same way as before.
