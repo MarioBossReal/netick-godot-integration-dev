@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://b8mltkipc2nya"]
+[gd_scene load_steps=6 format=3 uid="uid://b8mltkipc2nya"]
 
 [ext_resource type="Script" path="res://bomberman/scripts/BombermanController.cs" id="2_olgif"]
 [ext_resource type="Script" path="res://addons/NetickForGodot/Netick/Integration/Components/NetworkTransform2D.cs" id="3_cfjmj"]
+[ext_resource type="Script" path="res://bomberman/scripts/TestNetworkedChild.cs" id="4_rv28h"]
 [ext_resource type="Texture2D" uid="uid://d0s15gbe5wc5o" path="res://bomberman/textures/Bomber.png" id="4_wk5rk"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_01r8t"]
@@ -33,3 +34,15 @@ _bombPrefab = "bomb"
 _speed = 5.0
 _sprite2D = NodePath("../Scaler/Sprite2D")
 _collisionShape2D = NodePath("../CollisionShape2D")
+
+[node name="TestNetworkedChild" type="Label" parent="."]
+offset_right = 134.0
+offset_bottom = 23.0
+scale = Vector2(0.025, 0.025)
+theme_override_font_sizes/font_size = 0
+text = "ayy"
+metadata/networked_node = true
+metadata/owner_prefab_id = 6
+
+[node name="NetworkedLabelChildTest" type="Node" parent="TestNetworkedChild"]
+script = ExtResource("4_rv28h")

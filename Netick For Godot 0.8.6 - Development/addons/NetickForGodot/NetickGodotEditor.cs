@@ -6,6 +6,7 @@ using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Netick.CodeGen;
 using Netick.GodotEngine;
+using Netick.GodotEngine.Constants;
 using Netick.GodotEngine.Extensions;
 using System;
 using System.Collections.Generic;
@@ -175,20 +176,24 @@ public partial class NetickGodotEditor : EditorPlugin
                 var ownerName = Path.GetFileNameWithoutExtension(owner.SceneFilePath);
                 _netickConfig.Prefabs.TryGetValue(ownerName, out var ownerReference);
 
-                node.SetMeta("networked_node", true);
+                node.SetMeta(MetaConstants.NetworkedNode, true);
 
                 if (ownerReference != null)
-                    node.SetMeta("owner_prefab_id", ownerReference.Id);
+                {
+                    node.SetMeta(MetaConstants.OwnerPrefabId, ownerReference.Id);
+                }
                 else
-                    node.SetMeta("owner_prefab_id", -1);
+                {
+                    node.SetMeta(MetaConstants.OwnerPrefabId, -1);
+                }
             }
             else
             {
-                if (node.HasMeta("networked_node"))
-                    node.RemoveMeta("networked_node");
+                if (node.HasMeta(MetaConstants.NetworkedNode))
+                    node.RemoveMeta(MetaConstants.NetworkedNode);
 
-                if (node.HasMeta("owner_prefab_id"))
-                    node.RemoveMeta("owner_prefab_id");
+                if (node.HasMeta(MetaConstants.OwnerPrefabId))
+                    node.RemoveMeta(MetaConstants.OwnerPrefabId);
             }
         }
 
@@ -196,15 +201,15 @@ public partial class NetickGodotEditor : EditorPlugin
         {
             if (networked)
             {
-                node.SetMeta("networked_node", true);
+                node.SetMeta(MetaConstants.NetworkedNode, true);
 
                 var reference = RegisterNetworkedPrefab(node);
 
-                var descendants = node.GetDescendants<Node>().Where(x => x.HasMeta("owner_prefab_id"));
+                var descendants = node.GetDescendants<Node>().Where(x => x.HasMeta(MetaConstants.OwnerPrefabId));
 
                 foreach (var desc in descendants)
                 {
-                    desc.SetMeta("owner_prefab_id", reference.Id);
+                    desc.SetMeta(MetaConstants.OwnerPrefabId, reference.Id);
                 }
 
             }
@@ -212,19 +217,19 @@ public partial class NetickGodotEditor : EditorPlugin
             {
                 UnRegisterNetworkedPrefab(node);
 
-                if (node.HasMeta("networked_node"))
-                    node.RemoveMeta("networked_node");
+                if (node.HasMeta(MetaConstants.NetworkedNode))
+                    node.RemoveMeta(MetaConstants.NetworkedNode);
 
-                var descendants = node.GetDescendants<Node>().Where(x => x.HasMeta("owner_prefab_id"));
+                var descendants = node.GetDescendants<Node>().Where(x => x.HasMeta(MetaConstants.OwnerPrefabId));
 
                 foreach (var desc in descendants)
                 {
-                    desc.SetMeta("owner_prefab_id", -1);
+                    desc.SetMeta(MetaConstants.OwnerPrefabId, -1);
                 }
             }
 
-            if (node.HasMeta("owner_prefab_id"))
-                node.RemoveMeta("owner_prefab_id");
+            if (node.HasMeta(MetaConstants.OwnerPrefabId))
+                node.RemoveMeta(MetaConstants.OwnerPrefabId);
         }
     }
 
@@ -477,7 +482,7 @@ public partial class NetickGodotEditor : EditorPlugin
     {
         node.Set(nameof(NetworkObject.SceneId), -1);
         node.Set(nameof(NetworkObject.PrefabId), prefabId);
-        node.Set(nameof(NetworkObject.BakedInternalPrefabRoot), prefabRoot);
+        node.Set(nameof(NetworkObject.InternalPrefabRoot), prefabRoot);
         node.Set(nameof(NetworkObject.PrefabIndex), prefabIndex);
     }
 
@@ -485,7 +490,7 @@ public partial class NetickGodotEditor : EditorPlugin
     internal static void SetPrefabNodeChildren(Node node, Node[] children)
     {
         var godotArray = new Godot.Collections.Array(children);
-        node.Set(nameof(NetworkObject.BakedInternalPrefabChildren), Variant.From(godotArray));
+        //node.Set(nameof(NetworkObject.BakedInternalPrefabChildren), Variant.From(godotArray));
     }
 
     // To be deleted.

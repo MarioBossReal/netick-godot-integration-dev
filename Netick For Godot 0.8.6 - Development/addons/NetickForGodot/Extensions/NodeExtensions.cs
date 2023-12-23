@@ -14,7 +14,7 @@ public static class NodeExtensions
     public static IEnumerable<T> GetChildren<T>(this Node node) where T : Node
     {
         var children = node.GetChildren();
-        return (IEnumerable<T>)children.Where(x => x is T);
+        return children.Where(x => x is T).Cast<T>();
     }
 
     public static T GetSibling<T>(this Node node) where T : Node
@@ -37,6 +37,11 @@ public static class NodeExtensions
         return GetChildren<T>(parent).Where(x => x != node);
     }
 
+    public static IEnumerable<Node> GetSiblings(this Node node)
+    {
+        return GetSiblings<Node>(node);
+    }
+
     public static T GetDescendant<T>(this Node node) where T : Node
     {
         var descendants = GetDescendantsInternal(node);
@@ -46,7 +51,12 @@ public static class NodeExtensions
     public static IEnumerable<T> GetDescendants<T>(this Node node) where T : Node
     {
         var descendants = GetDescendantsInternal(node);
-        return (IEnumerable<T>)descendants.Where(x => x is T);
+        return descendants.Where(x => x is T).Cast<T>();
+    }
+
+    public static IEnumerable<Node> GetDescendants(this Node node)
+    {
+        return GetDescendantsInternal(node);
     }
 
     private static IEnumerable<Node> GetDescendantsInternal(Node node)

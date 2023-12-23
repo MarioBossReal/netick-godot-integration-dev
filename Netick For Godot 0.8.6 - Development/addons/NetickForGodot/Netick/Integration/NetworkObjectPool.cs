@@ -1,7 +1,10 @@
 ﻿// Copyright (c) 2023 Karrar Rahim. All rights reserved.
 
 using Godot;
+using Netick.GodotEngine.Constants;
+using Netick.GodotEngine.Extensions;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Netick.GodotEngine;
 
@@ -122,21 +125,19 @@ internal class NetworkObjectPool
 
     private NetworkObject Create(Vector3 pos, Quaternion rot)
     {
-        //Debug.Log("Pool Create");
-
         var scene = GD.Load<PackedScene>(PrefabPath);
         var prefabRoot = scene.Instantiate();
         var networkObject = new NetworkObject();
         networkObject.Node = prefabRoot;
 
-        Init(networkObject);
+        Init(networkObject, networkObject);
 
         All.Add(networkObject);
 
         return networkObject;
     }
 
-    private void Init(NetworkObject obj)
+    private void Init(NetworkObject obj, NetworkObject rootObj)
     {
         if (obj != null)
         {
@@ -146,11 +147,25 @@ internal class NetworkObjectPool
             obj.PrefabId = PrefabId;
         }
 
-        foreach (var child in obj.BakedInternalPrefabChildren)
-        {
-            Init(child);
-        }
+        var childObjs = obj.Node.GetChildren<Node>()
+            .Where(x => x.HasMeta(MetaConstants.NetworkedNode) && x.HasMeta(MetaConstants.OwnerPrefabId))
+            .Where(x => x.GetMeta(MetaConstants.OwnerPrefabId).As<int>() == PrefabId);
 
+        foreach (var childObj in childObjs)
+        {
+            var childNetObj = new NetworkObject();
+            childNetObj.Node = childObj;
+            childNetObj.ParentId = obj.Id;
+            childNetObj.InternalPrefabRoot = rootObj;
+
+            childNetObj.PrefabIndex = childObj.Owner.GetDescendants()
+                .Where(x => x.HasMeta(MetaConstants.NetworkedNode))
+                .ToList()
+                .IndexOf(childObj);
+
+            obj.InternalPrefabChildren.Add(childNetObj);
+            Init(childNetObj, rootObj);
+        }
     }
     public void Push(NetworkObject obj)
     {

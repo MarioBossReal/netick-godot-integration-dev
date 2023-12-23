@@ -1,60 +1,85 @@
 ﻿// Copyright (c) 2023 Karrar Rahim. All rights reserved.
 
 using Godot;
+using Netick.GodotEngine.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 
 namespace Netick.GodotEngine;
 
 public unsafe partial class NetworkObject : INetickEntity
 {
+    /// <summary>
+    /// The <see cref="NetworkSandbox"/> this <see cref="NetworkObject"/> is being simulated in.
+    /// </summary>
     public NetworkSandbox Sandbox { get; private set; }
-    public NetickEngine Engine { get; internal set; }
-    public Entity Entity { get; private set; }
-
-    public int NetworkId
-    {
-        get
-        {
-            if (Entity == null)
-                return -1;
-            return Entity.NetworkId;
-        }
-    }
 
     /// <summary>
-    /// The tick which this object was spawned at.
+    /// The <see cref="NetickEngine"/> that this <see cref="NetworkObject"/> is being simulated by.
+    /// </summary>
+    public NetickEngine Engine { get; internal set; }
+
+    /// <summary>
+    /// The <see cref="Netick.Entity"/> that this <see cref="NetworkObject"/> represents.
+    /// </summary>
+    public Entity Entity { get; private set; }
+
+    /// <summary>
+    /// The Network Id of this <see cref="NetworkObject"/>. The same as <see cref="Entity"/>.Id.
+    /// </summary>
+    public int NetworkId => Entity != null ? Entity.NetworkId : -1;
+
+    /// <summary>
+    /// The <see cref="Tick"/> which this <see cref="NetworkObject"/> was spawned at.
     /// </summary>
     public Tick SpawnTick { get; internal set; } = Tick.InvalidTick;
-    public SpawnPredictionKey SpawnPredictionKey { get; private set; }
 
+    /// <summary>
+    /// The <see cref="Netick.SpawnPredictionKey"/> that this <see cref="NetworkObject"/> was spawned with.
+    /// </summary>
+    public SpawnPredictionKey SpawnPredictionKey { get; private set; }
 
     /// <summary>
     /// The <see cref="Godot.Node"/> that this <see cref="NetworkObject"/> wraps.
     /// </summary>
     public Node Node { get; set; }
 
-    internal NetworkObject[] BakedInternalPrefabChildren = new NetworkObject[0];
+    /// <summary>
+    /// The list of instanced <see cref="NetworkObject"/>s that are descendants of this <see cref="NetworkObject"/>'s associated prefab.
+    /// </summary>
+    internal List<NetworkObject> InternalPrefabChildren { get; private set; } = new();
 
-    internal NetworkObject BakedInternalPrefabRoot;
+    /// <summary>
+    /// The instanced <see cref="NetworkObject"/> which is the root of this <see cref="NetworkObject"/>'s associated prefab.
+    /// </summary>
+    internal NetworkObject InternalPrefabRoot;
 
     internal int SceneId = 0;
 
+    /// <summary>
+    ///  The global Id of this <see cref="NetworkObject"/>'s associated prefab.
+    /// </summary>
     internal int PrefabId = -1;
 
+    /// <summary>
+    /// The index of this <see cref="NetworkObject"/> in the networked descendents of its <see cref="InternalPrefabRoot"/>.
+    /// </summary>
     internal int PrefabIndex = -1;
 
-
     internal bool IsPrefabInstance = false;
+
     internal int InstanceCounter = 0;
 
-    //internal List<NetworkEventsListner> EventListners           = new();
-    internal BaseNetworkBehaviour[] NetworkedBehaviours = new BaseNetworkBehaviour[0];
-    internal BaseNetworkBehaviour[] NetickBehaviours = new BaseNetworkBehaviour[0];
-    // internal NetworkPlayer              TempInputSource;
+    //internal List<NetworkEventsListner> EventListners = new();
 
-    // [SerializeField]
+    internal BaseNetworkBehaviour[] NetworkedBehaviours = new BaseNetworkBehaviour[0];
+
+    internal BaseNetworkBehaviour[] NetickBehaviours = new BaseNetworkBehaviour[0];
+
+    //internal NetworkPlayer TempInputSource;
+
     private Relevancy predictionMode = Relevancy.InputSource;
     public Relevancy PredictionMode => predictionMode;
 
@@ -168,26 +193,18 @@ public unsafe partial class NetworkObject : INetickEntity
             throw new Exception($"Netick: Cannot initialize NetworkObject that has no transform source.");
         }
 
-        this.Sandbox = sandbox;
-        var listdd = new List<BaseNetworkBehaviour>();
-        GetBehaviours(Node, listdd); //   GetBehaviours(Actor, EventListners);
-        NetickBehaviours = listdd.ToArray();//  NetickLogger.Log("INIT -- Behs" + listdd.Count);
+        Sandbox = sandbox;
 
-        var listo = new List<BaseNetworkBehaviour>();
-        for (int i = 0; i < NetickBehaviours.Length; i++)
+        var behaviours = Node.GetChildren<BaseNetworkBehaviour>();
+
+        foreach (var beh in behaviours)
         {
-            if (NetickBehaviours[i] as BaseNetworkBehaviour != null)
-                listo.Add(NetickBehaviours[i] as BaseNetworkBehaviour);
+            beh.Object = this;
+            beh.Sandbox = sandbox;
         }
 
-        NetworkedBehaviours = listo.ToArray();//this.NetworkedBehaviours.Sort((x, y) => GetBehOrder(x).CompareTo(GetBehOrder(y)));
-
-        for (int i = 0; i < NetickBehaviours.Length; i++)
-        {
-            this.NetickBehaviours[i].Object = this;
-            this.NetickBehaviours[i].Sandbox = sandbox;
-            //   this.NetickBehaviours[i].Engine = sandbox.InternalSandbox;
-        }
+        NetickBehaviours = behaviours.ToArray();
+        NetworkedBehaviours = behaviours.ToArray();
 
         InitParentData();
     }
@@ -246,7 +263,7 @@ public unsafe partial class NetworkObject : INetickEntity
                 else
                     this.ParentId = -2;*/
 
-        this.ParentId = -2;
+        //this.ParentId = -2;
     }
     /// <summary>
     /// <i><b>[Owner/InputSource Only]</b></i> Changes the parent of this object.
