@@ -209,21 +209,6 @@ public unsafe partial class NetworkObject : INetickEntity
         InitParentData();
     }
 
-    static void GetBehaviours<T>(Node obj, List<T> behaviourList) where T : Node
-    {
-        var myChilds = obj.GetChildren();
-
-        foreach (var child in myChilds)
-        {
-            if (child as T != null)
-                behaviourList.Add(child as T);  // (child as NetworkBehaviour).Object = obj;
-
-            // CHECK
-
-            //if (child as NetworkObject == null)
-            //GetBehaviours(child, behaviourList);
-        }
-    }
 #pragma warning disable
     void INetickEntity.NetworkRegister(Tick spawnTick, int id, NetworkPlayer us, SpawnPredictionKey spawnKey = default)
     {
