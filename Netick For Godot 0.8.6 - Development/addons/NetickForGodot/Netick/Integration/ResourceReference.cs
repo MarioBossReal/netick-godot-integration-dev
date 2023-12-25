@@ -7,10 +7,10 @@ namespace Netick.GodotEngine;
 public partial class ResourceReference : Resource
 {
     [Export]
-    public string Name { get; set; }
+    public StringName Name { get; set; }
 
     [Export]
-    public string Path { get; set; }
+    public StringName Path { get; set; }
 
     [Export]
     public int Id { get; set; }

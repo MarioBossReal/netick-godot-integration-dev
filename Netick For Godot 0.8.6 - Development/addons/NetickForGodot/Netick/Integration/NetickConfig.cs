@@ -12,10 +12,10 @@ namespace Netick.GodotEngine;
 public partial class NetickConfig : Resource
 {
     [Export]
-    public Dictionary<string, ResourceReference> Levels;
+    public Dictionary<StringName, ResourceReference> Levels;
 
     [Export]
-    public Dictionary<string, ResourceReference> Prefabs;
+    public Dictionary<StringName, ResourceReference> Prefabs;
 
     public ReplicationMode Replication = ReplicationMode.Pessimistic;
 

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) 2023 Karrar Rahim. All rights reserved.
 
 using Godot;
+using Netick.GodotEngine.Constants;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -514,7 +515,7 @@ public unsafe partial class NetworkSandbox : Node, IGameEngine
     /// <param name="preloadedAmount">How many instances to be preloaded.</param>
     /// <param name="hideInactiveMembers">Pass true to hide inactive pool members.</param>
 
-    public void InitializePool(string prefabName, int preloadedAmount)
+    public void InitializePool(StringName prefabName, int preloadedAmount)
     {
         int prefabId = NetworkObjectPool.GetPrefabIdFromName(prefabName);
 
@@ -530,7 +531,7 @@ public unsafe partial class NetworkSandbox : Node, IGameEngine
         NetworkObjectPools[prefabId].Reload();
     }
 
-    public void DestroyPool(string prefabName)
+    public void DestroyPool(StringName prefabName)
     {
         int prefabId = NetworkObjectPool.GetPrefabIdFromName(prefabName);
 
@@ -556,7 +557,7 @@ public unsafe partial class NetworkSandbox : Node, IGameEngine
         if (obj == null)
             return;
 
-        if (!obj.HasMeta("networked_object"))
+        if (!obj.HasMeta(MetaConstants.NetworkedNode))
             return;
 
         // CHECK
@@ -606,7 +607,7 @@ public unsafe partial class NetworkSandbox : Node, IGameEngine
     /// <param name="rotation">Rotation of the instantiated object.</param>
     /// <param name="inputSource">Input source of the instantiated object.</param>
     /// <returns></returns>
-    public NetworkObject NetworkInstantiate(string prefabName, Vector3? position = null, Quaternion? rotation = null, NetworkPlayer inputSource = null, SpawnPredictionKey predictedSpawnKey = default)
+    public NetworkObject NetworkInstantiate(StringName prefabName, Vector3? position = null, Quaternion? rotation = null, NetworkPlayer inputSource = null, SpawnPredictionKey predictedSpawnKey = default)
     {
         if (prefabName == null || prefabName == "")
             throw new Exception("Netick: prefabName cannot be empty.");
@@ -641,6 +642,7 @@ public unsafe partial class NetworkSandbox : Node, IGameEngine
 
         return newObj;
     }
+
 
 
     private void LinkObject(NetworkObject networkObject, NetworkPlayer inputSource, SpawnPredictionKey spawnKey)

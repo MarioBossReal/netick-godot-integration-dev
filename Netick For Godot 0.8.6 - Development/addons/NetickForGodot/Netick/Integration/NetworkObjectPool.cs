@@ -31,7 +31,7 @@ internal class NetworkObjectPool
         Preload(preloadAmount);
     }
 
-    internal static int GetPrefabIdFromName(string prefabName)
+    internal static int GetPrefabIdFromName(StringName prefabName)
     {
         Network.Config.Prefabs.TryGetValue(prefabName, out var reference);
 

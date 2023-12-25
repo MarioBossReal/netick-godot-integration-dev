@@ -22,7 +22,7 @@ scale = Vector2(0.23, 0.23)
 scale = Vector2(0.001, 0.001)
 texture = ExtResource("4_wk5rk")
 metadata/networked_node = true
-metadata/owner_prefab_id = 4
+metadata/owner_prefab_id = 1
 
 [node name="NetworkTransform2D" type="Node" parent="." node_paths=PackedStringArray("RenderTransform")]
 script = ExtResource("3_cfjmj")
@@ -42,7 +42,7 @@ scale = Vector2(0.025, 0.025)
 theme_override_font_sizes/font_size = 0
 text = "ayy"
 metadata/networked_node = true
-metadata/owner_prefab_id = 6
+metadata/owner_prefab_id = 1
 
 [node name="NetworkedLabelChildTest" type="Node" parent="TestNetworkedChild"]
 script = ExtResource("4_rv28h")
