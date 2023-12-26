@@ -1,6 +1,5 @@
-[gd_scene load_steps=10 format=3 uid="uid://clylysmwkqgoa"]
+[gd_scene load_steps=9 format=3 uid="uid://clylysmwkqgoa"]
 
-[ext_resource type="Script" path="res://addons/NetickForGodot/Netick/Integration/NetworkObject.cs" id="1_x33wu"]
 [ext_resource type="Script" path="res://bomberman_3d/scripts/Bomberman3DController.cs" id="2_6mphk"]
 [ext_resource type="Material" uid="uid://bkecxmgndgwj6" path="res://bomberman_3d/materials/red.material" id="3_qwysm"]
 [ext_resource type="Material" uid="uid://bwe7xjk10hp1t" path="res://bomberman_3d/materials/green.material" id="4_my5xb"]
@@ -14,26 +13,18 @@ size = Vector3(0.5, 0.5, 0.5)
 [sub_resource type="BoxMesh" id="BoxMesh_m30y5"]
 size = Vector3(0.5, 0.5, 0.5)
 
-[node name="BomberMan3D" type="Node" node_paths=PackedStringArray("TransformSource")]
-script = ExtResource("1_x33wu")
-"Network Id" = -1
-SceneId = 0
-PrefabId = 5
-PrefabIndex = -1
-IsSceneObject = true
-TransformSource = NodePath("CharacterBody3D")
+[node name="BomberMan3D" type="CharacterBody3D"]
+metadata/networked_node = true
 
-[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
 shape = SubResource("BoxShape3D_8fdws")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
 mesh = SubResource("BoxMesh_m30y5")
 
-[node name="Node" type="Node" parent="CharacterBody3D" node_paths=PackedStringArray("_meshInstance")]
+[node name="3DController" type="Node" parent="." node_paths=PackedStringArray("_meshInstance")]
 script = ExtResource("2_6mphk")
 Speed = 8.0
 Red = ExtResource("3_qwysm")
@@ -42,6 +33,6 @@ Blue = ExtResource("5_2yb7v")
 Yellow = ExtResource("6_5h00d")
 _meshInstance = NodePath("../MeshInstance3D")
 
-[node name="NetworkTransform3D" type="Node" parent="CharacterBody3D" node_paths=PackedStringArray("RenderTransform")]
+[node name="NetworkTransform3D" type="Node" parent="." node_paths=PackedStringArray("RenderTransform")]
 script = ExtResource("7_56ic7")
 RenderTransform = NodePath("../MeshInstance3D")

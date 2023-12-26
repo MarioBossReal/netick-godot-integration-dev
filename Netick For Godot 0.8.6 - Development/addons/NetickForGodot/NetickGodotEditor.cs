@@ -6,9 +6,13 @@ using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Netick.CodeGen;
 using Netick.GodotEngine;
+using Netick.GodotEngine.Constants;
+using Netick.GodotEngine.Extensions;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using static Netick.GodotEngine.NetickInspectorPlugin;
 
 namespace NetickEditor;
 
@@ -21,6 +25,12 @@ internal static class NetickWebLinks
     public static void GoToDiscord() => OS.ShellOpen(Discord);
     public static void GoToDocs() => OS.ShellOpen(Docs);
     public static void GoToSite() => OS.ShellOpen(Site);
+}
+
+internal static class NetickEditorResourcePaths
+{
+    public const string DockPath = "res://addons/NetickForGodot/NetickDock.tscn";
+    public const string InspectorControlPath = "res://addons/NetickForGodot/Editor/plugins/inspector/netick_node_inspector.tscn";
 }
 
 [Tool]
@@ -85,10 +95,12 @@ public partial class NetickGodotEditor : EditorPlugin
 
         _editorConfig = GetNetickEditorConfigResource("res://addons/NetickForGodot/editorConfig.tres");
         _netickConfig = GetNetickConfigResource(_editorConfig.NetickConfigPath);
-        SceneChanged += RegisterSceneAsPrefabOrLevel;
 
         _inspectorPlugin = new();
         AddInspectorPlugin(_inspectorPlugin);
+        _inspectorPlugin.InspectorCreated += HandleInspectorCreated;
+
+        SceneChanged += RegisterNetworkedLevel;
 
         InitEditor();
     }
@@ -113,7 +125,7 @@ public partial class NetickGodotEditor : EditorPlugin
 
     private void InitEditor()
     {
-        _dock = GD.Load<PackedScene>("res://addons/NetickForGodot/NetickDock.tscn").Instantiate<NetickDock>();
+        _dock = GD.Load<PackedScene>(NetickEditorResourcePaths.DockPath).Instantiate<NetickDock>();
         AddControlToDock(DockSlot.LeftUl, _dock);
 
         _dock.VersionLabel.Text = $"Version: {Network.Version}-dev";
@@ -134,8 +146,125 @@ public partial class NetickGodotEditor : EditorPlugin
         _dock?.Initialize(_netickConfig);
     }
 
+    private void HandleInspectorCreated(NetickNodeInspector inspector)
+    {
+        var name = Path.GetFileNameWithoutExtension(inspector.InspectedNode.SceneFilePath);
+
+        bool check = false;
+
+        if (inspector.Category == InspectedNodeCategory.PrefabRoot)
+            check = _netickConfig.Prefabs.ContainsKey(name);
+
+        if (inspector.Category == InspectedNodeCategory.NonPrefabChild)
+            check = inspector.InspectedNode.HasMeta("networked_node");
+
+        inspector.NetworkedCheckbox.SetPressedNoSignal(check);
+        inspector.NetworkedPropertySet += HandleNodeNetworkedPropertySet;
+    }
+
+    private void HandleNodeNetworkedPropertySet(NetickNodeInspector inspector)
+    {
+        var category = inspector.Category;
+        var networked = inspector.NetworkedPropertyValue;
+        var node = inspector.InspectedNode;
+
+        if (category == InspectedNodeCategory.NonPrefabChild)
+        {
+            if (networked)
+            {
+                var owner = node.Owner;
+                var ownerName = Path.GetFileNameWithoutExtension(owner.SceneFilePath);
+                _netickConfig.Prefabs.TryGetValue(ownerName, out var ownerReference);
+
+                node.SetMeta(MetaConstants.NetworkedNode, true);
+
+                if (ownerReference != null)
+                {
+                    node.SetMeta(MetaConstants.OwnerPrefabId, ownerReference.Id);
+                }
+                else
+                {
+                    node.SetMeta(MetaConstants.OwnerPrefabId, -1);
+                }
+            }
+            else
+            {
+                if (node.HasMeta(MetaConstants.NetworkedNode))
+                    node.RemoveMeta(MetaConstants.NetworkedNode);
+
+                if (node.HasMeta(MetaConstants.OwnerPrefabId))
+                    node.RemoveMeta(MetaConstants.OwnerPrefabId);
+            }
+        }
+
+        if (category == InspectedNodeCategory.PrefabRoot)
+        {
+            if (networked)
+            {
+                node.SetMeta(MetaConstants.NetworkedNode, true);
+
+                var reference = RegisterNetworkedPrefab(node);
+
+                var descendants = node.GetDescendants<Node>().Where(x => x.HasMeta(MetaConstants.OwnerPrefabId));
+
+                foreach (var desc in descendants)
+                {
+                    desc.SetMeta(MetaConstants.OwnerPrefabId, reference.Id);
+                }
+
+            }
+            else
+            {
+                UnRegisterNetworkedPrefab(node);
+
+                if (node.HasMeta(MetaConstants.NetworkedNode))
+                    node.RemoveMeta(MetaConstants.NetworkedNode);
+
+                var descendants = node.GetDescendants<Node>().Where(x => x.HasMeta(MetaConstants.OwnerPrefabId));
+
+                foreach (var desc in descendants)
+                {
+                    desc.SetMeta(MetaConstants.OwnerPrefabId, -1);
+                }
+            }
+
+            if (node.HasMeta(MetaConstants.OwnerPrefabId))
+                node.RemoveMeta(MetaConstants.OwnerPrefabId);
+        }
+    }
+
     // Currently does not setup child prefabs like the original code does. Because this is going to be changed at some point.
-    private void RegisterSceneAsPrefabOrLevel(Node sceneRoot)
+    private ResourceReference RegisterNetworkedPrefab(Node sceneRoot)
+    {
+        if (sceneRoot == null)
+            return null;
+
+        if (sceneRoot.SceneFilePath == null || sceneRoot.SceneFilePath == string.Empty)
+            return null;
+
+        var path = sceneRoot.SceneFilePath;
+
+        var name = Path.GetFileNameWithoutExtension(path);
+
+        // Already registered.
+        if (_netickConfig.Prefabs.ContainsKey(name))
+            return null;
+
+        var reference = new ResourceReference();
+        reference.Name = name;
+        reference.Path = path;
+        reference.Id = _netickConfig.GetValidNewPrefabId();
+
+        _netickConfig.Prefabs.Add(name, reference);
+        _dock.AddPrefabReferenceToList(reference);
+
+        ResourceSaver.Save(_netickConfig, _netickConfig.ResourcePath);
+
+        return reference;
+    }
+
+    // Temporary! To allow registering levels in the same way as before.
+    private void RegisterNetworkedLevel(Node sceneRoot)
     {
         if (sceneRoot == null)
             return;
@@ -145,59 +274,45 @@ public partial class NetickGodotEditor : EditorPlugin
 
         var path = sceneRoot.SceneFilePath;
 
-        // Prefabs and levels will be registered by their name. Names must be unique.
         var name = Path.GetFileNameWithoutExtension(path);
 
-        // Later we'll change this to use metadata or some other identifier
+        // Already registered.
+        if (_netickConfig.Levels.ContainsKey(name))
+            return;
 
-        if (sceneRoot is NetworkObject netObj)
-        {
-            bool exists = _netickConfig.Prefabs.ContainsKey(name);
+        if (sceneRoot is not NetworkLevel)
+            return;
 
-            if (!exists)
-            {
-                var reference = new ResourceReference();
-                reference.Name = name;
-                reference.Path = path;
-                reference.Id = _netickConfig.GetValidNewPrefabId();
+        var reference = new ResourceReference();
+        reference.Name = name;
+        reference.Path = path;
+        reference.Id = _netickConfig.GetValidNewLevelId();
 
-                // I think that things like this should be stored in the resource
-                // reference and then set at runtime when the object is instanced.
-                netObj.PrefabId = reference.Id;
+        _netickConfig.Levels.Add(name, reference);
 
-                // Need to resave because of setting PrefabId.
-                var newScene = new PackedScene();
-                newScene.Pack(sceneRoot);
-                ResourceSaver.Save(newScene, path);
-
-                _netickConfig.Prefabs.Add(name, reference);
-
-                _dock.AddPrefabReferenceToList(reference);
-
-                GD.Print("Netick: Registered new prefab: " + Path.GetFileName(sceneRoot.SceneFilePath));
-            }
-        }
-
-        if (sceneRoot is NetworkLevel)
-        {
-            bool exists = _netickConfig.Levels.ContainsKey(name);
-
-            if (!exists)
-            {
-                var reference = new ResourceReference();
-                reference.Name = name;
-                reference.Path = path;
-                reference.Id = _netickConfig.GetValidNewLevelId();
-
-                _netickConfig.Levels.Add(name, reference);
-
-                _dock.AddLevelReferenceToList(reference);
-
-                GD.Print("Netick: Registered new level: " + Path.GetFileName(sceneRoot.SceneFilePath));
-            }
-        }
+        _dock.AddLevelReferenceToList(reference);
 
         ResourceSaver.Save(_netickConfig, _netickConfig.ResourcePath);
+
+        GD.Print("Netick: Registered new level: " + Path.GetFileName(sceneRoot.SceneFilePath));
+    }
+
+    private void UnRegisterNetworkedPrefab(Node sceneRoot)
+    {
+        if (sceneRoot == null)
+            return;
+
+        var name = Path.GetFileNameWithoutExtension(sceneRoot.SceneFilePath);
+
+        if (!_netickConfig.Prefabs.TryGetValue(name, out var reference))
+            return;
+
+        _netickConfig.Prefabs.Remove(name);
+        _dock.RemovePrefabReferenceFromList(reference);
+
+        ResourceSaver.Save(_netickConfig, _netickConfig.ResourcePath);
+
+        //GD.Print("Netick: Unregistered prefab: " + Path.GetFileName(sceneRoot.SceneFilePath));
     }
 
     private static NetickGodotEditorConfig GetNetickEditorConfigResource(string path)
@@ -367,7 +482,7 @@ public partial class NetickGodotEditor : EditorPlugin
     {
         node.Set(nameof(NetworkObject.SceneId), -1);
         node.Set(nameof(NetworkObject.PrefabId), prefabId);
-        node.Set(nameof(NetworkObject.BakedInternalPrefabRoot), prefabRoot);
+        node.Set(nameof(NetworkObject.InternalPrefabRoot), prefabRoot);
         node.Set(nameof(NetworkObject.PrefabIndex), prefabIndex);
     }
 
@@ -375,7 +490,7 @@ public partial class NetickGodotEditor : EditorPlugin
     internal static void SetPrefabNodeChildren(Node node, Node[] children)
     {
         var godotArray = new Godot.Collections.Array(children);
-        node.Set(nameof(NetworkObject.BakedInternalPrefabChildren), Variant.From(godotArray));
+        //node.Set(nameof(NetworkObject.BakedInternalPrefabChildren), Variant.From(godotArray));
     }
 
     // To be deleted.

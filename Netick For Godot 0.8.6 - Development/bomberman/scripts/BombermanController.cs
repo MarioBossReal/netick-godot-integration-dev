@@ -1,5 +1,6 @@
 ﻿using Godot;
 using Netick.GodotEngine;
+using Netick.GodotEngine.Extensions;
 
 namespace Netick.Samples.Bomberman;
 
@@ -35,18 +36,16 @@ public partial class BombermanController : NetworkBehaviour
     public int Score { get; set; } = 0;
     [Networked]
     public bool Alive { get; set; } = true;
-    [Networked(relevancy: Relevancy.InputSource)]
+
+    [Networked]
     public int MaxBombs { get; set; } = 3;
 
     [Networked]
     public int BombCount { get; set; } = 0;
 
-    [Networked(relevancy: Relevancy.InputSource)]
-    private bool wishPlaceBomb = false;
-
     public override void _Ready()
     {
-        _bombermanEventsHandler = NetickGodotUtils.FindObjectOfType<BombermanEventsHandler>(GetTree().Root);
+        _bombermanEventsHandler = GetTree().Root.GetDescendant<BombermanEventsHandler>();
 
         BaseNode = GetBaseNode<CharacterBody2D>();
 
@@ -63,13 +62,15 @@ public partial class BombermanController : NetworkBehaviour
 
     public override void NetworkUpdate()
     {
+        if (IsProxy)
+            return;
+
         var input = Sandbox.GetInput<BombermanInput>();
         input.Movement = Input.GetVector(_moveLeft, _moveRight, _moveUp, _moveDown);
 
         if (Input.IsActionJustPressed(_placeBomb))
-            wishPlaceBomb = true;
+            input.PlantBomb = true;
 
-        input.PlantBomb = wishPlaceBomb;
         Sandbox.SetInput(input);
     }
 
@@ -85,14 +86,14 @@ public partial class BombermanController : NetworkBehaviour
             if (IsServer && input.PlantBomb && BombCount < MaxBombs && !IsResimulating)
             {
                 // * round the bomb pos so that it snaps to the nearest square.
-                var bombNetworkObject = Sandbox.NetworkInstantiate(_bombPrefab, new Vector3(Round(BaseNode.Position).X, Round(BaseNode.Position).Y, 0), Quaternion.Identity);
-                var bomb = NetickGodotUtils.FindObjectOfType<Bomb>(bombNetworkObject);
+                var bombNetworkObject = Sandbox.NetworkInstantiate(_bombPrefab, new Vector3(Round(BaseNode.Position).X, Round(BaseNode.Position).Y, 0));
+                var bomb = bombNetworkObject.Node.GetChild<Bomb>();
                 BombCount++;
                 //bomb.Bomber = this;
-                bomb.Exploded += () => BombCount--;
+                bomb.Exploded += () => { BombCount--; if (BombCount < 0) BombCount = 0; };
             }
         }
-        wishPlaceBomb = false;
+
     }
 
     public void Die()
@@ -105,7 +106,6 @@ public partial class BombermanController : NetworkBehaviour
         Alive = true;
         MaxBombs = 3;
         BombCount = 0;
-        wishPlaceBomb = false;
         _bombermanEventsHandler.RespawnPlayer(this);
         BaseNode.Position = SpawnPos;
     }

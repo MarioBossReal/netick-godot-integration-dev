@@ -96,6 +96,21 @@ public partial class NetickDock : Control
         LevelReferencesContainer?.AddChild(item);
     }
 
+    public void RemovePrefabReferenceFromList(ResourceReference reference)
+    {
+        foreach (var child in PrefabReferencesContainer?.GetChildren())
+        {
+            if (child is not ResourceReferenceListItem item)
+                continue;
+
+            if (item.NameLabel.Text != reference.Name)
+                continue;
+
+            item.QueueFree();
+            break;
+        }
+    }
+
     private void ClearReferenceLists()
     {
 

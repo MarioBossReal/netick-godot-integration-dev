@@ -1,35 +1,21 @@
-[gd_scene load_steps=5 format=3 uid="uid://b82qlq421rr6h"]
+[gd_scene load_steps=4 format=3 uid="uid://b82qlq421rr6h"]
 
-[ext_resource type="Script" path="res://addons/NetickForGodot/Netick/Integration/NetworkObject.cs" id="1_sl46a"]
 [ext_resource type="Script" path="res://bomberman/scripts/Bomb.cs" id="2_di2hj"]
 [ext_resource type="Script" path="res://addons/NetickForGodot/Netick/Integration/Components/NetworkTransform2D.cs" id="3_ylqdy"]
 [ext_resource type="Texture2D" uid="uid://de5en3j6a2fgq" path="res://bomberman/textures/Bomb.png" id="4_43fw2"]
 
-[node name="Bomb" type="Node" node_paths=PackedStringArray("TransformSource")]
-script = ExtResource("1_sl46a")
-"Network Id" = -1
-SceneId = 0
-PrefabId = 0
-PrefabIndex = -1
-IsSceneObject = true
-TransformSource = NodePath("Scaler")
-
-[node name="Scaler" type="Node2D" parent="."]
+[node name="Bomb" type="Node2D"]
 scale = Vector2(1.815, 1.815)
+metadata/networked_node = true
 
-[node name="Sprite2D" type="Sprite2D" parent="Scaler"]
+[node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.001, 0.001)
 texture = ExtResource("4_43fw2")
 
-[node name="Bomb Script" type="Node" parent="Scaler" node_paths=PackedStringArray("_sprite2D")]
+[node name="Bomb Script" type="Node" parent="." node_paths=PackedStringArray("_sprite2D")]
 script = ExtResource("2_di2hj")
 _sprite2D = NodePath("../Sprite2D")
 
-[node name="NetworkTransform2D" type="Node" parent="Scaler" node_paths=PackedStringArray("TransformSource", "RenderTransform")]
+[node name="NetworkTransform2D" type="Node" parent="." node_paths=PackedStringArray("RenderTransform")]
 script = ExtResource("3_ylqdy")
-TransformSource = NodePath("..")
 RenderTransform = NodePath("../Sprite2D")
-InterpolationSource = null
-TeleportDistance = null
-PositionPrecision = null
-RotationPrecision = null
