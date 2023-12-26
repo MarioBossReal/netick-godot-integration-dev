@@ -129,6 +129,7 @@ internal class NetworkObjectPool
         var prefabRoot = scene.Instantiate();
         var networkObject = new NetworkObject();
         networkObject.Node = prefabRoot;
+        prefabRoot.SetMeta(MetaConstants.NetworkObject, networkObject);
 
         Init(networkObject, networkObject);
 
@@ -162,6 +163,8 @@ internal class NetworkObjectPool
                 .Where(x => x.HasMeta(MetaConstants.NetworkedNode))
                 .ToList()
                 .IndexOf(childObj);
+
+            childObj.SetMeta(MetaConstants.NetworkObject, childNetObj);
 
             obj.InternalPrefabChildren.Add(childNetObj);
             Init(childNetObj, rootObj);

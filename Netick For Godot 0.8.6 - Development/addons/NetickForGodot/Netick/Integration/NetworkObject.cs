@@ -9,7 +9,7 @@ using System.Runtime.CompilerServices;
 
 namespace Netick.GodotEngine;
 
-public unsafe partial class NetworkObject : INetickEntity
+public unsafe partial class NetworkObject : Resource, INetickEntity
 {
     /// <summary>
     /// The <see cref="NetworkSandbox"/> this <see cref="NetworkObject"/> is being simulated in.
@@ -81,13 +81,16 @@ public unsafe partial class NetworkObject : INetickEntity
     //internal NetworkPlayer TempInputSource;
 
     private Relevancy predictionMode = Relevancy.InputSource;
+
     public Relevancy PredictionMode => predictionMode;
 
     /// <summary>
     /// The <see cref="NetworkObject"/> parent of this object.
     /// </summary>
     public NetworkObject Parent { get; private set; }
+
     internal Node AuthParent { get; private set; }
+
     internal int ParentId = -1;
 
     /// <summary>

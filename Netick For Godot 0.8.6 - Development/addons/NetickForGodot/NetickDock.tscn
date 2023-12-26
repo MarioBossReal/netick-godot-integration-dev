@@ -117,21 +117,6 @@ visible = false
 layout_mode = 2
 text = "Auto update levels and prefabs"
 
-[node name="Note" type="Label" parent="Margin/Root"]
-clip_contents = true
-custom_minimum_size = Vector2(0, 39.17)
-layout_mode = 2
-size_flags_vertical = 1
-theme_type_variation = &"HeaderMedium"
-theme_override_font_sizes/font_size = 9
-text = "Note: your prefabs must have a NetworkObject node at the root, while your levels must have a NetworkLevel node at the root. That's how they are differentiated."
-autowrap_mode = 2
-max_lines_visible = 5
-
-[node name="VSeparator2" type="VSeparator" parent="Margin/Root"]
-custom_minimum_size = Vector2(0, 16.89)
-layout_mode = 2
-
 [node name="Netick Config Path" type="Label" parent="Margin/Root"]
 layout_mode = 2
 text = "Netick Config Path"
@@ -155,6 +140,24 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 11
 text = "mono//temp//bin//Debug//Godot Game Project.dll"
 wrap_mode = 1
+
+[node name="VSeparator2" type="VSeparator" parent="Margin/Root"]
+custom_minimum_size = Vector2(0, 16.89)
+layout_mode = 2
+
+[node name="Note" type="Label" parent="Margin/Root"]
+clip_contents = true
+custom_minimum_size = Vector2(0, 39.17)
+layout_mode = 2
+size_flags_vertical = 1
+theme_type_variation = &"HeaderMedium"
+theme_override_font_sizes/font_size = 9
+text = "To register a prefab, check the \"Networked\" checkbox on the root node of a saved scene.
+For now, levels use the same system of having a NetworkLevel node as the root.
+This will change eventually so that levels and prefabs are the same thing."
+horizontal_alignment = 1
+autowrap_mode = 2
+max_lines_visible = 5
 
 [node name="VSeparator3" type="VSeparator" parent="Margin/Root"]
 custom_minimum_size = Vector2(0, 16.89)

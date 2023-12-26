@@ -215,6 +215,8 @@ public unsafe partial class NetworkSandbox : Node, IGameEngine
         if (!NodeToNetworkObject.ContainsKey(entity.Node))
             NodeToNetworkObject.Add(entity.Node, entity);
 
+        entity.Node.SetMeta(MetaConstants.NetworkObject, entity);
+
         Callbacks.OnObjectCreated(entity);
     }
 
