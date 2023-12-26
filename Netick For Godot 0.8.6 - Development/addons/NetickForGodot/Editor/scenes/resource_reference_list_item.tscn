@@ -57,10 +57,6 @@ text = "0"
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 8
-tooltip_text = "Remove this item from the Netick config.
-
-[Note] Removing a prefab from the prefabs list will not automatically update
-the owner_prefab_id metadata for any of its networked descendents. 
-If this is an issue, you should instead open up the prefab and set it to be non-networked."
+tooltip_text = "Remove this item from the Netick config."
 text = "Remove"
 alignment = 2
