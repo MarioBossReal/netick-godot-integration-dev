@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="NetickConfig" load_steps=10 format=3 uid="uid://bygipwwx5g5xj"]
+[gd_resource type="Resource" script_class="NetickConfig" load_steps=11 format=3 uid="uid://bygipwwx5g5xj"]
 
 [ext_resource type="Script" path="res://addons/NetickForGodot/Netick/Integration/ResourceReference.cs" id="1_01xuc"]
 [ext_resource type="Script" path="res://addons/NetickForGodot/Netick/Integration/NetickConfig.cs" id="2_f5d0d"]
@@ -15,17 +15,11 @@ Name = &"bomberman_main_level"
 Path = &"res://bomberman/levels/bomberman_main_level.tscn"
 Id = 0
 
-[sub_resource type="Resource" id="Resource_lu8vv"]
+[sub_resource type="Resource" id="Resource_q0tf4"]
 script = ExtResource("1_01xuc")
 Name = &"bomb"
 Path = &"res://bomberman/network_prefabs/bomb.tscn"
-Id = 0
-
-[sub_resource type="Resource" id="Resource_5ruv6"]
-script = ExtResource("1_01xuc")
-Name = &"bomber"
-Path = &"res://bomberman/network_prefabs/bomber.tscn"
-Id = 1
+Id = 5
 
 [sub_resource type="Resource" id="Resource_x110t"]
 script = ExtResource("1_01xuc")
@@ -45,6 +39,18 @@ Name = &"static_block"
 Path = &"res://bomberman/network_prefabs/static_block.tscn"
 Id = 3
 
+[sub_resource type="Resource" id="Resource_bj346"]
+script = ExtResource("1_01xuc")
+Name = &"test_networked_child"
+Path = &"res://bomberman/network_prefabs/test_networked_child.tscn"
+Id = 7
+
+[sub_resource type="Resource" id="Resource_rpasd"]
+script = ExtResource("1_01xuc")
+Name = &"bomber"
+Path = &"res://bomberman/network_prefabs/bomber.tscn"
+Id = 8
+
 [resource]
 script = ExtResource("2_f5d0d")
 Levels = {
@@ -52,11 +58,12 @@ Levels = {
 "bomberman_main_level": SubResource("Resource_130up")
 }
 Prefabs = {
-"bomb": SubResource("Resource_lu8vv"),
-"bomber": SubResource("Resource_5ruv6"),
+"bomb": SubResource("Resource_q0tf4"),
+"bomber": SubResource("Resource_rpasd"),
 "bomber_man_3d": SubResource("Resource_x110t"),
 "destroyable_block": SubResource("Resource_ed52s"),
-"static_block": SubResource("Resource_wryxv")
+"static_block": SubResource("Resource_wryxv"),
+"test_networked_child": SubResource("Resource_bj346")
 }
 TickRate = 64.0
 MaxPlayers = 16

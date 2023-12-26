@@ -7,11 +7,9 @@ using Mono.Cecil.Cil;
 using Netick.CodeGen;
 using Netick.GodotEngine;
 using Netick.GodotEngine.Constants;
-using Netick.GodotEngine.Extensions;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using static Netick.GodotEngine.NetickInspectorPlugin;
 
 namespace NetickEditor;
@@ -172,28 +170,12 @@ public partial class NetickGodotEditor : EditorPlugin
         {
             if (networked)
             {
-                var owner = node.Owner;
-                var ownerName = Path.GetFileNameWithoutExtension(owner.SceneFilePath);
-                _netickConfig.Prefabs.TryGetValue(ownerName, out var ownerReference);
-
                 node.SetMeta(MetaConstants.NetworkedNode, true);
-
-                if (ownerReference != null)
-                {
-                    node.SetMeta(MetaConstants.OwnerPrefabId, ownerReference.Id);
-                }
-                else
-                {
-                    node.SetMeta(MetaConstants.OwnerPrefabId, -1);
-                }
             }
             else
             {
                 if (node.HasMeta(MetaConstants.NetworkedNode))
                     node.RemoveMeta(MetaConstants.NetworkedNode);
-
-                if (node.HasMeta(MetaConstants.OwnerPrefabId))
-                    node.RemoveMeta(MetaConstants.OwnerPrefabId);
             }
         }
 
@@ -202,34 +184,14 @@ public partial class NetickGodotEditor : EditorPlugin
             if (networked)
             {
                 node.SetMeta(MetaConstants.NetworkedNode, true);
-
-                var reference = RegisterNetworkedPrefab(node);
-
-                var descendants = node.GetDescendants<Node>().Where(x => x.HasMeta(MetaConstants.OwnerPrefabId));
-
-                foreach (var desc in descendants)
-                {
-                    desc.SetMeta(MetaConstants.OwnerPrefabId, reference.Id);
-                }
-
+                RegisterNetworkedPrefab(node);
             }
             else
             {
                 UnRegisterNetworkedPrefab(node);
-
                 if (node.HasMeta(MetaConstants.NetworkedNode))
                     node.RemoveMeta(MetaConstants.NetworkedNode);
-
-                var descendants = node.GetDescendants<Node>().Where(x => x.HasMeta(MetaConstants.OwnerPrefabId));
-
-                foreach (var desc in descendants)
-                {
-                    desc.SetMeta(MetaConstants.OwnerPrefabId, -1);
-                }
             }
-
-            if (node.HasMeta(MetaConstants.OwnerPrefabId))
-                node.RemoveMeta(MetaConstants.OwnerPrefabId);
         }
     }
 

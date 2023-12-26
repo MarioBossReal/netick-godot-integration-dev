@@ -2,6 +2,7 @@
 
 using Godot;
 using Netick.GodotEngine.Constants;
+using Netick.GodotEngine.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,8 +53,6 @@ public unsafe partial class NetworkSandbox : Node, IGameEngine
     void IGameEngine.OnNetworkFixedUpdate() { }
 
     private Dictionary<NetworkConnection, ConnectionMeta> PreivousConnectionMetas = new(512);
-
-    private Dictionary<Node, NetworkObject> NodeToNetworkObject = new();
 
     void IGameEngine.OnPacketReceived(NetworkConnection source)
     {
@@ -212,10 +211,10 @@ public unsafe partial class NetworkSandbox : Node, IGameEngine
         var entity = (NetworkObject)ent.UserEntity;
         Entities.Add(ent.NetworkId, entity);
 
-        if (!NodeToNetworkObject.ContainsKey(entity.Node))
-            NodeToNetworkObject.Add(entity.Node, entity);
+        //if (!NodeToNetworkObject.ContainsKey(entity.Node))
+        //NodeToNetworkObject.Add(entity.Node, entity);
 
-        entity.Node.SetMeta(MetaConstants.NetworkObject, entity);
+        //entity.Node.SetMeta(MetaConstants.NetworkObject, entity);
 
         Callbacks.OnObjectCreated(entity);
     }
@@ -672,16 +671,13 @@ public unsafe partial class NetworkSandbox : Node, IGameEngine
             PredictedSpawns.Remove(spawnKey.RawValue);//entity.transform.position = pos; //entity.transform.rotation = rot;
             Engine.ClientAddEntity(spawnTick, entity, id, isThisInputSource ? Engine.LocalPeer : null, true, false, spawnKey);
             entity.InstanceCounter = instanceCounter;
-
             entity.OnSpawnPredictionSucceeded();
         }
-
         else
         {
             entity = NetworkObjectPools[prefabId].Get(pos, rot);
             Engine.ClientAddEntity(spawnTick, entity, id, isThisInputSource ? Engine.LocalPeer : null, true, true, spawnKey);
             entity.InstanceCounter = instanceCounter;
-
             Callbacks.OnObjectCreated(entity);
 
             //if (Network.Instance.StartMode == StartMode.ServerAndClient)
@@ -695,8 +691,6 @@ public unsafe partial class NetworkSandbox : Node, IGameEngine
     {
         NetworkObject childEntity = root.InternalPrefabChildren.Find(x => x.PrefabIndex == childIndex);
 
-        //GD.Print("Client: root children = " + root.Children.Count);
-
         if (childEntity == null)
             return null;
 
@@ -708,7 +702,6 @@ public unsafe partial class NetworkSandbox : Node, IGameEngine
             {
                 Engine.ClientAddEntity(root.SpawnTick, childEntity, childId, usable ? Engine.LocalPeer : null, true, false, rootSpawnKey);
             }
-
             else
             {
                 Engine.ClientAddEntity(root.SpawnTick, childEntity, childId, usable ? Engine.LocalPeer : null, true, true, default);
@@ -757,7 +750,7 @@ public unsafe partial class NetworkSandbox : Node, IGameEngine
         foreach (Node child in obj.GetChildren())
             InternalNetworkDestroy(child);
 
-        NodeToNetworkObject.TryGetValue(obj, out var entity);
+        var entity = obj.GetNetworkObject();
 
         if (entity != null)
         {
@@ -792,7 +785,7 @@ public unsafe partial class NetworkSandbox : Node, IGameEngine
     {
         foreach (Node child in obj.GetChildren())
         {
-            NodeToNetworkObject.TryGetValue(obj, out var childNet);
+            var childNet = child.GetNetworkObject();
 
             if (childNet != null)
             {
@@ -839,7 +832,6 @@ public unsafe partial class NetworkSandbox : Node, IGameEngine
             if (entity.Node.GetParent() != null)
                 entity.Node.GetParent().RemoveChild(entity.Node);
             entity.Node.QueueFree();
-            NodeToNetworkObject.Remove(entity.Node);
         }
     }
 

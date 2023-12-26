@@ -131,6 +131,7 @@ internal class NetworkObjectPool
         networkObject.Node = prefabRoot;
         prefabRoot.SetMeta(MetaConstants.NetworkObject, networkObject);
 
+        InitPrefabNodeChildren(prefabRoot);
         Init(networkObject, networkObject);
 
         All.Add(networkObject);
@@ -138,26 +139,38 @@ internal class NetworkObjectPool
         return networkObject;
     }
 
-    private void Init(NetworkObject obj, NetworkObject rootObj)
+    private void InitPrefabNodeChildren(Node root)
     {
-        if (obj != null)
+        var descendants = root.GetDescendants();
+
+        // Children which are nested prefabs of a network object
+        // are treated as non-prefabs (made local to scene).
+        foreach (var descendant in descendants)
         {
-            obj.InitInternals(Sandbox);
-            Sandbox.Engine.CreateEntityLocal(obj);
-            obj.IsPrefabInstance = true;
-            obj.PrefabId = PrefabId;
+            descendant.SceneFilePath = "";
+            descendant.Owner = root;
+        }
+    }
+
+    private void Init(NetworkObject currentNode, NetworkObject prefabRoot)
+    {
+        if (currentNode != null)
+        {
+            currentNode.InitInternals(Sandbox);
+            Sandbox.Engine.CreateEntityLocal(currentNode);
+            currentNode.IsPrefabInstance = true;
+            currentNode.PrefabId = PrefabId;
         }
 
-        var childObjs = obj.Node.GetChildren<Node>()
-            .Where(x => x.HasMeta(MetaConstants.NetworkedNode) && x.HasMeta(MetaConstants.OwnerPrefabId))
-            .Where(x => x.GetMeta(MetaConstants.OwnerPrefabId).As<int>() == PrefabId);
+        var childObjs = currentNode.Node.GetChildren<Node>()
+            .Where(x => x.HasMeta(MetaConstants.NetworkedNode));
 
         foreach (var childObj in childObjs)
         {
             var childNetObj = new NetworkObject();
             childNetObj.Node = childObj;
-            childNetObj.ParentId = obj.Id;
-            childNetObj.InternalPrefabRoot = rootObj;
+            childNetObj.ParentId = currentNode.Id;
+            childNetObj.InternalPrefabRoot = prefabRoot;
 
             childNetObj.PrefabIndex = childObj.Owner.GetDescendants()
                 .Where(x => x.HasMeta(MetaConstants.NetworkedNode))
@@ -165,9 +178,11 @@ internal class NetworkObjectPool
                 .IndexOf(childObj);
 
             childObj.SetMeta(MetaConstants.NetworkObject, childNetObj);
+            childObj.SetMeta(MetaConstants.OwnerPrefabId, PrefabId);
 
-            obj.InternalPrefabChildren.Add(childNetObj);
-            Init(childNetObj, rootObj);
+            prefabRoot.InternalPrefabChildren.Add(childNetObj);
+
+            Init(childNetObj, prefabRoot);
         }
     }
     public void Push(NetworkObject obj)

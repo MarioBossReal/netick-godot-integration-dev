@@ -1,0 +1,26 @@
+[gd_scene load_steps=2 format=3 uid="uid://bybufietktoiw"]
+
+[ext_resource type="Script" path="res://bomberman/scripts/TestNetworkedChild.cs" id="1_aa8tj"]
+
+[node name="TestNetworkedChild" type="Label"]
+offset_right = 134.0
+offset_bottom = 23.0
+scale = Vector2(0.025, 0.025)
+theme_override_font_sizes/font_size = 0
+text = "ayy"
+metadata/networked_node = true
+
+[node name="NetworkedLabelChildTest" type="Node" parent="."]
+script = ExtResource("1_aa8tj")
+
+[node name="TestNetworkedChild2" type="Label" parent="."]
+layout_mode = 0
+offset_right = 134.0
+offset_bottom = 23.0
+scale = Vector2(3, 3)
+theme_override_font_sizes/font_size = 0
+text = "ayy2"
+metadata/networked_node = true
+
+[node name="NetworkedLabelChildTest" type="Node" parent="TestNetworkedChild2"]
+script = ExtResource("1_aa8tj")
