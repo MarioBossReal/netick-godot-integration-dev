@@ -154,7 +154,7 @@ public partial class NetickGodotEditor : EditorPlugin
             check = _netickConfig.Prefabs.ContainsKey(name);
 
         if (inspector.Category == InspectedNodeCategory.NonPrefabChild)
-            check = inspector.InspectedNode.HasMeta("networked_node");
+            check = inspector.InspectedNode.HasMeta(MetaConstants.NetworkedNode);
 
         inspector.NetworkedCheckbox.SetPressedNoSignal(check);
         inspector.NetworkedPropertySet += HandleNodeNetworkedPropertySet;
@@ -569,10 +569,10 @@ public class GodotCodeGen : ICodeGenUser
     {
     }
 
-  int ICodeGenUser.GetAutoSmoothableVectorFloatFieldsCount(PropertyDefinition item)
-  {
-    return 1;
-  }
+    int ICodeGenUser.GetAutoSmoothableVectorFloatFieldsCount(PropertyDefinition item)
+    {
+        return 1;
+    }
 }
 
 
