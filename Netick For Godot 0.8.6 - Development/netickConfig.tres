@@ -45,7 +45,7 @@ Name = &"test_networked_child"
 Path = &"res://bomberman/network_prefabs/test_networked_child.tscn"
 Id = 4
 
-[sub_resource type="Resource" id="Resource_ytx2m"]
+[sub_resource type="Resource" id="Resource_rv5gb"]
 script = ExtResource("1_01xuc")
 Name = &"bomber_man_3d"
 Path = &"res://bomberman_3d/network_prefabs/bomber_man_3d.tscn"
@@ -60,7 +60,7 @@ Levels = {
 Prefabs = {
 "bomb": SubResource("Resource_ydq7o"),
 "bomber": SubResource("Resource_hk8yb"),
-"bomber_man_3d": SubResource("Resource_ytx2m"),
+"bomber_man_3d": SubResource("Resource_rv5gb"),
 "destroyable_block": SubResource("Resource_upna5"),
 "static_block": SubResource("Resource_gyw7h"),
 "test_networked_child": SubResource("Resource_0kpwt")
