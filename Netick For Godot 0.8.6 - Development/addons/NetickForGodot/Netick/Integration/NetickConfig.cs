@@ -44,7 +44,7 @@ public partial class NetickConfig : Resource
     public int Timeout = 10;
 
     [Export]
-    public int MaxPredicatedTicks = 64;
+    public int MaxPredictedTicks = 64;
 
     [Export]
     public bool CallRenderInHeadless = true;
@@ -73,7 +73,7 @@ public partial class NetickConfig : Resource
 
     public int CellSize = 450;
 
-    public int WorldSize = 8000;
+    public System.Numerics.Vector3 WorldSize = System.Numerics.Vector3.One;
 
     public bool UseSceneSwitchThread = true;
 

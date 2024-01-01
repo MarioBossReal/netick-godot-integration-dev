@@ -279,18 +279,21 @@ namespace Netick.GodotEngine
                 MaxObjects = Config.MaxObjects,
                 MaxPlayers = Config.MaxPlayers,
                 EnableLogging = Config.EnableLogging,
-                MaxPredicatedTicks = Config.MaxPredicatedTicks,
+                MaxPredictedTicks = Config.MaxPredictedTicks,
                 MaxInterpolationBufferCount = (int)(Config.TickRate * 1.2f),
                 SavedSnapshotsCount = (int)(Config.TickRate * 1.2f),
                 MaxDataPerConnectionPerTickInBytes = Config.MaxSendableDataSize, //2500
 
                 EnableLagCompensation = Config.EnableLagCompensation,
-                EnableAoI = Config.AoI,
+                EnableInterestManagement = false,
+                EnableSimulationCulling = false,
 
-                AoIWorldSize = Config.WorldSize,
+                AoIWorldSize = System.Numerics.Vector3.One,
                 AoICellSize = Config.CellSize,
 
-                AllocatorBlockSize = Config.AllocatorBlockSize,
+                AllocatorStateBlockSize = Config.AllocatorBlockSize,
+                AllocatorMetaBlockSize = Config.AllocatorBlockSize,
+
                 TransportReceiveBufferSize = Config.ReceiveBufferSize,
                 TransportSendBufferSize = Config.SendBufferSize,
                 TransportTimeout = Config.Timeout

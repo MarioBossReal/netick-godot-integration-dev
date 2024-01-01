@@ -13,6 +13,7 @@ internal class GodotLogger : INetickLogger
 {
     public void LogError(object message) => GD.PrintErr(message);
     public void LogWarning(object message) => GD.Print(message);
+    public void LogException(object message, object targetScript) => GD.PrintErr(message);
     public void Log(object message) => GD.Print(message);
 }
 
@@ -51,6 +52,7 @@ public unsafe partial class NetworkSandbox : Node, IGameEngine
     void IGameEngine.OnNetworkUpdate() { }
     void IGameEngine.OnNetworkRender() { }
     void IGameEngine.OnNetworkFixedUpdate() { }
+    void IGameEngine.OnEntityInterestChanged(Entity entity, bool isInterested) { }
 
     private Dictionary<NetworkConnection, ConnectionMeta> PreivousConnectionMetas = new(512);
 
@@ -255,7 +257,7 @@ public unsafe partial class NetworkSandbox : Node, IGameEngine
             if (userData->PrefabChildIndex != -1)
             {
                 //NetickLogger.Log($"CHILD: ROOT ID {userData->PrefabRootId}  --- Child Index {userData->PrefabChildIndex}--- Child ID {id} --- Create Id {userData->CreateId}");
-                if (!Entities.ContainsKey(userData->PrefabRootId))
+                if (!Engine.Entities.ContainsKey(userData->PrefabRootId))
                 {
                     Vector3 rootPos = default;
                     Quaternion rootRot = Quaternion.Identity;
@@ -270,7 +272,7 @@ public unsafe partial class NetworkSandbox : Node, IGameEngine
             else
             {
 
-                if (!Entities.ContainsKey(id))
+                if (!Engine.Entities.ContainsKey(id))
                 {
                     Vector3 pos = userData->Pos;
                     Quaternion rot = userData->Rot;
@@ -284,7 +286,7 @@ public unsafe partial class NetworkSandbox : Node, IGameEngine
 
         else // is scene object
         {
-            if (!Entities.ContainsKey(id))
+            if (!Engine.Entities.ContainsKey(id))
             {
                 Engine.ClientAddEntity(userData->SpawnTick, SceneObjects[userData->CreateId], id, isUsable ? Engine.LocalPeer : null, true, true, default);
                 SceneObjects[userData->CreateId].InstanceCounter = netickMeta.InstanceCounter;

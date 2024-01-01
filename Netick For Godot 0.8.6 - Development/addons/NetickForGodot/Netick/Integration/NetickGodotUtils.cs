@@ -77,12 +77,12 @@ namespace Netick.GodotEngine
         _FindObjectsOfType(child, objs);
     }
 
-    public static NetickVector3 Vector3EngineToNetick(Vector3 from)
+    public static System.Numerics.Vector3 Vector3EngineToNetick(Vector3 from)
     {
-      return new NetickVector3(from.X, from.Y, from.Z);
+      return new System.Numerics.Vector3(from.X, from.Y, from.Z);
     }
 
-    public static Vector3 Vector3NetickToEngine(NetickVector3 from)
+    public static Vector3 Vector3NetickToEngine(System.Numerics.Vector3 from)
     {
       return new Vector3(from.X, from.Y, from.Z);
     }

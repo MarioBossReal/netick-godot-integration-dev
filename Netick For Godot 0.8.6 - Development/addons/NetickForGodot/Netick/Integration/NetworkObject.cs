@@ -144,7 +144,13 @@ public unsafe partial class NetworkObject : Resource, INetickEntity
     INetickNetworkScript[] INetickEntity.NetworkScripts => NetworkedBehaviours;
     INetickScript[] INetickEntity.AllScripts => NetickBehaviours;
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+  System.Numerics.Vector3 INetickEntity.WorldPosition => throw new NotImplementedException();
+
+  bool INetickEntity.UseSAP => false;
+  BroadPhaseFilter INetickEntity.BroadPhaseFilter => BroadPhaseFilter.None;
+  bool INetickEntity.NarrowPhaseFilter => false;
+
+  [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal bool IsPrefabChild() => PrefabIndex >= 0 && (!IsSceneObject);
 
     internal void OnSpawnPredictionSucceeded()
@@ -157,7 +163,7 @@ public unsafe partial class NetworkObject : Resource, INetickEntity
     {
         Engine = sandbox;
         Entity = entity;
-        var p = entity.State;
+        var p = entity.S;
         var behId = 0;
 
         foreach (var beh in NetworkedBehaviours)

@@ -117,9 +117,8 @@ shape = SubResource("ConcavePolygonShape3D_ospor")
 [node name="TopLeft" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0, -7.5)
 
-[node name="EventsHandler" type="Node" parent="." node_paths=PackedStringArray("_topLeft", "_spawns")]
+[node name="EventsHandler" type="Node" parent="." node_paths=PackedStringArray("_spawns")]
 script = ExtResource("4_sijab")
-_topLeft = NodePath("../TopLeft")
 BoardSize = 16
 _spawns = NodePath("../Spawns")
 _red = ExtResource("5_wqden")

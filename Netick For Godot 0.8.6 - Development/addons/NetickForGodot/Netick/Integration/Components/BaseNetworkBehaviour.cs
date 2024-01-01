@@ -7,10 +7,13 @@ namespace Netick.GodotEngine;
 
 public unsafe abstract partial class BaseNetworkBehaviour : Node, INetickScript
 {
-    /// <summary>
-    /// The <see cref="NetworkSandbox"/> containing this <see cref="Object"/>.
-    /// </summary>
-    public NetworkSandbox Sandbox { get; internal set; }
+  INetickScript INetickScript.Next { get; set; }
+  INetickScript INetickScript.Previous { get; set; }
+
+  /// <summary>
+  /// The <see cref="NetworkSandbox"/> containing this <see cref="Object"/>.
+  /// </summary>
+  public NetworkSandbox Sandbox { get; internal set; }
 
     /// <summary>
     /// The <see cref="NetworkObject"/> this behaviour is attached to.
@@ -61,7 +64,10 @@ public unsafe abstract partial class BaseNetworkBehaviour : Node, INetickScript
     /// </summary>
 
     public unsafe virtual void NetworkRender() { }
-}
+
+    public unsafe virtual void OnBecameSimulated(){ }
+    public unsafe virtual void OnBecameUnsimulated(){ }
+  }
 
 public unsafe abstract partial class BaseNetworkBehaviour : Node, INetickNetworkScript
 {
@@ -126,14 +132,14 @@ public unsafe abstract partial class BaseNetworkBehaviour : Node, INetickNetwork
 
     public bool FetchInput<T>(out T input) where T : unmanaged => Engine.FetchInput<T>(out input, Entity);
 
-    public Interpolator FindInterpolator<T>(string propertyName) where T : unmanaged
+    public Interpolator        FindInterpolator(string propertyName) 
     {
-        var proName = $"{this.GetType().Name}_{propertyName}";
+      var proName = $"{this.GetType().FullName}_{propertyName}";
 
-        if (Entity.ObjectMeta.PropertyNameToDataOffset.TryGetValue(proName, out int offsetWords))
-            return new Interpolator(Entity, S, offsetWords);
+      if (Entity.ObjectMeta.PropertyNameToSmoothMetaData.TryGetValue(proName, out SmoothMetaData smoothMetaData))
+        return  new Interpolator(Entity, S, smoothMetaData.DataOffsetWords, smoothMetaData.Precision, smoothMetaData.VectorFloatFieldsCount);
 
-        return default;
+      return default;
     }
 
     public unsafe virtual void GameEngineIntoNetcode() { }
@@ -150,6 +156,9 @@ public unsafe abstract partial class BaseNetworkBehaviour : Node, INetickNetwork
     /// <summary>
     /// Called on the client when the server confirms that this object has been successfully spawn-predicted and therefore has a valid Id.
     /// </summary>
+
+    public unsafe virtual void OnBecameInterested() { }
+    public unsafe virtual void OnBecameUninterested() { }
 
     internal virtual void OnSpawnPredictionSucceeded() { }
     public unsafe virtual void InternalInit() { }

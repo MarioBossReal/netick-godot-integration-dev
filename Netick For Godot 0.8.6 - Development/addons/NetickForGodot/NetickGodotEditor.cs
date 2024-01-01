@@ -569,6 +569,10 @@ public class GodotCodeGen : ICodeGenUser
     {
     }
 
+  int ICodeGenUser.GetAutoSmoothableVectorFloatFieldsCount(PropertyDefinition item)
+  {
+    return 1;
+  }
 }
 
 

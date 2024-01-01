@@ -80,7 +80,7 @@ public unsafe partial class NetworkTransform2D : NetworkBehaviour
 
     public unsafe override void NetworkFixedUpdate()
     {
-        if (RenderTransform != null && InterpolationSource == InterpolationMode.PredicatedSnapshot /*&& NetTransform.Interpolator.IsLocalInterpData*/)
+        if (RenderTransform != null && InterpolationSource == InterpolationMode.PredictedSnapshot /*&& NetTransform.Interpolator.IsLocalInterpData*/)
         {
             RenderTransform.GlobalPosition = _transformSource.GlobalPosition;
             RenderTransform.GlobalRotation = _transformSource.GlobalRotation;
@@ -104,7 +104,7 @@ public unsafe partial class NetworkTransform2D : NetworkBehaviour
             interpolation = Object.Engine.LocalInterpolation;
         else
         {
-            if (InterpolationSource == InterpolationMode.PredicatedSnapshot)
+            if (InterpolationSource == InterpolationMode.PredictedSnapshot)
                 interpolation = Object.Engine.LocalInterpolation;
             else if (InterpolationSource == InterpolationMode.RemoteSnapshot)
                 interpolation = Object.Engine.RemoteInterpolation;
@@ -121,7 +121,7 @@ public unsafe partial class NetworkTransform2D : NetworkBehaviour
         if (!interpolation.HasSnapshots)
             return;
         //Logger.Log("BUFF COUNT: " + ((RemoteInterpolation)interpolation)._buffer.Count);
-        var offsetBytes = Entity.StateOffsetBytes + ((byte*)S - (byte*)Entity.State);
+        var offsetBytes = Entity.StateOffsetBytes + ((byte*)S - (byte*)Entity.S);
         float alpha = interpolation.Alpha;
         byte* snapFrom = (byte*)interpolation.FromSnapshot.Pools[Entity.PoolIndex].Ptr;
         byte* snapTo = (byte*)interpolation.ToSnapshot.Pools[Entity.PoolIndex].Ptr;
@@ -174,11 +174,11 @@ public unsafe partial class NetworkTransform2D : NetworkBehaviour
                 if (oldRot != newRot)
                     Entity.Dirtify(S + 2);
             }
-
-            Engine.Grid.Move(Entity, new NetickVector3(oldPos.X, oldPos.Y, 0), new NetickVector3(newPos.X, newPos.Y, 0));
+             //  Entity.Move(newPosNum);
+            
         }
 
-        Entity.Pos = new NetickVector3(newPos.X, newPos.Y, 0);
+       // Entity.Pos = new NetickVector3(newPos.X, newPos.Y, 0);
     }
 
     public override int InternalGetStateSizeWords()

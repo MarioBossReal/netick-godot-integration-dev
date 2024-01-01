@@ -101,7 +101,7 @@ public unsafe partial class NetworkTransform3D : NetworkBehaviour
 
     public unsafe override void NetworkFixedUpdate()
     {
-        if (RenderTransform != null && InterpolationSource == InterpolationMode.PredicatedSnapshot /*&& NetTransform.Interpolator.IsLocalInterpData*/)
+        if (RenderTransform != null && InterpolationSource == InterpolationMode.PredictedSnapshot /*&& NetTransform.Interpolator.IsLocalInterpData*/)
         {
             RenderTransform.GlobalPosition = _transformSource.GlobalPosition;
             RenderTransform.Quaternion = _transformSource.Quaternion;
@@ -125,7 +125,7 @@ public unsafe partial class NetworkTransform3D : NetworkBehaviour
             interpolation = Object.Engine.LocalInterpolation;
         else
         {
-            if (InterpolationSource == InterpolationMode.PredicatedSnapshot)
+            if (InterpolationSource == InterpolationMode.PredictedSnapshot)
                 interpolation = Object.Engine.LocalInterpolation;
             else if (InterpolationSource == InterpolationMode.RemoteSnapshot)
                 interpolation = Object.Engine.RemoteInterpolation;
@@ -142,7 +142,7 @@ public unsafe partial class NetworkTransform3D : NetworkBehaviour
         if (!interpolation.HasSnapshots)
             return;
         //Logger.Log("BUFF COUNT: " + ((RemoteInterpolation)interpolation)._buffer.Count);
-        var offsetBytes = Entity.StateOffsetBytes + ((byte*)S - (byte*)Entity.State);
+        var offsetBytes = Entity.StateOffsetBytes + ((byte*)S - (byte*)Entity.S);
         float alpha = interpolation.Alpha;
         byte* snapFrom = (byte*)interpolation.FromSnapshot.Pools[Entity.PoolIndex].Ptr;
         byte* snapTo = (byte*)interpolation.ToSnapshot.Pools[Entity.PoolIndex].Ptr;
@@ -170,7 +170,7 @@ public unsafe partial class NetworkTransform3D : NetworkBehaviour
         var oldPos = NetickGodotUtils.GetVector3(S, _posPrecision);  //var newPos = _trans.position;
         var oldRot = NetickGodotUtils.GetQuaternion(S + 3, _rotPrecision);   //var newRot = _trans.rotation;
 
-        var oldPotNum = *(NetickVector3*)&oldPos;
+        var oldPotNum = *(System.Numerics.Vector3*)&oldPos;
         // var oldQuatNum = *(System.Numerics.Quaternion*)&oldRot;
 
         // new poses
@@ -182,7 +182,7 @@ public unsafe partial class NetworkTransform3D : NetworkBehaviour
         var newPos = NetickGodotUtils.GetVector3(S, _posPrecision);
         var newRot = NetickGodotUtils.GetQuaternion(S + 3, _rotPrecision);
 
-        var newPosNum = *(NetickVector3*)&newPos;
+        var newPosNum = *(System.Numerics.Vector3*)&newPos;
 
         if (Engine.IsServer /*&& EnableNetworking*/)
         {
@@ -212,7 +212,7 @@ public unsafe partial class NetworkTransform3D : NetworkBehaviour
                     Entity.Dirtify(S + 6);
             }
 
-            Engine.Grid.Move(Entity, oldPotNum, newPosNum);
+             Entity.Move(newPosNum);
         }
 
         Entity.Pos = newPosNum;
