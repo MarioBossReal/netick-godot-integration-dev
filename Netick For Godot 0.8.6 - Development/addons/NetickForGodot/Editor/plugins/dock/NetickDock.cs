@@ -1,8 +1,20 @@
 #if TOOLS
 
 using Godot;
+using Netick.GodotEngine;
 
-namespace Netick.GodotEngine;
+namespace NetickEditor;
+
+internal static class NetickWebLinks
+{
+    public const string Discord = "https://discord.com/invite/uV6bfG66Fx";
+    public const string Premium = "https://www.patreon.com/user?u=82493081";
+    public const string Docs = "https://www.netick.net/docs.html";
+    public const string Site = "https://www.netick.net";
+    public static void GoToDiscord() => OS.ShellOpen(Discord);
+    public static void GoToDocs() => OS.ShellOpen(Docs);
+    public static void GoToSite() => OS.ShellOpen(Site);
+}
 
 [Tool]
 public partial class NetickDock : Control
@@ -47,6 +59,14 @@ public partial class NetickDock : Control
     private NetickConfig _netickConfig;
 
     private bool _initialized = false;
+
+    public override void _Ready()
+    {
+        VersionLabel.Text = $"Version: {Network.Version}-dev";
+        DocumentationButton.Pressed += NetickWebLinks.GoToDocs;
+        DiscordButton.Pressed += NetickWebLinks.GoToDiscord;
+        SiteButton.Pressed += NetickWebLinks.GoToSite;
+    }
 
     public void Initialize(NetickConfig netickConfig)
     {
@@ -134,6 +154,11 @@ public partial class NetickDock : Control
         item.Initialize(_netickConfig);
 
         return item;
+    }
+
+    internal static NetickDock Instantiate()
+    {
+        return GD.Load<PackedScene>(NetickEditorResourcePaths.DockPath).Instantiate<NetickDock>();
     }
 }
 

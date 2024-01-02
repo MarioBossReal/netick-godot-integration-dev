@@ -13,62 +13,10 @@ using static Netick.GodotEngine.NetickInspectorPlugin;
 
 namespace NetickEditor;
 
-internal static class NetickWebLinks
-{
-    public const string Discord = "https://discord.com/invite/uV6bfG66Fx";
-    public const string Premium = "https://www.patreon.com/user?u=82493081";
-    public const string Docs = "https://www.netick.net/docs.html";
-    public const string Site = "https://www.netick.net";
-    public static void GoToDiscord() => OS.ShellOpen(Discord);
-    public static void GoToDocs() => OS.ShellOpen(Docs);
-    public static void GoToSite() => OS.ShellOpen(Site);
-}
-
 internal static class NetickEditorResourcePaths
 {
     public const string DockPath = "res://addons/NetickForGodot/Editor/plugins/dock/NetickDock.tscn";
     public const string InspectorControlPath = "res://addons/NetickForGodot/Editor/plugins/inspector/netick_node_inspector.tscn";
-}
-
-[Tool]
-public partial class NetickExportPlugin : EditorExportPlugin
-{
-    internal NetickGodotEditor _editor;
-    string _assemblyPath;
-
-    public override void _ExportBegin(string[] features, bool isDebug, string path, uint flags)
-    {
-        _assemblyPath = null;
-        var fileName = Path.GetFileName(path);
-        var folder = path.Replace(fileName, "");     //GD.Print($"MAIN FOLDER {folder}");
-        var folders = System.IO.Directory.GetDirectories(folder, "*", System.IO.SearchOption.AllDirectories);
-        var asmName = Path.GetFileName(_editor._editorConfig.MainEditorGameAssemblyPath);
-
-        for (int i = 0; i < folders.Length; i++)
-        {
-            var p = $"{folders[i]}/{asmName}";
-            bool doesExist = System.IO.File.Exists(p);
-
-            if (doesExist)
-            {
-                _assemblyPath = p;
-                break;
-            }
-        }
-    }
-
-    public override void _ExportEnd()
-    {
-        if (_assemblyPath != null)
-        {
-            Netick.CodeGen.Processor.ProcessAssembly(new GodotCodeGen(), _assemblyPath);
-            GD.Print("Netick Editor: export done.");
-        }
-        else
-        {
-            GD.PrintErr("Netick Editor: export failed.");
-        }
-    }
 }
 
 [Tool]
@@ -122,14 +70,8 @@ public partial class NetickGodotEditor : EditorPlugin
 
     private void InitEditor()
     {
-        _dock = GD.Load<PackedScene>(NetickEditorResourcePaths.DockPath).Instantiate<NetickDock>();
+        _dock = NetickDock.Instantiate();
         AddControlToDock(DockSlot.LeftUl, _dock);
-
-        _dock.VersionLabel.Text = $"Version: {Network.Version}-dev";
-
-        _dock.DocumentationButton.Pressed += NetickWebLinks.GoToDocs;
-        _dock.DiscordButton.Pressed += NetickWebLinks.GoToDiscord;
-        _dock.SiteButton.Pressed += NetickWebLinks.GoToSite;
 
         _configPath = _dock.ConfigPathTextEdit;
         _assemblyPath = _dock.AssemblyPathTextEdit;
