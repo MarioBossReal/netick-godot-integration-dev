@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://26oa35d8aytx"]
 
-[ext_resource type="Script" path="res://addons/NetickForGodot/NetickDock.cs" id="1_ha63q"]
-[ext_resource type="Texture2D" uid="uid://bgnl3xd70l633" path="res://addons/NetickForGodot/NetickBanner.png" id="1_id205"]
+[ext_resource type="Script" path="res://addons/NetickForGodot/Editor/plugins/dock/NetickDock.cs" id="1_ha63q"]
+[ext_resource type="Texture2D" uid="uid://bgnl3xd70l633" path="res://addons/NetickForGodot/Editor/plugins/dock/NetickBanner.png" id="1_id205"]
 [ext_resource type="PackedScene" uid="uid://by4o78sb78lha" path="res://addons/NetickForGodot/Editor/scenes/resource_reference_list_item.tscn" id="2_d2vmd"]
 
 [node name="Netick" type="Control" node_paths=PackedStringArray("VersionLabel", "DocumentationButton", "DiscordButton", "SiteButton", "RegisterPrefabsAndLevelsButton", "AutoUpdatePrefabsAndLevelsButton", "ConfigPathTextEdit", "AssemblyPathTextEdit", "PrefabReferencesContainer", "LevelReferencesContainer")]

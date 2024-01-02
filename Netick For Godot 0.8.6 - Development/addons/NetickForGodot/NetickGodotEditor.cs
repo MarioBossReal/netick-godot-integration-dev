@@ -27,7 +27,7 @@ internal static class NetickWebLinks
 
 internal static class NetickEditorResourcePaths
 {
-    public const string DockPath = "res://addons/NetickForGodot/NetickDock.tscn";
+    public const string DockPath = "res://addons/NetickForGodot/Editor/plugins/dock/NetickDock.tscn";
     public const string InspectorControlPath = "res://addons/NetickForGodot/Editor/plugins/inspector/netick_node_inspector.tscn";
 }
 

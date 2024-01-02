@@ -27,6 +27,12 @@ Name = &"bomber"
 Path = &"res://bomberman/network_prefabs/bomber.tscn"
 Id = 1
 
+[sub_resource type="Resource" id="Resource_rv5gb"]
+script = ExtResource("1_01xuc")
+Name = &"bomber_man_3d"
+Path = &"res://bomberman_3d/network_prefabs/bomber_man_3d.tscn"
+Id = 5
+
 [sub_resource type="Resource" id="Resource_upna5"]
 script = ExtResource("1_01xuc")
 Name = &"destroyable_block"
@@ -44,12 +50,6 @@ script = ExtResource("1_01xuc")
 Name = &"test_networked_child"
 Path = &"res://bomberman/network_prefabs/test_networked_child.tscn"
 Id = 4
-
-[sub_resource type="Resource" id="Resource_rv5gb"]
-script = ExtResource("1_01xuc")
-Name = &"bomber_man_3d"
-Path = &"res://bomberman_3d/network_prefabs/bomber_man_3d.tscn"
-Id = 5
 
 [resource]
 script = ExtResource("2_f5d0d")
