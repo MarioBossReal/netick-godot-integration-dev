@@ -114,7 +114,7 @@ public unsafe partial class NetworkObject : Resource, INetickEntity
     public bool IsInputSource => Entity.IsInputSource;
 
     /// <summary>
-    /// Returns true if we neither provide inputs nor own this <see cref="Object"/>.
+    /// Returns true if we neither provide inputs nor own this <see cref="NetworkObject"/>.
     /// </summary>
     public bool IsProxy => IsClient && !IsInputSource;
 
@@ -144,13 +144,13 @@ public unsafe partial class NetworkObject : Resource, INetickEntity
     INetickNetworkScript[] INetickEntity.NetworkScripts => NetworkedBehaviours;
     INetickScript[] INetickEntity.AllScripts => NetickBehaviours;
 
-  System.Numerics.Vector3 INetickEntity.WorldPosition => throw new NotImplementedException();
+    System.Numerics.Vector3 INetickEntity.WorldPosition => throw new NotImplementedException();
 
-  bool INetickEntity.UseSAP => false;
-  BroadPhaseFilter INetickEntity.BroadPhaseFilter => BroadPhaseFilter.None;
-  bool INetickEntity.NarrowPhaseFilter => false;
+    bool INetickEntity.UseSAP => false;
+    BroadPhaseFilter INetickEntity.BroadPhaseFilter => BroadPhaseFilter.None;
+    bool INetickEntity.NarrowPhaseFilter => false;
 
-  [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal bool IsPrefabChild() => PrefabIndex >= 0 && (!IsSceneObject);
 
     internal void OnSpawnPredictionSucceeded()
