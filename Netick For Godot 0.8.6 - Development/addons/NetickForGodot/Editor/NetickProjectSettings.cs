@@ -19,7 +19,7 @@ public static class NetickProjectSettings
             return ProjectSettings.GetSetting(DefaultConfigPathSetting).As<string>();
         }
 
-        var path = "res://netickConfig.tres";
+        var path = "res://netick_config.tres";
 
         ProjectSettings.SetSetting(DefaultConfigPathSetting, path);
 

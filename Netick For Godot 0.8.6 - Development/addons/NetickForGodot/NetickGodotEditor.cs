@@ -35,7 +35,7 @@ public partial class NetickGodotEditor : EditorPlugin
         _inspectorPlugin = new();
         AddInspectorPlugin(_inspectorPlugin);
 
-        _netickConfig = GetNetickConfig();
+        _netickConfig = LoadOrCreateNetickConfig();
 
         _inspectorPlugin.InspectorCreated += HandleInspectorCreated;
         SceneChanged += RegisterNetworkedLevel;
@@ -196,7 +196,7 @@ public partial class NetickGodotEditor : EditorPlugin
         ResourceSaver.Save(_netickConfig, _netickConfig.ResourcePath);
     }
 
-    private static NetickConfig GetNetickConfig()
+    private static NetickConfig LoadOrCreateNetickConfig()
     {
         var path = NetickProjectSettings.GetDefaultConfigPath();
 

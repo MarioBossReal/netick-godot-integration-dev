@@ -57,4 +57,4 @@ place_bomb={
 
 [netick]
 
-project/default_config_path="res://netickConfig.tres"
+project/default_config_path="res://netick_config.tres"

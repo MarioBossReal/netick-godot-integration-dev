@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://addons/NetickForGodot/Netick/Integration/NetworkLevel.cs" id="1_4sb24"]
 [ext_resource type="Script" path="res://scripts/GameStarter.cs" id="2_dqxd1"]
-[ext_resource type="Resource" uid="uid://bygipwwx5g5xj" path="res://netickConfig.tres" id="3_bse4x"]
+[ext_resource type="Resource" uid="uid://bygipwwx5g5xj" path="res://netick_config.tres" id="3_bse4x"]
 [ext_resource type="Script" path="res://bomberman/scripts/BombermanEventsHandler.cs" id="4_3ayfx"]
 [ext_resource type="Texture2D" uid="uid://53w5obgmey4u" path="res://bomberman/textures/StaticBlock.png" id="5_ilxb4"]
 
