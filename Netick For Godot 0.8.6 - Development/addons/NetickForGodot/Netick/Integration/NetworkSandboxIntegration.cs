@@ -209,15 +209,8 @@ public unsafe partial class NetworkSandbox : Node, IGameEngine
 
     void IGameEngine.OnEntitySpawned(Entity ent)
     {
-        //NetickLogger.Log($"ENTITY SPAWN: Id: {ent.NetworkId}      Behs:{ent.Scripts.Length}");
         var entity = (NetworkObject)ent.UserEntity;
         Entities.Add(ent.NetworkId, entity);
-
-        //if (!NodeToNetworkObject.ContainsKey(entity.Node))
-        //NodeToNetworkObject.Add(entity.Node, entity);
-
-        //entity.Node.SetMeta(MetaConstants.NetworkObject, entity);
-
         Callbacks.OnObjectCreated(entity);
     }
 
@@ -256,7 +249,6 @@ public unsafe partial class NetworkSandbox : Node, IGameEngine
         {
             if (userData->PrefabChildIndex != -1)
             {
-                //NetickLogger.Log($"CHILD: ROOT ID {userData->PrefabRootId}  --- Child Index {userData->PrefabChildIndex}--- Child ID {id} --- Create Id {userData->CreateId}");
                 if (!Engine.Entities.ContainsKey(userData->PrefabRootId))
                 {
                     Vector3 rootPos = default;
@@ -276,8 +268,6 @@ public unsafe partial class NetworkSandbox : Node, IGameEngine
                 {
                     Vector3 pos = userData->Pos;
                     Quaternion rot = userData->Rot;
-                    //Vector3    pos      = default;
-                    //Quaternion rot      = Quaternion.identity;
                     var obj = InstantiatePrefabRootForClient(netickMeta.InstanceCounter, userData->SpawnTick, pos, rot, id, userData->CreateId, userData->SpawnKey, isUsable);
                     obj.InstanceCounter = netickMeta.InstanceCounter;
                 }
@@ -325,7 +315,7 @@ public unsafe partial class NetworkSandbox : Node, IGameEngine
         //}
     }
 
-    internal unsafe void LoadTheWorld(Node scene, short buildIndex, bool firstTime, bool createNewScene)
+    internal unsafe void LoadTheWorld(Node scene, short buildIndex, bool firstTime)
     {
         //lock (SceneSwitchLock)
         {
@@ -433,7 +423,7 @@ public unsafe partial class NetworkSandbox : Node, IGameEngine
 
                 Network.Instance.GetTree().Root.AddChild(newScene);
 
-                LoadTheWorld(newScene, Network.Instance.ScenesPathToId[newScene.SceneFilePath], false, false);
+                LoadTheWorld(newScene, Network.Instance.ScenesPathToId[newScene.SceneFilePath], false);
                 _currentSceneLoadingOperation = "";
             }
             else if (ResourceLoader.LoadThreadedGetStatus(_currentSceneLoadingOperation) == ResourceLoader.ThreadLoadStatus.Failed)

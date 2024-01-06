@@ -254,61 +254,31 @@ namespace Netick.GodotEngine
             SwitchedToScene = path;
         }
 
-        internal unsafe void Init(Node scene, NetworkTransport transport, bool isServer, bool createNewScene, String name, int port, ReflectionData reflectionData)
+        internal unsafe void Init(Node scene, NetworkTransport transport, bool isServer, bool createNewScene, string name, int port, ReflectionData reflectionData)
         {
-            UseMainScene = !createNewScene;
             IsServer = isServer;
             Name = isServer ? $"Server {name}" : $"Client {name}";
             Entities = new(Network.Config.MaxObjects);
-            // NetPhysics                           = new NetworkPhysics(this);
             Callbacks = new NetickCallbacks(this);
             Objects = new ObjectList(this);
             Engine = new NetickEngine();
 
-            //if (GetComponent<PhysicsSimulationStep>() == null && Config.PhysicsType != PhysicsType.None)
-            //  gameObject.AddComponent<PhysicsSimulationStep>();
-
             Level = scene;
 
-            var config = new NetickConfigData()
-            {
-                ServerDivisor = 1,
+            var configData = Config.GetNetickConfigData();
 
-                ReplicationMode = ReplicationMode.Pessimistic,
-                TickRate = Config.TickRate,
-                MaxObjects = Config.MaxObjects,
-                MaxPlayers = Config.MaxPlayers,
-                EnableLogging = Config.EnableLogging,
-                MaxPredictedTicks = Config.MaxPredictedTicks,
-                MaxInterpolationBufferCount = (int)(Config.TickRate * 1.2f),
-                SavedSnapshotsCount = (int)(Config.TickRate * 1.2f),
-                MaxDataPerConnectionPerTickInBytes = Config.MaxSendableDataSize, //2500
-
-                EnableLagCompensation = Config.EnableLagCompensation,
-                EnableInterestManagement = false,
-                EnableSimulationCulling = false,
-
-                AoIWorldSize = System.Numerics.Vector3.One,
-                AoICellSize = Config.CellSize,
-
-                AllocatorStateBlockSize = Config.AllocatorBlockSize,
-                AllocatorMetaBlockSize = Config.AllocatorBlockSize,
-
-                TransportReceiveBufferSize = Config.ReceiveBufferSize,
-                TransportSendBufferSize = Config.SendBufferSize,
-                TransportTimeout = Config.Timeout
-            };
-
-            Engine.Start(Name, port, IsServer, this, config, transport, reflectionData, new GodotLogger(), new DefaultAllocator());
+            Engine.Start(Name, port, IsServer, this, configData, transport, reflectionData, new GodotLogger(), new DefaultAllocator());
             InitNetworkSandboxEntities();
+
+            // Level will always be an empty Node
 
             if (Level.SceneFilePath == null || Level.SceneFilePath == "")
             {
                 throw new Exception("Netick: level node is not a Scene file.");
             }
 
-            //var l = Network.Instance.ScenesPathToId[Level.SceneFilePath];
-            LoadTheWorld(Level, Network.Instance.ScenesPathToId[Level.SceneFilePath], true, !UseMainScene);
+            LoadTheWorld(Level, Network.Instance.ScenesPathToId[Level.SceneFilePath], true);
+
             Callbacks.OnStartup(this);
         }
 

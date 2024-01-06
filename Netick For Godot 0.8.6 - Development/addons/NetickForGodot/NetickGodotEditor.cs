@@ -26,28 +26,21 @@ public partial class NetickGodotEditor : EditorPlugin
     private NetickExportPlugin _exportPlugin;
     private NetickInspectorPlugin _inspectorPlugin;
 
-    private TextEdit _configPath;
-    private TextEdit _assemblyPath;
-    private CheckButton _autoUpdateCheckButton;
-
-    internal NetickGodotEditorConfig _editorConfig;
     internal NetickConfig _netickConfig;
     public override void _EnterTree()
     {
-        _exportPlugin = new NetickExportPlugin();
+        _exportPlugin = new();
         AddExportPlugin(_exportPlugin);
-        _exportPlugin._editor = this;
-
-        _editorConfig = GetNetickEditorConfigResource("res://addons/NetickForGodot/editorConfig.tres");
-        _netickConfig = GetNetickConfigResource(_editorConfig.NetickConfigPath);
 
         _inspectorPlugin = new();
         AddInspectorPlugin(_inspectorPlugin);
-        _inspectorPlugin.InspectorCreated += HandleInspectorCreated;
 
+        _netickConfig = GetNetickConfig();
+
+        _inspectorPlugin.InspectorCreated += HandleInspectorCreated;
         SceneChanged += RegisterNetworkedLevel;
 
-        InitEditor();
+        InitDock();
     }
 
     public override void _ExitTree()
@@ -68,20 +61,10 @@ public partial class NetickGodotEditor : EditorPlugin
         return true;
     }
 
-    private void InitEditor()
+    private void InitDock()
     {
         _dock = NetickDock.Instantiate();
         AddControlToDock(DockSlot.LeftUl, _dock);
-
-        _configPath = _dock.ConfigPathTextEdit;
-        _assemblyPath = _dock.AssemblyPathTextEdit;
-
-        _configPath.Text = _editorConfig.NetickConfigPath;
-        _assemblyPath.Text = _editorConfig.EditorGameAssemblyDirectoryPath;
-
-        _configPath.TextChanged += () => _editorConfig.NetickConfigPath = _configPath.Text;
-        _assemblyPath.TextChanged += () => _editorConfig.EditorGameAssemblyDirectoryPath = _assemblyPath.Text;
-
         _dock?.Initialize(_netickConfig);
     }
 
@@ -213,18 +196,10 @@ public partial class NetickGodotEditor : EditorPlugin
         ResourceSaver.Save(_netickConfig, _netickConfig.ResourcePath);
     }
 
-    private static NetickGodotEditorConfig GetNetickEditorConfigResource(string path)
+    private static NetickConfig GetNetickConfig()
     {
-        if (ResourceLoader.Exists(path))
-            return GD.Load<NetickGodotEditorConfig>(path);
+        var path = NetickProjectSettings.GetDefaultConfigPath();
 
-        var newNetickConfig = new NetickGodotEditorConfig();
-        ResourceSaver.Save(newNetickConfig, path);
-        return newNetickConfig;
-    }
-
-    private static NetickConfig GetNetickConfigResource(string path)
-    {
         if (ResourceLoader.Exists(path))
         {
             var config = GD.Load(path);
@@ -239,9 +214,9 @@ public partial class NetickGodotEditor : EditorPlugin
         return newNetickConfig;
     }
 
-    private void Weave()
+    private static void Weave()
     {
-        var k = ProjectSettings.GlobalizePath(_editorConfig.MainEditorGameAssemblyPath);
+        var k = ProjectSettings.GlobalizePath(NetickProjectSettings.FullGameAssemblyPath);
         Netick.CodeGen.Processor.ProcessAssembly(new GodotCodeGen(), k);
     }
 }

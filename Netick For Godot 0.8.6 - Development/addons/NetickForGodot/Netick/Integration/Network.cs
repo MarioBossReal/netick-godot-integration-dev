@@ -90,13 +90,6 @@ namespace Netick.GodotEngine
 
             if (config.Levels != null)
             {
-                /*for (int i = 0; i < config.Levels.Count; i++)
-                {
-                    Instance.ScenesPathToId.Add(config.Levels[i], (short)i);
-                    Instance.ScenesIdToPath.Add((short)i, config.Levels[i]);
-                }*/
-
-
                 foreach (var pair in config.Levels)
                 {
                     var path = pair.Value.Path;
@@ -106,7 +99,6 @@ namespace Netick.GodotEngine
                     Instance.ScenesIdToPath.Add((short)id, path);
                 }
             }
-
 
             var asmsList = new string[1] { "Godot Game Project" }.ToList();
 
@@ -305,6 +297,7 @@ namespace Netick.GodotEngine
 
         private static NetworkSandbox CreateSandbox(Node level, NetickConfig config, string prefab, NetworkTransport transport, int port, bool isServer, bool useMainScene = true, string name = "")
         {
+            // Only needs level to access SceneTree.Root
             if (Network.Instance == null)
                 Init(level, transport, config);
 
@@ -328,6 +321,7 @@ namespace Netick.GodotEngine
             }
 
             sandbox.Init(level, transport, isServer, !useMainScene, name, port, Instance.ReflectionData);
+
             (sandbox as Node).Name = $"{sandbox.Name} Sandbox";
             Instance.Sandboxes.Add(sandbox);
 

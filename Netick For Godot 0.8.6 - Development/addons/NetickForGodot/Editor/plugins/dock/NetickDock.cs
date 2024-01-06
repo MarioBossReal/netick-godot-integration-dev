@@ -32,18 +32,6 @@ public partial class NetickDock : Control
     public Button SiteButton { get; private set; }
 
     [Export]
-    public Button RegisterPrefabsAndLevelsButton { get; private set; }
-
-    [Export]
-    public CheckButton AutoUpdatePrefabsAndLevelsButton { get; private set; }
-
-    [Export]
-    public TextEdit ConfigPathTextEdit { get; private set; }
-
-    [Export]
-    public TextEdit AssemblyPathTextEdit { get; private set; }
-
-    [Export]
     public VBoxContainer PrefabReferencesContainer { get; private set; }
 
     [Export]
@@ -51,10 +39,6 @@ public partial class NetickDock : Control
 
     [Export]
     public PackedScene ResourceReferenceItemScene { get; private set; }
-
-    public string ConfigPath => ConfigPathTextEdit?.Text ?? string.Empty;
-
-    public string AssemblyPath => AssemblyPathTextEdit?.Text ?? string.Empty;
 
     private NetickConfig _netickConfig;
 

@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://bgnl3xd70l633" path="res://addons/NetickForGodot/Editor/plugins/dock/NetickBanner.png" id="1_id205"]
 [ext_resource type="PackedScene" uid="uid://by4o78sb78lha" path="res://addons/NetickForGodot/Editor/scenes/resource_reference_list_item.tscn" id="2_d2vmd"]
 
-[node name="Netick" type="Control" node_paths=PackedStringArray("VersionLabel", "DocumentationButton", "DiscordButton", "SiteButton", "RegisterPrefabsAndLevelsButton", "AutoUpdatePrefabsAndLevelsButton", "ConfigPathTextEdit", "AssemblyPathTextEdit", "PrefabReferencesContainer", "LevelReferencesContainer")]
+[node name="Netick" type="Control" node_paths=PackedStringArray("VersionLabel", "DocumentationButton", "DiscordButton", "SiteButton", "PrefabReferencesContainer", "LevelReferencesContainer")]
 layout_mode = 3
 anchors_preset = 14
 anchor_top = 0.5
@@ -21,10 +21,6 @@ VersionLabel = NodePath("Margin/Root/VersionLabel")
 DocumentationButton = NodePath("Margin/Root/Links/DocumentationButton")
 DiscordButton = NodePath("Margin/Root/Links/DiscordButton")
 SiteButton = NodePath("Margin/Root/Links/SiteButton")
-RegisterPrefabsAndLevelsButton = NodePath("Margin/Root/RegisterPrefabsAndLevelsButton")
-AutoUpdatePrefabsAndLevelsButton = NodePath("Margin/Root/AutoUpdatePrefabsAndLevelsButton")
-ConfigPathTextEdit = NodePath("Margin/Root/ConfigPathTextEdit")
-AssemblyPathTextEdit = NodePath("Margin/Root/AssemblyPathTextEdit")
 PrefabReferencesContainer = NodePath("Margin/Root/RegisteredResourcesTabContainer/Prefabs")
 LevelReferencesContainer = NodePath("Margin/Root/RegisteredResourcesTabContainer/Levels")
 ResourceReferenceItemScene = ExtResource("2_d2vmd")
@@ -77,7 +73,7 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"HeaderMedium"
 theme_override_constants/outline_size = 3
-text = "Version: 0.8.6"
+text = "Version: 0.8.6-dev"
 
 [node name="Links" type="HBoxContainer" parent="Margin/Root"]
 layout_mode = 2
@@ -103,45 +99,6 @@ size_flags_horizontal = 3
 text = "Site"
 
 [node name="VSeparator" type="VSeparator" parent="Margin/Root"]
-custom_minimum_size = Vector2(0, 16.89)
-layout_mode = 2
-
-[node name="RegisterPrefabsAndLevelsButton" type="Button" parent="Margin/Root"]
-visible = false
-layout_mode = 2
-text = "Register Prefabs & Levels"
-
-[node name="AutoUpdatePrefabsAndLevelsButton" type="CheckButton" parent="Margin/Root"]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-text = "Auto update levels and prefabs"
-
-[node name="Netick Config Path" type="Label" parent="Margin/Root"]
-layout_mode = 2
-text = "Netick Config Path"
-
-[node name="ConfigPathTextEdit" type="TextEdit" parent="Margin/Root"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 56.37)
-layout_mode = 2
-theme_override_font_sizes/font_size = 11
-text = "res://netickConfig.tres"
-wrap_mode = 1
-
-[node name="Editor Assembly Path" type="Label" parent="Margin/Root"]
-layout_mode = 2
-text = "Editor Game Assembly Path "
-
-[node name="AssemblyPathTextEdit" type="TextEdit" parent="Margin/Root"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 56.37)
-layout_mode = 2
-theme_override_font_sizes/font_size = 11
-text = "mono//temp//bin//Debug//Godot Game Project.dll"
-wrap_mode = 1
-
-[node name="VSeparator2" type="VSeparator" parent="Margin/Root"]
 custom_minimum_size = Vector2(0, 16.89)
 layout_mode = 2
 

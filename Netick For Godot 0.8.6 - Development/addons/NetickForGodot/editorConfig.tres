@@ -1,9 +1,0 @@
-[gd_resource type="Resource" load_steps=2 format=3 uid="uid://0latbxnyffox"]
-
-[ext_resource type="Script" path="res://addons/NetickForGodot/Netick/Integration/NetickGodotEditorConfig.cs" id="1_swo27"]
-
-[resource]
-script = ExtResource("1_swo27")
-EditorGameAssemblyDirectoryPath = "res://.godot/mono//temp//bin//Debug/"
-NetickConfigPath = "res://netickConfig.tres"
-AutoUpdateLevelsAndPrefabs = false

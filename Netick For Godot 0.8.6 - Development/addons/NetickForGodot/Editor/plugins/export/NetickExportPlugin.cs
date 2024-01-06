@@ -7,16 +7,15 @@ namespace NetickEditor;
 [Tool]
 public partial class NetickExportPlugin : EditorExportPlugin
 {
-    internal NetickGodotEditor _editor;
     string _assemblyPath;
 
     public override void _ExportBegin(string[] features, bool isDebug, string path, uint flags)
     {
         _assemblyPath = null;
         var fileName = Path.GetFileName(path);
-        var folder = path.Replace(fileName, "");     //GD.Print($"MAIN FOLDER {folder}");
+        var folder = path.Replace(fileName, "");
         var folders = System.IO.Directory.GetDirectories(folder, "*", System.IO.SearchOption.AllDirectories);
-        var asmName = Path.GetFileName(_editor._editorConfig.MainEditorGameAssemblyPath);
+        var asmName = Path.GetFileName(NetickProjectSettings.FullGameAssemblyPath);
 
         for (int i = 0; i < folders.Length; i++)
         {

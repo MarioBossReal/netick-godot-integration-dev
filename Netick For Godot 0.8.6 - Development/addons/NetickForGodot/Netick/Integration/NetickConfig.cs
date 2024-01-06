@@ -151,4 +151,36 @@ public partial class NetickConfig : Resource
 
         return highest + 1;
     }
+
+    public NetickConfigData GetNetickConfigData()
+    {
+        return new NetickConfigData()
+        {
+            ServerDivisor = 1,
+
+            ReplicationMode = ReplicationMode.Pessimistic,
+            TickRate = TickRate,
+            MaxObjects = MaxObjects,
+            MaxPlayers = MaxPlayers,
+            EnableLogging = EnableLogging,
+            MaxPredictedTicks = MaxPredictedTicks,
+            MaxInterpolationBufferCount = (int)(TickRate * 1.2f),
+            SavedSnapshotsCount = (int)(TickRate * 1.2f),
+            MaxDataPerConnectionPerTickInBytes = MaxSendableDataSize, //2500
+
+            EnableLagCompensation = EnableLagCompensation,
+            EnableInterestManagement = false,
+            EnableSimulationCulling = false,
+
+            AoIWorldSize = System.Numerics.Vector3.One,
+            AoICellSize = CellSize,
+
+            AllocatorStateBlockSize = AllocatorBlockSize,
+            AllocatorMetaBlockSize = AllocatorBlockSize,
+
+            TransportReceiveBufferSize = ReceiveBufferSize,
+            TransportSendBufferSize = SendBufferSize,
+            TransportTimeout = Timeout
+        };
+    }
 }
