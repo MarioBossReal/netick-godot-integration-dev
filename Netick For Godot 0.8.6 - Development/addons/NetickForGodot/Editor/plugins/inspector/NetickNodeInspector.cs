@@ -1,3 +1,4 @@
+#if TOOLS
 using Godot;
 using static Netick.GodotEngine.NetickInspectorPlugin;
 
@@ -30,3 +31,4 @@ public partial class NetickNodeInspector : Control
         EmitSignal(SignalName.NetworkedPropertySet, this);
     }
 }
+#endif
